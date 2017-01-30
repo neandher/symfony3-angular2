@@ -2,12 +2,24 @@
 # http://symfony.com/doc/current/security.html
 security:
 
+    encoders:
+        ApiBundle\Entity\User: bcrypt
+
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+        database_users:
+            entity: { class: ApiBundle\Entity\User }
 
     firewalls:
+
+        api:
+            pattern: ^/api/
+            anonymous: true
+            stateless: true
+            guard:
+                authenticators:
+                    - jwt_token_authenticator
+
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -22,3 +34,11 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control:
+        #- { path: ^/_wdt|_profiler, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # allow anonymous API - if auth is needed, it's handled in the controller
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

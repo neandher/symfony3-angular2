@@ -1,0 +1,34 @@
+##### API SERVICES #####
+
+services:
+
+    api.last_login_subscriber:
+        class: ApiBundle\EventListener\Security\LastLoginSubscriber
+        autowire: true
+        tags:
+            - { name: kernel.event_subscriber }
+
+    api.encode_password_subscriber:
+        class: ApiBundle\EventListener\Security\EncodePasswordSubscriber
+        autowire: true
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    api.canonicalizer_email_subscriber:
+        class: ApiBundle\EventListener\Security\CanonicalizerEmailSubscriber
+        autowire: true
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    jwt_token_authenticator:
+        class: ApiBundle\Security\jwtTokenAuthenticator
+        autowire: true
+
+    api.response_factory:
+        class: ApiBundle\Api\ResponseFactory
+
+    api_exception_subscriber:
+        class: ApiBundle\EventListener\ApiExceptionSubscriber
+        arguments: ['%kernel.debug%', '@api.response_factory']
+        tags:
+            - { name: kernel.event_subscriber }

@@ -1,0 +1,11 @@
+ApiBundle\Entity\User:
+
+    user1:
+        firstName: Neandher
+        lastName: Carlos
+        email: neandher89@gmail.com
+        emailCanonical: -
+        isEnabled: 1
+        plainPassword: admin@123
+        password: -
+        roles: [ROLE_USER]
