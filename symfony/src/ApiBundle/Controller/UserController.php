@@ -20,15 +20,6 @@ class UserController extends BaseController
 {
     /**
      * @Route("/users")
-     * @Method("GET")
-     */
-    public function listAction()
-    {
-        return $this->json(['0' => 'List Users!']);
-    }
-
-    /**
-     * @Route("/users")
      * @Method("POST")
      */
     public function newAction(Request $request)
@@ -82,6 +73,28 @@ class UserController extends BaseController
         }
 
         $response = $this->createApiResponse($user, 200);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/users", name="api_users_collection")
+     * @Method("GET")
+     * @param Request $request
+     * @return Response
+     */
+    public function listAction(Request $request)
+    {
+        $filter = $request->query->get('filter');
+
+        $qb = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findAllQueryBuilder($filter);
+
+        $paginatedCollection = $this->get('api.pagination_factory')
+            ->createCollection($qb, $request, 'api_users_collection');
+
+        $response = $this->createApiResponse($paginatedCollection, 200);
 
         return $response;
     }

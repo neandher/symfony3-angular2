@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Video
@@ -25,6 +26,8 @@ class Video
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="2", max="255")
      */
     private $title;
 
@@ -32,6 +35,8 @@ class Video
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(min="2")
      */
     private $description;
 
@@ -39,6 +44,8 @@ class Video
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="2", max="20")
      */
     private $status;
 
@@ -46,6 +53,8 @@ class Video
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="2", max="255")
      */
     private $image;
 
@@ -53,6 +62,8 @@ class Video
      * @var string
      *
      * @ORM\Column(name="video_path", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="2", max="255")
      */
     private $videoPath;
 
@@ -60,6 +71,7 @@ class Video
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
@@ -67,6 +79,7 @@ class Video
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
 

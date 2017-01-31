@@ -20,15 +20,28 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    jwt_token_authenticator:
+    api.jwt_token_authenticator:
         class: ApiBundle\Security\jwtTokenAuthenticator
         autowire: true
 
     api.response_factory:
         class: ApiBundle\Api\ResponseFactory
 
-    api_exception_subscriber:
+    api.exception_subscriber:
         class: ApiBundle\EventListener\ApiExceptionSubscriber
         arguments: ['%kernel.debug%', '@api.response_factory']
         tags:
             - { name: kernel.event_subscriber }
+
+    api.pagination_factory:
+        class: ApiBundle\Pagination\PaginationFactory
+        autowire: true
+
+    api.custom_hateoas_json_serializer:
+        class: ApiBundle\Serializer\CustomHATEOASJsonSerializer
+
+    api.link_serialization_subscriber:
+        class: ApiBundle\Serializer\LinkSerializationSubscriber
+        autowire: true
+        tags:
+            - { name: jms_serializer.event_subscriber }
