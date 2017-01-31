@@ -8,6 +8,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: pt_BR
+    upload_avatar_path: "%kernel.root_dir%/../web/uploads/images/avatar"
 
 framework:
     #esi:             ~
@@ -80,3 +81,18 @@ stof_doctrine_extensions:
     orm:
         default:
             timestampable: true
+
+bazinga_hateoas:
+    serializer:
+        json: api.custom_hateoas_json_serializer
+
+vich_uploader:
+    db_driver: orm
+    mappings:
+        user_avatar:
+            uri_prefix: '/uploads/images/avatar'
+            upload_destination: "%upload_avatar_path%"
+            delete_on_remove: true
+            delete_on_update: true
+            inject_on_load: true
+            namer: vich_uploader.namer_uniqid

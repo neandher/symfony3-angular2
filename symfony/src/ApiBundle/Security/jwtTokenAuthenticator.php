@@ -80,12 +80,6 @@ class jwtTokenAuthenticator extends AbstractGuardAuthenticator
             throw new CustomUserMessageAuthenticationException($e->getReason());
         }
 
-        /*$data = $this->jwtEncoder->decode($credentials);
-
-        if ($data === FALSE) {
-            Throw new CustomUserMessageAuthenticationException('Invalid token!');
-        }*/
-
         $email = $data['email'];
 
         $user = $this->em->getRepository('ApiBundle:User')->findOneBy(['emailCanonical' => $email]);

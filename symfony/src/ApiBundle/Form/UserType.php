@@ -5,6 +5,7 @@ namespace ApiBundle\Form;
 use ApiBundle\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,7 @@ class UserType extends PlainPasswordType
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class)
             ->add('email', EmailType::class)
+            ->add('avatarImageFile', FileType::class)
             ->add('isEnabled', CheckboxType::class);
 
         parent::buildForm($builder,$options);

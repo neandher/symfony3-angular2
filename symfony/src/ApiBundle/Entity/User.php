@@ -4,10 +4,14 @@ namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\Role\Role;
 use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\UserRepository")
@@ -17,6 +21,13 @@ use JMS\Serializer\Annotation as Serializer;
  *     message="Email ja registrado!"
  * )
  * @Serializer\ExclusionPolicy("all")
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "api_users_show",
+ *          parameters = { "email" = "expr(object.getEmailCanonical())" }
+ *     )
+ * )
  */
 class User implements AdvancedUserInterface
 {
@@ -73,6 +84,22 @@ class User implements AdvancedUserInterface
      * @ORM\Column(type="string", nullable=true)
      */
     protected $username;
+
+    /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @Vich\UploadableField(mapping="user_avatar", fileNameProperty="avatarImageName")
+     *
+     * @var File
+     */
+    private $avatarImageFile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatarImageName;
 
     /**
      * @var bool
@@ -694,5 +721,46 @@ class User implements AdvancedUserInterface
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
         $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+    }
+
+    /**
+     * @return File
+     */
+    public function getAvatarImageFile()
+    {
+        return $this->avatarImageFile;
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $avatarImageFile
+     * @return User
+     */
+    public function setAvatarImageFile(File $avatarImageFile = null)
+    {
+        $this->avatarImageFile = $avatarImageFile;
+
+        /*if ($avatarImageFile instanceof UploadedFile) {
+            $this->setUpdatedAt(new \DateTime());
+        }*/
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvatarImageName()
+    {
+        return $this->avatarImageName;
+    }
+
+    /**
+     * @param string $avatarImageName
+     * @return User
+     */
+    public function setAvatarImageName($avatarImageName)
+    {
+        $this->avatarImageName = $avatarImageName;
+        return $this;
     }
 }

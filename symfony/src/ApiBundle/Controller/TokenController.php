@@ -14,6 +14,9 @@ class TokenController extends BaseController
     /**
      * @Route("/tokens")
      * @Method("POST")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException
      */
     public function newTokenAction(Request $request)
     {

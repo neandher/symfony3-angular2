@@ -7,7 +7,6 @@ use ApiBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,6 +20,8 @@ class UserController extends BaseController
     /**
      * @Route("/users")
      * @Method("POST")
+     * @param Request $request
+     * @return Response|void
      */
     public function newAction(Request $request)
     {
@@ -30,7 +31,7 @@ class UserController extends BaseController
         $this->processForm($request, $form);
 
         if (!$form->isValid()) {
-            return $this->throwApiProblemValidationException($form);
+            $this->throwApiProblemValidationException($form);
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -66,7 +67,7 @@ class UserController extends BaseController
         if (!$user) {
             throw $this->createNotFoundException(
                 sprintf(
-                    'No user with email "%s"',
+                    'No user found with email "%s"',
                     $email
                 )
             );
@@ -97,5 +98,68 @@ class UserController extends BaseController
         $response = $this->createApiResponse($paginatedCollection, 200);
 
         return $response;
+    }
+
+    /**
+     * @Route("/users/{email}")
+     * @Method({"PUT", "PATCH", "POST"})
+     * @param $email
+     * @param Request $request
+     * @return Response
+     */
+    public function updateAction($email, Request $request)
+    {
+        $user = $this->getDoctrine()
+            ->getRepository('ApiBundle:User')
+            ->findOneBy(['emailCanonical' => $email]);
+
+        if (!$user) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'No user found with email "%s"',
+                    $email
+                )
+            );
+        }
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $this->processForm($request, $form);
+
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        $response = $this->createApiResponse($user, 200);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/users/{email}")
+     * @Method("DELETE")
+     * @param $email
+     * @return Response
+     */
+    public function deleteAction($email)
+    {
+        $user = $this->getDoctrine()
+            ->getRepository('ApiBundle:User')
+            ->findOneBy(['emailCanonical' => $email]);
+
+        if ($user) {
+            // debated point: should we 404 on an unknown nickname?
+            // or should we just return a nice 204 in all cases?
+            // we're doing the latter
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+        }
+
+        return new Response(null, 204);
     }
 }

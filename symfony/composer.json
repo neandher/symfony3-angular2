@@ -29,12 +29,12 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
-        "firebase/php-jwt": "^4.0",
-        "knplabs/knp-paginator-bundle": "^2.5",
         "jms/serializer-bundle": "^1.1",
         "lexik/jwt-authentication-bundle": "^2.1",
         "willdurand/hateoas-bundle": "^1.2",
-        "white-october/pagerfanta-bundle": "^1.0"
+        "white-october/pagerfanta-bundle": "^1.0",
+        "vich/uploader-bundle": "^1.4",
+        "srio/rest-upload-bundle": "^2.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
