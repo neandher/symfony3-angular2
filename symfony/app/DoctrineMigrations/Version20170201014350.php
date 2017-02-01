@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170131155807 extends AbstractMigration
+class Version20170201014350 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,7 +18,7 @@ class Version20170131155807 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE user ADD avatar_image_name VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE user ADD updated_at DATETIME DEFAULT NULL');
     }
 
     /**
@@ -29,6 +29,6 @@ class Version20170131155807 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE user DROP avatar_image_name');
+        $this->addSql('ALTER TABLE user DROP updated_at');
     }
 }

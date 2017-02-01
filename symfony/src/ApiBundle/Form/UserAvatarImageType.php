@@ -3,14 +3,12 @@
 namespace ApiBundle\Form;
 
 use ApiBundle\Entity\User;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends PlainPasswordType
+class UserAvatarImageType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -18,12 +16,9 @@ class UserType extends PlainPasswordType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', TextType::class)
-            ->add('lastName', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('isEnabled', CheckboxType::class);
-
-        parent::buildForm($builder,$options);
+            ->add('avatarImageFile', FileType::class, [
+                'required' => false
+            ]);
     }
 
     /**
@@ -33,8 +28,7 @@ class UserType extends PlainPasswordType
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,
-            'validation_groups' => ['Default', 'creating'],
-            'csrf_protection' => false,
+            'csrf_protection' => false
         ));
     }
 

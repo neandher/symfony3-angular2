@@ -12,10 +12,12 @@ use Symfony\Component\Security\Core\Role\Role;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\UserRepository")
  * @ORM\Table(name="user")
+ * @Vich\Uploadable()
  * @UniqueEntity(
  *     "email",
  *     message="Email ja registrado!"
@@ -92,14 +94,15 @@ class User implements AdvancedUserInterface
      *
      * @var File
      */
-    private $avatarImageFile;
+    protected $avatarImageFile;
 
     /**
      * @var string
      *
+     * @Serializer\Expose()
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $avatarImageName;
+    protected $avatarImageName;
 
     /**
      * @var bool
@@ -198,7 +201,16 @@ class User implements AdvancedUserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $credentialsExpireAt;
-
+    
+    /**
+     * @var \DateTime
+     * 
+     * @Serializer\Expose()
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     */
+    protected $updatedAt;
+    
     /**
      * User constructor.
      */
@@ -732,22 +744,22 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $avatarImageFile
+     * @param File $avatarImageFile
      * @return User
      */
     public function setAvatarImageFile(File $avatarImageFile = null)
     {
         $this->avatarImageFile = $avatarImageFile;
 
-        /*if ($avatarImageFile instanceof UploadedFile) {
+        if ($avatarImageFile instanceof UploadedFile) {
             $this->setUpdatedAt(new \DateTime());
-        }*/
+        }
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return File|null
      */
     public function getAvatarImageName()
     {
@@ -763,4 +775,23 @@ class User implements AdvancedUserInterface
         $this->avatarImageName = $avatarImageName;
         return $this;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return User
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+    
 }

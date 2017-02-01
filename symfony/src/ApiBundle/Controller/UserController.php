@@ -3,6 +3,7 @@
 namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\User;
+use ApiBundle\Form\UserAvatarImageType;
 use ApiBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -14,11 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
  * Class UserController
  *
  * @Security("is_granted('ROLE_USER')")
+ * @Route("/users")
  */
 class UserController extends BaseController
 {
     /**
-     * @Route("/users")
+     * @Route("")
      * @Method("POST")
      * @param Request $request
      * @return Response|void
@@ -53,33 +55,21 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("/users/{email}", name="api_users_show")
+     * @Route("/{email}", name="api_users_show")
      * @Method("GET")
      * @param $email
      * @return Response
      */
     public function showAction($email)
     {
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->findOneBy(['emailCanonical' => $email]);
-
-        if (!$user) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'No user found with email "%s"',
-                    $email
-                )
-            );
-        }
-
+        $user = $this->checkUser($email);
         $response = $this->createApiResponse($user, 200);
 
         return $response;
     }
 
     /**
-     * @Route("/users", name="api_users_collection")
+     * @Route("", name="api_users_collection")
      * @Method("GET")
      * @param Request $request
      * @return Response
@@ -101,29 +91,16 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("/users/{email}")
-     * @Method({"PUT", "PATCH", "POST"})
+     * @Route("/{email}")
+     * @Method({"PUT", "PATCH"})
      * @param $email
      * @param Request $request
      * @return Response
      */
     public function updateAction($email, Request $request)
     {
-        $user = $this->getDoctrine()
-            ->getRepository('ApiBundle:User')
-            ->findOneBy(['emailCanonical' => $email]);
-
-        if (!$user) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'No user found with email "%s"',
-                    $email
-                )
-            );
-        }
-
+        $user = $this->checkUser($email);
         $form = $this->createForm(UserType::class, $user);
-
         $this->processForm($request, $form);
 
         if (!$form->isValid()) {
@@ -140,7 +117,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @Route("/users/{email}")
+     * @Route("/{email}")
      * @Method("DELETE")
      * @param $email
      * @return Response
@@ -152,14 +129,57 @@ class UserController extends BaseController
             ->findOneBy(['emailCanonical' => $email]);
 
         if ($user) {
-            // debated point: should we 404 on an unknown nickname?
-            // or should we just return a nice 204 in all cases?
-            // we're doing the latter
             $em = $this->getDoctrine()->getManager();
             $em->remove($user);
             $em->flush();
         }
 
         return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/{email}/avatar")
+     * @Method("POST")
+     * @param Request $request
+     * @param $email
+     * @return Response
+     */
+    public function avatarImageUploadAction(Request $request, $email)
+    {
+        $user = $this->checkUser($email);
+
+        $form = $this->createForm(UserAvatarImageType::class, $user);
+
+        $form->submit($request->files->all());
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $response = $this->createApiResponse($user, 200);
+
+            return $response;
+        }
+
+        return $this->throwApiProblemValidationException($form);
+    }
+
+    private function checkUser($email)
+    {
+        $user = $this->getDoctrine()
+            ->getRepository('ApiBundle:User')
+            ->findOneBy(['emailCanonical' => $email]);
+
+        if (!$user) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'No user found with email "%s"',
+                    $email
+                )
+            );
+        }
+
+        return $user;
     }
 }

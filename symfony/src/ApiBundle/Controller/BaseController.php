@@ -45,11 +45,6 @@ class BaseController extends Controller
     
     protected function processForm(Request $request, FormInterface $form)
     {
-        var_dump($request->files->get('avatarImageFile'));
-        var_dump($request->getContent());
-
-        die();
-
         $data = json_decode($request->getContent(), true);
 
         if ($data === null) {
