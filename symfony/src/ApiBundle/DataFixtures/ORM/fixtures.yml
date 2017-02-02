@@ -1,5 +1,4 @@
 ApiBundle\Entity\User:
-
     user1:
         firstName: Neandher
         lastName: Carlos
@@ -9,3 +8,24 @@ ApiBundle\Entity\User:
         plainPassword: admin@123
         password: -
         roles: [ROLE_USER]
+    user2:
+        firstName: Julianna
+        lastName: Dalma
+        email: julianna_dalma@hotmail.com
+        emailCanonical: -
+        isEnabled: 1
+        plainPassword: admin@123
+        password: -
+        roles: [ROLE_USER]
+
+ApiBundle\Entity\Video:
+    video{1..10}:
+        title: Video title <current()>
+        description: Video description <current()>
+        status: avaible
+        user: '@user1'
+    video{11..20}:
+        title: Video title <current()>
+        description: Video description <current()>
+        status: avaible
+        user: '@user2'

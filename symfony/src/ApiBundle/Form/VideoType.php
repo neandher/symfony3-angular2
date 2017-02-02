@@ -30,7 +30,7 @@ class VideoType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'ApiBundle\Entity\Video',
-            'csrf_protection' => false,
+            'csrf_protection' => false
         ));
     }
 }

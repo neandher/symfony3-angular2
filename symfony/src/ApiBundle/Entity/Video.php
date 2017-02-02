@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Video
@@ -22,13 +23,6 @@ use JMS\Serializer\Annotation as Serializer;
  *     href = @Hateoas\Route(
  *          "api_videos_show",
  *          parameters = { "id" = "expr(object.getId())" }
- *     )
- * )
- * @Hateoas\Relation(
- *     "user",
- *     href = @Hateoas\Route(
- *          "api_users_show",
- *          parameters = { "email" = "expr(object.getUser().getEmailCanonical())" }
  *     )
  * )
  */
@@ -78,15 +72,18 @@ class Video
      * @Vich\UploadableField(mapping="video_image", fileNameProperty="imageName")
      *
      * @var File
+     * @Assert\NotBlank(groups={"image_upload"})
+     * @Assert\File(
+     *     groups={"image_upload"},
+     *     mimeTypes = {"image/png", "image/jpg", "image/jpeg"}
+     * )
      */
     private $imageFile;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="image_name", type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(min="2", max="255")
+     * @ORM\Column(name="image_name", type="string", length=255, nullable=true)
      * @Serializer\Expose()
      */
     private $imageName;
@@ -95,15 +92,18 @@ class Video
      * @Vich\UploadableField(mapping="video", fileNameProperty="videoName")
      *
      * @var File
+     * @Assert\NotBlank(groups={"video_upload"})
+     * @Assert\File(
+     *     groups={"video_upload"},
+     *     mimeTypes = {"video/mp4"}
+     * )
      */
     private $videoFile;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="video_name", type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(min="2", max="255")
+     * @ORM\Column(name="video_name", type="string", length=255, nullable=true)
      * @Serializer\Expose()
      */
     private $videoName;
@@ -132,6 +132,7 @@ class Video
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Expose()
+     * @Serializer\Groups({"deep"})
      */
     private $user;
 

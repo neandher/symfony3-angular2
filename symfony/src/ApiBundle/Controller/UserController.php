@@ -3,8 +3,10 @@
 namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\User;
+use ApiBundle\Entity\Video;
 use ApiBundle\Form\UserAvatarImageType;
 use ApiBundle\Form\UserType;
+use ApiBundle\Repository\VideoRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -76,11 +78,11 @@ class UserController extends BaseController
      */
     public function listAction(Request $request)
     {
-        $filter = $request->query->get('filter');
+        $params = $request->query->all();
 
         $qb = $this->getDoctrine()
             ->getRepository(User::class)
-            ->findAllQueryBuilder($filter);
+            ->findAllQueryBuilder($params);
 
         $paginatedCollection = $this->get('api.pagination_factory')
             ->createCollection($qb, $request, 'api_users_collection');
@@ -149,22 +151,50 @@ class UserController extends BaseController
         $user = $this->checkUser($email);
 
         $form = $this->createForm(UserAvatarImageType::class, $user);
-
         $form->submit($request->files->all());
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $response = $this->createApiResponse($user, 200);
-
-            return $response;
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
         }
 
-        return $this->throwApiProblemValidationException($form);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        $response = $this->createApiResponse($user, 200);
+
+        return $response;
     }
 
+    /**
+     * @Route("/{email}/channel-videos", name="api_users_channel_videos")
+     * @Method("GET")
+     * @param Request $request
+     * @param $email
+     * @return Response
+     */
+    public function channelVideos(Request $request, $email)
+    {
+        $user = $this->checkUser($email);
+
+        $params = $request->query->all();
+
+        $channelVideosQb = $this->getDoctrine()->getRepository(Video::class)->findAllQueryBuilder($params, $user);
+
+        $collection = $this->get('api.pagination_factory')->createCollection(
+            $channelVideosQb,
+            $request,
+            'api_users_channel_videos',
+            ['email' => $user->getEmailCanonical()]
+        );
+
+        return $this->createApiResponse($collection);
+    }
+
+    /**
+     * @param $email
+     * @return User
+     */
     private function checkUser($email)
     {
         $user = $this->getDoctrine()

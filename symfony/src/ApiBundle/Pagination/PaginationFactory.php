@@ -24,14 +24,22 @@ class PaginationFactory
         $this->router = $router;
     }
 
-    public function createCollection(QueryBuilder $qb, Request $request, $route, array $routeParams = array())
+    /**
+     * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $qb
+     * @param Request $request
+     * @param $route
+     * @param array $routeParams
+     * @return PaginatedCollection
+     */
+    public function createCollection($qb, Request $request, $route, array $routeParams = array())
     {
         $page = $request->query->get('page', 1);
+        $perPage = $request->query->get('perpage', 10);
 
         $adapter = new DoctrineORMAdapter($qb);
 
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(10);
+        $pagerfanta->setMaxPerPage($perPage);
         $pagerfanta->setCurrentPage($page);
 
         $programmers = [];

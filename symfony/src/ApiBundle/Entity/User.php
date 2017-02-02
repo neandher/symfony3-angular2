@@ -30,6 +30,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *          parameters = { "email" = "expr(object.getEmailCanonical())" }
  *     )
  * )
+ * @Hateoas\Relation(
+ *     "channel_videos",
+ *     href = @Hateoas\Route(
+ *          "api_users_channel_videos",
+ *          parameters = { "email" = "expr(object.getEmailCanonical())" }
+ *     )
+ * )
  */
 class User implements AdvancedUserInterface
 {
@@ -93,6 +100,7 @@ class User implements AdvancedUserInterface
      * @Vich\UploadableField(mapping="user_avatar", fileNameProperty="avatarImageName")
      *
      * @var File
+     * @Assert\NotBlank()
      * @Assert\Image(
      *     mimeTypes = {"image/png", "image/jpg", "image/jpeg"}
      * )

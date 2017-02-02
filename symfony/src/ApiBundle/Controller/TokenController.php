@@ -36,7 +36,8 @@ class TokenController extends BaseController
             [
                 'fullname' => $user->getFullName(),
                 'email' => $user->getEmailCanonical(),
-                'exp' => time() + 3600 // 1 hour expiration
+                'exp' => time() + 993600
+                //'exp' => time() + 3600 // 1 hour expiration
             ]
         );
 

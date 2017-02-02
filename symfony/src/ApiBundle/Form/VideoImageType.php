@@ -26,6 +26,7 @@ class VideoImageType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'ApiBundle\Entity\Video',
             'csrf_protection' => false,
+            'validation_groups' => ['image_upload']
         ));
     }
 }

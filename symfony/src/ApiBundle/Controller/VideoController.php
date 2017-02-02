@@ -56,7 +56,7 @@ class VideoController extends BaseController
     }
 
     /**
-     * @Route("/{id}", name="api_videos_show")
+     * @Route("/{id}", requirements={"id": "\d+"}, name="api_videos_show")
      * @Method("GET")
      * @param $id
      * @return Response
@@ -77,11 +77,11 @@ class VideoController extends BaseController
      */
     public function listAction(Request $request)
     {
-        $filter = $request->query->get('filter');
+        $params = $request->query->all();
 
         $qb = $this->getDoctrine()
             ->getRepository(Video::class)
-            ->findAllQueryBuilder($filter);
+            ->findAllQueryBuilder($params);
 
         $paginatedCollection = $this->get('api.pagination_factory')
             ->createCollection($qb, $request, 'api_videos_collection');
@@ -92,13 +92,13 @@ class VideoController extends BaseController
     }
 
     /**
-     * @Route("/{id}")
+     * @Route("/{id}", requirements={"id": "\d+"})
      * @Method({"PUT", "PATCH"})
      * @param $id
      * @param Request $request
      * @return Response
      */
-    public function updateAction($id, Request $request)
+    public function updateAction(Request $request, $id)
     {
         $video = $this->checkVideo($id);
         
@@ -119,7 +119,7 @@ class VideoController extends BaseController
     }
 
     /**
-     * @Route("/{id}")
+     * @Route("/{id}", requirements={"id": "\d+"})
      * @Method("DELETE")
      * @param $id
      * @return Response
@@ -140,7 +140,7 @@ class VideoController extends BaseController
     }
 
     /**
-     * @Route("/{id}/image")
+     * @Route("/{id}/image", requirements={"id": "\d+"})
      * @Method("POST")
      * @param Request $request
      * @param $id
@@ -151,24 +151,23 @@ class VideoController extends BaseController
         $video = $this->checkVideo($id);
 
         $form = $this->createForm(VideoImageType::class, $video);
-
         $form->submit($request->files->all());
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($video);
-            $em->flush();
-
-            $response = $this->createApiResponse($video, 200);
-
-            return $response;
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
         }
 
-        return $this->throwApiProblemValidationException($form);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($video);
+        $em->flush();
+
+        $response = $this->createApiResponse($video, 200);
+
+        return $response;
     }
 
     /**
-     * @Route("/{id}/video-file")
+     * @Route("/{id}/video", requirements={"id": "\d+"})
      * @Method("POST")
      * @param Request $request
      * @param $id
@@ -179,20 +178,19 @@ class VideoController extends BaseController
         $video = $this->checkVideo($id);
 
         $form = $this->createForm(VideoFileType::class, $video);
-
         $form->submit($request->files->all());
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($video);
-            $em->flush();
-
-            $response = $this->createApiResponse($video, 200);
-
-            return $response;
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
         }
 
-        return $this->throwApiProblemValidationException($form);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($video);
+        $em->flush();
+
+        $response = $this->createApiResponse($video, 200);
+
+        return $response;
     }
 
     /**
