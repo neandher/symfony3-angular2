@@ -3,14 +3,34 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Video
  *
  * @ORM\Table(name="video")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\VideoRepository")
+ * @Serializer\ExclusionPolicy("all")
+ * @Vich\Uploadable()
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "api_videos_show",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ * @Hateoas\Relation(
+ *     "user",
+ *     href = @Hateoas\Route(
+ *          "api_users_show",
+ *          parameters = { "email" = "expr(object.getUser().getEmailCanonical())" }
+ *     )
+ * )
  */
 class Video
 {
@@ -20,6 +40,7 @@ class Video
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose()
      */
     private $id;
 
@@ -29,6 +50,7 @@ class Video
      * @ORM\Column(name="title", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min="2", max="255")
+     * @Serializer\Expose()
      */
     private $title;
 
@@ -38,6 +60,7 @@ class Video
      * @ORM\Column(name="description", type="text")
      * @Assert\NotBlank()
      * @Assert\Length(min="2")
+     * @Serializer\Expose()
      */
     private $description;
 
@@ -47,32 +70,50 @@ class Video
      * @ORM\Column(name="status", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min="2", max="20")
+     * @Serializer\Expose()
      */
     private $status;
 
     /**
-     * @var string
+     * @Vich\UploadableField(mapping="video_image", fileNameProperty="imageName")
      *
-     * @ORM\Column(name="image", type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(min="2", max="255")
+     * @var File
      */
-    private $image;
-
+    private $imageFile;
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="video_path", type="string", length=255)
+     * @ORM\Column(name="image_name", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min="2", max="255")
+     * @Serializer\Expose()
      */
-    private $videoPath;
+    private $imageName;
+
+    /**
+     * @Vich\UploadableField(mapping="video", fileNameProperty="videoName")
+     *
+     * @var File
+     */
+    private $videoFile;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="video_name", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="2", max="255")
+     * @Serializer\Expose()
+     */
+    private $videoName;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @Serializer\Expose()
      */
     private $createdAt;
 
@@ -81,6 +122,7 @@ class Video
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="update")
+     * @Serializer\Expose()
      */
     private $updatedAt;
 
@@ -89,6 +131,7 @@ class Video
      * 
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Expose()
      */
     private $user;
 
@@ -175,15 +218,38 @@ class Video
     }
 
     /**
+     * @return File
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param File $imageFile
+     * @return Video
+     */
+    public function setImageFile(File $imageFile = null)
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile instanceof UploadedFile) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+
+        return $this;
+    }
+    
+    /**
      * Set image
      *
-     * @param string $image
+     * @param string $imageName
      *
      * @return Video
      */
-    public function setImage($image)
+    public function setImageName($imageName)
     {
-        $this->image = $image;
+        $this->imageName = $imageName;
 
         return $this;
     }
@@ -193,33 +259,56 @@ class Video
      *
      * @return string
      */
-    public function getImage()
+    public function getImageName()
     {
-        return $this->image;
+        return $this->imageName;
     }
 
     /**
-     * Set videoPath
+     * @return File
+     */
+    public function getVideoFile()
+    {
+        return $this->videoFile;
+    }
+
+    /**
+     * @param File $videoFile
+     * @return Video
+     */
+    public function setVideoFile(File $videoFile = null)
+    {
+        $this->videoFile = $videoFile;
+
+        if ($videoFile instanceof UploadedFile) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Set videoName
      *
-     * @param string $videoPath
+     * @param string $videoName
      *
      * @return Video
      */
-    public function setVideoPath($videoPath)
+    public function setVideoName($videoName)
     {
-        $this->videoPath = $videoPath;
+        $this->videoName = $videoName;
 
         return $this;
     }
 
     /**
-     * Get videoPath
+     * Get videoName
      *
      * @return string
      */
-    public function getVideoPath()
+    public function getVideoName()
     {
-        return $this->videoPath;
+        return $this->videoName;
     }
 
     /**

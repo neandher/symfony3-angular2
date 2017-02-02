@@ -9,6 +9,8 @@ imports:
 parameters:
     locale: pt_BR
     upload_avatar_path: "%kernel.root_dir%/../web/uploads/images/avatar"
+    upload_video_path: "%kernel.root_dir%/../web/uploads/videos"
+    upload_video_image_path: "%kernel.root_dir%/../web/uploads/images/video"
 
 framework:
     #esi:             ~
@@ -92,6 +94,20 @@ vich_uploader:
         user_avatar:
             uri_prefix: '/uploads/images/avatar'
             upload_destination: "%upload_avatar_path%"
+            delete_on_remove: true
+            delete_on_update: true
+            inject_on_load: true
+            namer: vich_uploader.namer_uniqid
+        video:
+            uri_prefix: '/uploads/videos'
+            upload_destination: "%upload_video_path%"
+            delete_on_remove: true
+            delete_on_update: true
+            inject_on_load: true
+            namer: vich_uploader.namer_uniqid
+        video_image:
+            uri_prefix: '/uploads/images/video'
+            upload_destination: "%upload_video_image_path%"
             delete_on_remove: true
             delete_on_update: true
             inject_on_load: true
