@@ -2,5 +2,7 @@ api:
     resource: "@ApiBundle/Controller/"
     type:     annotation
     prefix:   /api/
+    defaults:
+        #_format: json
 
 

@@ -43,6 +43,7 @@ class User implements AdvancedUserInterface
     /**
      * @var integer
      *
+     * @Serializer\Expose()
      * @ORM\Id()
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")

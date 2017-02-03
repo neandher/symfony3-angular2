@@ -34,7 +34,9 @@
         "willdurand/hateoas-bundle": "^1.2",
         "white-october/pagerfanta-bundle": "^1.0",
         "vich/uploader-bundle": "^1.4",
-        "srio/rest-upload-bundle": "^2.1"
+        "srio/rest-upload-bundle": "^2.1",
+        "nelmio/cors-bundle": "^1.5",
+        "stof/doctrine-extensions-bundle": "^1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

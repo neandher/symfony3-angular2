@@ -5,12 +5,23 @@ namespace ApiBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Comment
  *
  * @ORM\Table(name="comment")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\CommentRepository")
+ * @Serializer\ExclusionPolicy("all")
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "api_comments_show",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ * 
  */
 class Comment
 {
@@ -20,6 +31,7 @@ class Comment
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose()
      */
     private $id;
 
@@ -29,6 +41,7 @@ class Comment
      * @ORM\Column(name="body", type="text")
      * @Assert\NotBlank()
      * @Assert\Length(min="2")
+     * @Serializer\Expose()
      */
     private $body;
 
@@ -37,6 +50,7 @@ class Comment
      *
      * @ORM\Column(name="created_at", type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @Serializer\Expose()
      */
     private $createdAt;
 
@@ -45,6 +59,9 @@ class Comment
      *
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
+     * @Serializer\Expose()
+     * @Serializer\Groups({"deep"})
      */
     private $user;
 
@@ -53,6 +70,9 @@ class Comment
      *
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Video")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
+     * @Serializer\Expose()
+     * @Serializer\Groups({"deep"})
      */
     private $video;
 
