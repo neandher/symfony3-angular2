@@ -15,7 +15,7 @@
         [(ngModel)]="user.email"
         #email="ngModel"
         required/>
-      <span *ngIf="!email.valid">El email es obligatorio</span>
+      <span *ngIf="!email.valid && email.touched">El email es obligatorio</span>
     </p>
 
     <p>
@@ -28,7 +28,7 @@
         [(ngModel)]="user.password"
         #password="ngModel"
         required/>
-      <span *ngIf="!password.valid">La contraseña es obligatoria</span>
+      <span *ngIf="!password.valid && password.touched">La contraseña es obligatoria</span>
     </p>
 
     <input type="submit" value="Entrar" class="btn btn-primary"/>
