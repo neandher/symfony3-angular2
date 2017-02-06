@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from "../services/auth.service";
+import {UserDataService} from "../services/user-data.service";
 
 @Component({
   selector: 'app-default',
@@ -6,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DefaultComponent implements OnInit {
 
-  constructor() { }
+  public titulo: string = "Portada";
+  public user;
 
-  ngOnInit() {
+  constructor(private auth: AuthService, private _userDataService: UserDataService) {
+  }
+
+  ngOnInit(): void {
+    this.user = this._userDataService.getUserData();
   }
 
 }

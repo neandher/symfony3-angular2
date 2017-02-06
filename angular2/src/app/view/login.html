@@ -4,7 +4,9 @@
   <h1>{{titulo}}</h1>
   <hr/>
 
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="col-md-4">
+  <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
+
+    <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
     <p>
       <label>Correo electrónico:</label>
       <input
@@ -12,10 +14,9 @@
         type="email"
         id="email"
         class="form-control"
-        [(ngModel)]="user.email"
-        #email="ngModel"
+        formControlName="email"
         required/>
-      <span *ngIf="!email.valid && email.touched">El email es obligatorio</span>
+      <span *ngIf="!formLogin.controls['email'].valid && formLogin.controls['email'].touched">El email es obligatorio</span>
     </p>
 
     <p>
@@ -25,13 +26,12 @@
         type="password"
         id="password"
         class="form-control"
-        [(ngModel)]="user.password"
-        #password="ngModel"
+        formControlName="password"
         required/>
-      <span *ngIf="!password.valid && password.touched">La contraseña es obligatoria</span>
+      <span *ngIf="!formLogin.controls['password'].valid && formLogin.controls['password'].touched">El password es obligatorio</span>
     </p>
 
-    <input type="submit" value="Entrar" class="btn btn-primary"/>
+    <input type="submit" [disabled]="!formLogin.valid" value="Entrar" class="btn btn-primary"/>
   </form>
 
   <!--
