@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtHelper } from 'angular2-jwt';
 
 @Component({
   selector: 'app-channel',
@@ -6,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChannelComponent implements OnInit {
 
-  constructor() { }
+  ngOnInit(): void {
+    this.useJwtHelper();
+  }
 
-  ngOnInit() {
+  jwtHelper: JwtHelper = new JwtHelper();
+
+  useJwtHelper() {
+    var token = localStorage.getItem('id_token');
+
+    console.log(
+      this.jwtHelper.decodeToken(token),
+      this.jwtHelper.getTokenExpirationDate(token),
+      this.jwtHelper.isTokenExpired(token)
+    );
   }
 
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../services/login.service";
 import {LogService} from "../services/log.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
 
     this._loginService.signup(this.user).subscribe(
       response => {
-        if (response.status == 0) {
+        console.log(response);
+        if (response.token != null) {
           localStorage.setItem('id_token', response.token);
           this._router.navigate(['/channel']);
           //window.location.href = "/";
