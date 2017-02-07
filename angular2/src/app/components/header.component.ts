@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
-import {UserDataService} from "../services/user-data.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -12,11 +11,11 @@ export class HeaderComponent implements OnInit {
 
   public user;
 
-  constructor(private auth: AuthService, private _userDataService: UserDataService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.user = this._userDataService.getUserData();
+    this.user = this.auth.getUserData() ? this.auth.getUserData() : {};
   }
 
   onLogout(){

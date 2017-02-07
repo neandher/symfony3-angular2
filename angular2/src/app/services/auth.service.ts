@@ -7,9 +7,12 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {User} from "../models/user";
+import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
+
+  jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(private _http: Http, private _logService: LogService) {
   }
@@ -33,5 +36,16 @@ export class AuthService {
 
   loggedIn() {
     return tokenNotExpired();
+  }
+
+  getUserData() {
+    var token = localStorage.getItem('id_token');
+
+    if (typeof token === "string" || token != null) {
+      return this.jwtHelper.decodeToken(token)
+    }
+    else {
+      return null;
+    }
   }
 }
