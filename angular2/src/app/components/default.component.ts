@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../services/auth.service";
-import {UserDataService} from "../services/user-data.service";
 
 @Component({
   selector: 'app-default',
@@ -11,11 +10,11 @@ export class DefaultComponent implements OnInit {
   public titulo: string = "Portada";
   public user;
 
-  constructor(private auth: AuthService, private _userDataService: UserDataService) {
+  constructor(private auth: AuthService) {
   }
 
   ngOnInit(): void {
-    this.user = this._userDataService.getUserData();
+    this.user = this.auth.getUserData();
   }
 
 }

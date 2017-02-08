@@ -20,7 +20,8 @@ export class HeaderComponent implements OnInit {
 
   onLogout(){
     this.auth.logout();
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
+    window.location.href = "/login";
   }
 
 }

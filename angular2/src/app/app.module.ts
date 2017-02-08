@@ -14,7 +14,6 @@ import {AuthGuard} from "./common/auth.guard";
 import {AuthProvider} from "./common/auth.provider";
 import {HeaderComponent} from './components/header.component';
 import {AuthService} from "./services/auth.service";
-import {UserDataService} from "./services/user-data.service";
 import {LogService} from "./services/log.service";
 
 
@@ -38,7 +37,6 @@ import {LogService} from "./services/log.service";
     AuthGuard,
     {provide: AuthHttp, useClass: AuthProvider},
     AuthService,
-    UserDataService,
     LogService
   ],
   bootstrap: [AppComponent]

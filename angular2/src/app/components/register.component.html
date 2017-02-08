@@ -1,3 +1,70 @@
-<p>
-  register works!
-</p>
+<div class="col-md-12">
+  <hr/>
+  <h1>{{titulo}}</h1>
+  <hr/>
+
+  <div class="alert alert-success" *ngIf="status == 'success'">
+    Te has registrado correctamente, ahora puedes identificarte
+    <a [routerLink]="['/login']">pinchando aqui...</a>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="status == 'error'">
+    No ha sido posible registrarte en la plataforma, intentalo más tarde.
+  </div>
+
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
+
+    <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
+
+    <p [ngClass]="{'has-error': myForm.controls['firstName'].touched && myForm.controls['firstName'].errors}">
+      <label for="firstName">Nombre:</label>
+      <input type="text" class="form-control" formControlName="firstName" id="firstName" #firstName/>
+      <span class="help-block" *ngIf="!myForm.controls['firstName'].valid && myForm.controls['firstName'].touched">
+        El nombre es obligatorio
+      </span>
+    </p>
+
+    <p [ngClass]="{'has-error': myForm.controls['lastName'].touched && myForm.controls['lastName'].errors}">
+      <label for="lastName">Apellidos:</label>
+      <input type="text" class="form-control" formControlName="lastName" id="lastName"/>
+      <span class="help-block" *ngIf="!myForm.controls['lastName'].valid && myForm.controls['lastName'].touched">
+        Los apellidos son obligatorios
+      </span>
+    </p>
+
+    <p [ngClass]="{'has-error': myForm.controls['email'].touched && myForm.controls['email'].errors}">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" formControlName="email" id="email"/>
+      <span class="help-block" *ngIf="myForm.controls['email'].touched && !myForm.controls['email'].valid">
+        Invalid email
+      </span>
+    </p>
+
+    <p formGroupName="plainPassword" [ngClass]="{'has-error': myForm.controls['plainPassword'].get('first').touched
+       && myForm.controls['plainPassword'].get('first').errors}">
+      <label for="first">Contraseña:</label>
+      <input type="password" class="form-control" formControlName="first" id="first"/>
+      <span class="help-block" *ngIf="myForm.controls['plainPassword'].get('first').touched
+      && !myForm.controls['plainPassword'].get('first').valid">
+        La contraseña es obligatoria
+      </span>
+    </p>
+
+    <p formGroupName="plainPassword" [ngClass]="{'has-error': myForm.controls['plainPassword'].get('second').touched
+       && myForm.controls['plainPassword'].get('second').errors}">
+      <label for="second">Confirm Contraseña:</label>
+      <input type="password" class="form-control" formControlName="second" id="second"/>
+      <span class="help-block" *ngIf="myForm.controls['plainPassword'].get('second').touched
+      && myForm.controls['plainPassword'].get('second').errors
+      && myForm.controls['plainPassword'].get('second').errors.required">
+        La confirm contraseña es obligatoria
+      </span>
+      <span class="help-block" *ngIf="myForm.controls['plainPassword'].get('second').errors
+      && myForm.controls['plainPassword'].get('second').errors.mismatch">
+        Confirm Contraseña mismatch
+      </span>
+    </p>
+
+    <input type="submit" value="Registrarse" class="btn btn-success" [disabled]="!myForm.valid"/>
+  </form>
+</div>
