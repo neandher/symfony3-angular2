@@ -12,8 +12,8 @@
     No ha sido posible registrarte en la plataforma, intentalo más tarde.
   </div>
 
-  <div *ngIf="errorAlert.length" class="alert alert-danger" role="alert">
-    <p *ngFor="let item of errorAlert">{{item}}</p>
+  <div *ngIf="error.length" class="alert alert-danger" role="alert">
+    <p *ngFor="let item of error">{{item}}</p>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">

@@ -1,0 +1,22 @@
+
+ handleError(control: any) {
+
+ var _errors: Object[] = [];
+ for (let error in control.errors) {
+ _errors.push(this.validationMessages[error]);
+ var pathFormError = this.getPathFormError(control);
+ this.formErrors[(pathFormError)] = error;
+ }
+
+ for (var child in control.controls) {
+ if (control.controls[child] instanceof AbstractControl && control.controls[child].dirty && !control.controls[child].valid) {
+ var childErrors = this.handleError(control.controls[child]);
+ if (childErrors) {
+ var t: Object[] = [];
+ t[child] = childErrors;
+ _errors.push(t);
+ }
+ }
+ }
+ return _errors;
+ }
