@@ -1,16 +1,16 @@
 import {Routes, RouterModule} from '@angular/router';
 
 import {DefaultComponent} from "./components/default.component";
-import {LoginComponent} from "./components/login.component";
-import {RegisterComponent} from "./components/register.component";
+import {SignInComponent} from "./components/signin.component";
+import {SignUpComponent} from "./components/signup.component";
 import {ChannelComponent} from "./components/channel.component";
 import {AuthGuard} from "./common/auth.guard";
 
 const APP_ROUTE: Routes = [
   {path: '', component: DefaultComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
+  {path: 'login', component: SignInComponent},
+  {path: 'login', component: SignInComponent},
+  {path: 'register', component: SignUpComponent},
   {path: 'channel', component: ChannelComponent, canActivate: [AuthGuard]}
 ];
 

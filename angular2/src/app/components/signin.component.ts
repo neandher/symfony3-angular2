@@ -1,15 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {LogService} from "../services/log.service";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
-  templateUrl: './../view/login.html',
-  providers: [LogService]
+  templateUrl: 'signin.component.html'
 })
-export class LoginComponent implements OnInit {
+export class SignInComponent implements OnInit {
 
   titulo: string = "Identificate";
   formLogin: FormGroup;
@@ -30,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
 
-    this._authService.login(this.formLogin.value).subscribe(
+    this._authService.signInUser(this.formLogin.value).subscribe(
       response => {
         if (response.token != null) {
           this.error = '';
