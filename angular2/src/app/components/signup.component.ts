@@ -15,6 +15,7 @@ export class SignUpComponent extends BaseComponent implements OnInit {
   public status: string = "";
   public error: string[] = [];
   public form: FormGroup;
+  public submit: boolean = false;
   public formErrors: Object = {
     'firstName': [],
     'lastName': [],
@@ -51,12 +52,14 @@ export class SignUpComponent extends BaseComponent implements OnInit {
   }
 
   onSubmit() {
+    this.error = [];
+
     this.auth.signupUser(this.form.value).subscribe(
       response => {
-        this.router.navigate(['/signInUser']);
+        this.submit = true;
+        this.status = 'success';
       },
       responseError => {
-        this.error = [];
         this.handleResponseError(responseError.json().errors);
       }
     );

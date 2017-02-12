@@ -101,8 +101,9 @@ class User implements AdvancedUserInterface
      * @Vich\UploadableField(mapping="user_avatar", fileNameProperty="avatarImageName")
      *
      * @var File
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"user_avatar_upload"})
      * @Assert\Image(
+     *     groups={"user_avatar_upload"},
      *     mimeTypes = {"image/png", "image/jpg", "image/jpeg"}
      * )
      */
@@ -222,16 +223,16 @@ class User implements AdvancedUserInterface
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
-    
+
     /**
      * @var \DateTime
-     * 
+     *
      * @Serializer\Expose()
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="update")
      */
     protected $updatedAt;
-    
+
     /**
      * User constructor.
      */
@@ -814,7 +815,7 @@ class User implements AdvancedUserInterface
         $this->createdAt = $createdAt;
         return $this;
     }
-    
+
     /**
      * @return \DateTime
      */

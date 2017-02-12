@@ -14,6 +14,7 @@ import {AuthGuard} from "./common/auth.guard";
 import {AuthProvider} from "./common/auth.provider";
 import {HeaderComponent} from './components/header.component';
 import {AuthService} from "./services/auth.service";
+import { UserEditComponent } from './components/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {AuthService} from "./services/auth.service";
     SignUpComponent,
     DefaultComponent,
     ChannelComponent,
-    HeaderComponent
+    HeaderComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

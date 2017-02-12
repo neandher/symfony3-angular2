@@ -28,7 +28,8 @@ class UserAvatarImageType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'validation_groups' => ['user_avatar_upload']
         ));
     }
 

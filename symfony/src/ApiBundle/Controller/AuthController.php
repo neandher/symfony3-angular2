@@ -2,23 +2,31 @@
 
 namespace ApiBundle\Controller;
 
+use ApiBundle\Entity\User;
+use ApiBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
-class TokenController extends BaseController
+/**
+ * Class AuthController
+ *
+ * @Route("/auth")
+ */
+class AuthController extends BaseController
 {
 
     /**
-     * @Route("/tokens")
+     * @Route("/signin")
      * @Method("POST")
      * @param Request $request
      * @return JsonResponse
      * @throws \Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException
      */
-    public function newTokenAction(Request $request)
+    public function signInAction(Request $request)
     {
         $user = $this->getDoctrine()->getRepository('ApiBundle:User')->findOneBy(['emailCanonical' => $request->getUser()]);
 
@@ -46,5 +54,40 @@ class TokenController extends BaseController
                 'token' => $token
             ]
         );
+    }
+
+    /**
+     * @Route("/signup")
+     * @Method("POST")
+     * @param Request $request
+     * @return Response|void
+     */
+    public function signUpAction(Request $request)
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+
+        $this->processForm($request, $form);
+
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        $response = $this->createApiResponse($user, 201);
+
+        $userUrl = $this->generateUrl(
+            'api_users_show',
+            [
+                'email' => $user->getEmailCanonical()
+            ]
+        );
+
+        $response->headers->set('Location', $userUrl);
+
+        return $response;
     }
 }

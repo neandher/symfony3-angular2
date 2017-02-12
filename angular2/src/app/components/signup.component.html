@@ -5,18 +5,14 @@
 
   <div class="alert alert-success" *ngIf="status == 'success'">
     Te has registrado correctamente, ahora puedes identificarte
-    <a [routerLink]="['/login']">pinchando aqui...</a>
-  </div>
-
-  <div class="alert alert-danger" *ngIf="status == 'error'">
-    No ha sido posible registrarte en la plataforma, intentalo más tarde.
+    <a [routerLink]="['/signin']">pinchando aqui...</a>
   </div>
 
   <div *ngIf="error.length" class="alert alert-danger" role="alert">
     <p *ngFor="let item of error">{{item}}</p>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
+  <form *ngIf="!submit" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
 
     <div class="form-group {{form.get('firstName').dirty ? 'has-feedback' : ''}}"
          [ngClass]="{'has-error':formErrors.firstName.length,'has-success':form.get('firstName').valid}">
