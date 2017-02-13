@@ -3,6 +3,7 @@ import {AuthService} from "../services/auth.service";
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import {NGValidators} from "ng-validators";
 import {BaseComponent} from "./base.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class SignInComponent extends BaseComponent implements OnInit {
     'password': [],
   };
 
-  constructor(private fb: FormBuilder, private _authService: AuthService) {
+  constructor(private fb: FormBuilder, private _authService: AuthService, private router: Router) {
     super();
   }
 
@@ -41,14 +42,15 @@ export class SignInComponent extends BaseComponent implements OnInit {
       response => {
         if (response.token != null) {
           localStorage.setItem('id_token', response.token);
-          window.location.href = "/";
+          this._authService.authSuccessEmitter.emit(true);
+          this.router.navigate(['/']);
         }
         else {
           alert('Some Error!');
         }
       },
       responseError => {
-        this.handleResponseError(responseError.json().errors);
+        this.error = ['Invalid Credentials'];
       }
     );
   }

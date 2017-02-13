@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit, EventEmitter} from '@angular/core';
 import {Headers, RequestOptions, Http, Response} from "@angular/http";
 import {tokenNotExpired} from 'angular2-jwt';
 import {myConfig} from "../auth.config";
@@ -9,11 +9,16 @@ import {User} from "../models/user";
 import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnInit {
 
+  public authSuccessEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(private _http: Http) {
+  }
+
+  ngOnInit(): void {
+
   }
 
   signInUser(user: User) {
@@ -26,6 +31,10 @@ export class AuthService {
 
     return this._http.post(myConfig.url + "/auth/signin", null, options)
       .map(res => res.json());
+  }
+
+  authSuccess(isAuthSuccess: boolean) {
+    this.authSuccessEmitter.emit(isAuthSuccess);
   }
 
   logout() {

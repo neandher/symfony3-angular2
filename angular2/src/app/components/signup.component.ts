@@ -45,8 +45,10 @@ export class SignUpComponent extends BaseComponent implements OnInit {
           Validators.maxLength(24),
           EqualPasswordsValidator.validate('plainPassword', 'first', 'second')]],
       }),
+      isEnabled: [''],
     });
 
+    this.form.get('isEnabled').setValue(true);
     this.form.valueChanges.subscribe(data => this.onValueChanged());
     this.onValueChanged();
   }

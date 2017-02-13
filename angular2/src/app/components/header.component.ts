@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import {User} from "../models/user";
 
 @Component({
   selector: 'app-header',
@@ -9,19 +10,29 @@ import {Router} from "@angular/router";
 
 export class HeaderComponent implements OnInit {
 
-  public user;
+  public user: User;
 
   constructor(private auth: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.user = this.auth.getUserData() ? this.auth.getUserData() : {};
+    this.user = this.auth.getUserData();
+    this.auth.authSuccessEmitter.subscribe(
+      (isAuthSeccess: boolean) => {
+        if (isAuthSeccess) {
+          this.user = this.auth.getUserData();
+        }
+        else {
+          this.user = null;
+        }
+      }
+    );
   }
 
-  onLogout(){
+  onLogout() {
     this.auth.logout();
-    //this.router.navigate(['/signInUser']);
-    window.location.href = "/signInUser";
+    this.auth.authSuccess(false);
+    this.router.navigate(['/signin']);
   }
 
 }

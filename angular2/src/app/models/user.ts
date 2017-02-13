@@ -7,5 +7,5 @@ export class User {
   password: string;
   plainPassword?: {first?: string, second?: string};
   image: string;
-  fullname: string;
+  fullName: string;
 }
