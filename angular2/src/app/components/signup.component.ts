@@ -1,8 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {NGValidators} from "ng-validators";
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
+import {AuthService} from "../auth/auth.service";
 import {EqualPasswordsValidator} from "../validators/equalPasswords.validator";
 import {BaseComponent} from "./base.component";
 
@@ -24,7 +23,7 @@ export class SignUpComponent extends BaseComponent implements OnInit {
     'plainPassword.second': [],
   };
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, protected auth: AuthService) {
     super();
   }
 

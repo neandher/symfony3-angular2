@@ -1,6 +1,6 @@
 import {Injectable, OnInit, EventEmitter} from '@angular/core';
 import {Headers, RequestOptions, Http, Response} from "@angular/http";
-import {tokenNotExpired} from 'angular2-jwt';
+import {tokenNotExpired, AuthHttp} from 'angular2-jwt';
 import {myConfig} from "../auth.config";
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -14,7 +14,7 @@ export class AuthService implements OnInit {
   public authSuccessEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private _http: Http) {
+  constructor(private _http: Http, private authHttp: AuthHttp) {
   }
 
   ngOnInit(): void {
@@ -60,6 +60,12 @@ export class AuthService implements OnInit {
     else {
       return null;
     }
+  }
+
+  updateUser(user: User) {
+    let json = JSON.stringify(user);
+    return this.authHttp.put(myConfig.url + "/users/"+user.email, json)
+      .map((response: Response) => response.json());
   }
 
 }

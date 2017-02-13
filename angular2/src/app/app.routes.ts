@@ -4,7 +4,7 @@ import {DefaultComponent} from "./components/default.component";
 import {SignInComponent} from "./components/signin.component";
 import {SignUpComponent} from "./components/signup.component";
 import {ChannelComponent} from "./components/channel.component";
-import {AuthGuard} from "./common/auth.guard";
+import {AuthGuard} from "./auth/auth.guard";
 import {UserEditComponent} from "./components/user-edit.component";
 
 const APP_ROUTE: Routes = [

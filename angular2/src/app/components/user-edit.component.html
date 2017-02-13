@@ -1,3 +1,48 @@
-<p>
-  user-edit works!
-</p>
+<div class="col-md-12">
+  <hr/>
+  <h1>Actualizar mis datos</h1>
+  <hr/>
+
+  <div class="alert alert-success" *ngIf="status == 'success'">
+    Has modificado tus datos correctamente.
+  </div>
+
+  <div *ngIf="error.length" class="alert alert-danger" role="alert">
+    <p *ngFor="let item of error">{{item}}</p>
+  </div>
+
+  <form *ngIf="!submit" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
+
+    <div class="form-group {{form.get('firstName').dirty ? 'has-feedback' : ''}}"
+         [ngClass]="{'has-error':formErrors.firstName.length,'has-success':form.get('firstName').valid}">
+      <label class="control-label" for="firstName">Nombre:</label>
+      <input type="text" class="form-control" formControlName="firstName" id="firstName" [(ngModel)]="user.firstName"/>
+      <span class="help-block" *ngFor="let item of formErrors.firstName">{{item}}</span>
+      <span class="glyphicon form-control-feedback"
+            [ngClass]="{'glyphicon-remove':formErrors.firstName.length,'glyphicon-ok':form.get('firstName').valid}"
+            aria-hidden="true"></span>
+    </div>
+
+    <div class="form-group {{form.get('lastName').dirty ? 'has-feedback' : ''}}"
+         [ngClass]="{'has-error':formErrors.lastName.length,'has-success':form.get('lastName').valid}">
+      <label class="control-label" for="lastName">Apellidos:</label>
+      <input type="text" class="form-control" formControlName="lastName" id="lastName" [(ngModel)]="user.lastName"/>
+      <span class="help-block" *ngFor="let item of formErrors.lastName">{{item}}</span>
+      <span class="glyphicon form-control-feedback"
+            [ngClass]="{'glyphicon-remove':formErrors.lastName.length,'glyphicon-ok':form.get('lastName').valid}"
+            aria-hidden="true"></span>
+    </div>
+
+    <div class="form-group {{form.get('email').dirty ? 'has-feedback' : ''}}"
+         [ngClass]="{'has-error':formErrors.email.length,'has-success':form.get('email').valid}">
+      <label class="control-label" for="email">Email:</label>
+      <input type="email" class="form-control" formControlName="email" id="email" [(ngModel)]="user.email"/>
+      <span class="help-block" *ngFor="let item of formErrors.email">{{item}}</span>
+      <span class="glyphicon form-control-feedback"
+            [ngClass]="{'glyphicon-remove':formErrors.email.length,'glyphicon-ok':form.get('email').valid}"
+            aria-hidden="true"></span>
+    </div>
+
+    <input type="submit" value="Actualizar mis datos" class="btn btn-success" [disabled]="!form.valid"/>
+  </form>
+</div>
