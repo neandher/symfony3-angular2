@@ -123,7 +123,7 @@ class User implements AdvancedUserInterface
      * @Serializer\Expose()
      * @ORM\Column(type="boolean")
      */
-    protected $isEnabled = false;
+    protected $isEnabled = true;
 
     /**
      * @var string
