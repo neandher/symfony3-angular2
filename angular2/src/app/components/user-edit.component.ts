@@ -51,6 +51,7 @@ export class UserEditComponent extends BaseComponent implements OnInit {
         this.status = 'success';
       },
       responseError => {
+        console.log(responseError);
         this.handleResponseError(responseError.json().errors);
       }
     );
