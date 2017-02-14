@@ -4,8 +4,10 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\User;
 use ApiBundle\Entity\Video;
+use ApiBundle\Form\ChangePasswordType;
 use ApiBundle\Form\UserAvatarImageType;
 use ApiBundle\Form\UserType;
+use ApiBundle\Form\UserUpdateType;
 use ApiBundle\Repository\VideoRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -102,7 +104,7 @@ class UserController extends BaseController
     public function updateAction($email, Request $request)
     {
         $user = $this->checkUser($email);
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserUpdateType::class, $user);
         $this->processForm($request, $form);
 
         if (!$form->isValid()) {
@@ -137,6 +139,33 @@ class UserController extends BaseController
         }
 
         return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/{email}/change-password")
+     * @Method("PATCH")
+     * @param Request $request
+     * @param $email
+     * @return Response
+     */
+    public function changePasswordAction(Request $request, $email)
+    {
+        $user = $this->checkUser($email);
+
+        $form = $this->createForm(ChangePasswordType::class, $user);
+        $this->processForm($request, $form);
+
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        $response = $this->createApiResponse($user, 200);
+
+        return $response;
     }
 
     /**

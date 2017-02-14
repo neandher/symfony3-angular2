@@ -20,8 +20,6 @@ class PlainPasswordType extends AbstractType
                 RepeatedType::class,
                 array(
                     'type'          => PasswordType::class,
-                    'first_options' => array('label' => 'Senha'),
-                    'second_options' => array('label' => 'Confirma Senha'),
                     'invalid_message' => 'Senhas nao estao iguais'
                 )
             );
