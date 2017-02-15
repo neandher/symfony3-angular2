@@ -6,6 +6,6 @@ export class User {
   isEnabled: boolean = true;
   password: string;
   plainPassword?: {first?: string, second?: string};
-  image: string;
+  avatarImageName: string;
   fullName: string;
 }
