@@ -1,7 +1,7 @@
 import {Injectable, OnInit, EventEmitter} from '@angular/core';
 import {Headers, RequestOptions, Http, Response} from "@angular/http";
 import {tokenNotExpired, AuthHttp} from 'angular2-jwt';
-import {myConfig} from "../auth.config";
+import {appConfig} from "../app.config";
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -12,24 +12,23 @@ import {JwtHelper} from 'angular2-jwt';
 export class AuthService implements OnInit {
 
   public authSuccessEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
-  jwtHelper: JwtHelper = new JwtHelper();
+  private jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private _http: Http, private authHttp: AuthHttp) {
+  constructor(private http: Http, private authHttp: AuthHttp) {
   }
 
   ngOnInit(): void {
-
   }
 
-  signInUser(user: User) {
+  signIn(user: User) {
+
     let headers = new Headers();
 
-    headers.append('Authorization', "Basic " +
-      btoa(user.email + ":" + user.password));
+    headers.append('Authorization', "Basic " + btoa(user.email + ":" + user.password));
 
     let options = new RequestOptions({headers: headers});
 
-    return this._http.post(myConfig.url + "/auth/signin", null, options)
+    return this.http.post(appConfig.apiUrl + "/auth/signin", null, options)
       .map(res => res.json());
   }
 
@@ -45,14 +44,18 @@ export class AuthService implements OnInit {
     return tokenNotExpired();
   }
 
-  signupUser(user: User) {
+  signUp(user: User) {
+
     let json = JSON.stringify(user);
-    return this._http.post(myConfig.url + "/auth/signup", json, null)
+    let url = appConfig.apiUrl + "/auth/signup";
+
+    return this.http.post(url, json, null)
       .map((response: Response) => response.json());
   }
 
   getUserData() {
-    var token = localStorage.getItem('id_token');
+
+    let token = localStorage.getItem('id_token');
 
     if (typeof token === "string" || token != null) {
       return this.jwtHelper.decodeToken(token)
@@ -63,8 +66,21 @@ export class AuthService implements OnInit {
   }
 
   updateUser(user: User) {
+
     let json = JSON.stringify(user);
-    return this.authHttp.put(myConfig.url + "/users/"+user.email, json)
+    let url = appConfig.apiUrl + "/users/" + user.email;
+
+    return this.authHttp.put(url, json)
+      .map((response: Response) => response.json());
+  }
+
+  changePassword(user: User){
+
+    let userEmail = this.getUserData().email;
+    let json = JSON.stringify(user);
+    let url = appConfig.apiUrl + "/users/" + userEmail + "/change-password";
+
+    return this.authHttp.put(url, json)
       .map((response: Response) => response.json());
   }
 

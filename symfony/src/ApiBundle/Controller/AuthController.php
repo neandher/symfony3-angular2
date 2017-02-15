@@ -40,6 +40,11 @@ class AuthController extends BaseController
             throw new BadCredentialsException();
         }
 
+        $user->setLastLoginAt(new \DateTime());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
         $token = $this->get('lexik_jwt_authentication.encoder.default')->encode(
             [
                 'firstName' => $user->getFirstName(),

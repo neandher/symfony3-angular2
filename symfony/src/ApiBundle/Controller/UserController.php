@@ -143,7 +143,7 @@ class UserController extends BaseController
 
     /**
      * @Route("/{email}/change-password")
-     * @Method("PATCH")
+     * @Method("PUT")
      * @param Request $request
      * @param $email
      * @return Response
@@ -158,6 +158,8 @@ class UserController extends BaseController
         if (!$form->isValid()) {
             $this->throwApiProblemValidationException($form);
         }
+
+        $user->setPassword(null);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);

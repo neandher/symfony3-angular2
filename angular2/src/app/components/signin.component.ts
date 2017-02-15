@@ -18,12 +18,12 @@ export class SignInComponent extends BaseComponent implements OnInit {
     'password': [],
   };
 
-  constructor(private fb: FormBuilder, private _authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     super();
   }
 
   ngOnInit(): any {
-    this._authService.logout();
+    this.auth.logout();
     this.buildForm();
   }
 
@@ -38,11 +38,11 @@ export class SignInComponent extends BaseComponent implements OnInit {
 
   onSubmit() {
     this.error = [];
-    this._authService.signInUser(this.form.value).subscribe(
+    this.auth.signIn(this.form.value).subscribe(
       response => {
         if (response.token != null) {
           localStorage.setItem('id_token', response.token);
-          this._authService.authSuccessEmitter.emit(true);
+          this.auth.authSuccessEmitter.emit(true);
           this.router.navigate(['/']);
         }
         else {
@@ -50,6 +50,7 @@ export class SignInComponent extends BaseComponent implements OnInit {
         }
       },
       responseError => {
+        console.log(responseError);
         this.error = ['Invalid Credentials'];
       }
     );

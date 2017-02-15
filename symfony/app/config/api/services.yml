@@ -2,11 +2,15 @@
 
 services:
 
-    api.last_login_subscriber:
-        class: ApiBundle\EventListener\Security\LastLoginSubscriber
+#    api.last_login_subscriber:
+#        class: ApiBundle\EventListener\Security\LastLoginSubscriber
+#        autowire: true
+#        tags:
+#            - { name: kernel.event_subscriber }
+
+    api.jwt_token_authenticator:
+        class: ApiBundle\Security\jwtTokenAuthenticator
         autowire: true
-        tags:
-            - { name: kernel.event_subscriber }
 
     api.encode_password_subscriber:
         class: ApiBundle\EventListener\Security\EncodePasswordSubscriber
@@ -19,10 +23,6 @@ services:
         autowire: true
         tags:
             - { name: doctrine.event_subscriber }
-
-    api.jwt_token_authenticator:
-        class: ApiBundle\Security\jwtTokenAuthenticator
-        autowire: true
 
     api.response_factory:
         class: ApiBundle\Api\ResponseFactory

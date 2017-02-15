@@ -1,4 +1,5 @@
 import {FormGroup, FormControl} from "@angular/forms";
+import {validation} from "../models/validation";
 
 export class BaseComponent {
 
@@ -8,11 +9,14 @@ export class BaseComponent {
 
   protected handleResponseError(responseError: any[]) {
 
+    let check: number;
+    let path: string;
+
     for (let index in responseError) {
-      var check = 0;
+      check = 0;
       for (let item of responseError[index]) {
+        path = this.getPathFormErrorResponse(index, this.form);
         this.error.push(item);
-        var path = this.getPathFormErrorResponse(index, this.form);
         this.formErrors[(path)].push(item);
         this.form.get(path).setErrors({"response_error": item});
         check++;
@@ -24,9 +28,10 @@ export class BaseComponent {
   }
 
   protected getPathFormErrorResponse(field: string, control: any) {
-    var path: string|null = null;
 
-    for (var child in control.controls) {
+    let path: string|null = null;
+
+    for (let child in control.controls) {
       if (control.controls[child] instanceof FormControl) {
         if (field === child && path == null) {
           path = this.getPathFormError(control.controls[child]);
@@ -40,9 +45,10 @@ export class BaseComponent {
     return path;
   }
 
-  protected getPathFormError(control) {
-    var path: string = '';
-    var parent = control.parent;
+  protected getPathFormError(control: any) {
+
+    let path: string = '';
+    let parent = control.parent;
 
     while (parent instanceof FormGroup) {
       Object.keys(parent.controls).forEach((name) => {
@@ -55,11 +61,10 @@ export class BaseComponent {
     }
 
     path = path.substr(0, (path.length - 1));
-    var dotted = path.indexOf('.');
+    let dotted = path.indexOf('.');
 
     if (dotted != -1) {
-      var orderedArray: string[] = path.split('.');
-      orderedArray = orderedArray.reverse();
+      let orderedArray: string[] = path.split('.').reverse();
       path = '';
       for (let i = 0; i < orderedArray.length; i++) {
         path += orderedArray[i] + '.';
@@ -72,14 +77,14 @@ export class BaseComponent {
 
   protected handleError(control: any) {
 
-    const pathFormError = this.getPathFormError(control);
+    let pathFormError = this.getPathFormError(control);
 
     for (let error in control.errors) {
-      if (this.formErrors[(pathFormError)].indexOf(this.validationMessages[error]) == -1) {
-        this.formErrors[(pathFormError)].push(this.validationMessages[error]);
+      if (this.formErrors[(pathFormError)].indexOf(validation.messages[error]) == -1) {
+        this.formErrors[(pathFormError)].push(validation.messages[error]);
       }
     }
-    for (var child in control.controls) {
+    for (let child in control.controls) {
       if (control.controls[child] instanceof FormControl) {
         this.formErrors[(this.getPathFormError(control.controls[child]))] = [];
         if (control.controls[child].dirty && !control.controls[child].valid) {
@@ -91,13 +96,4 @@ export class BaseComponent {
       }
     }
   }
-
-  validationMessages: Object = {
-    'response_error': '',
-    'required': 'This field is required.',
-    'minlength': 'This field must be at least 4 characters long.',
-    'maxlength': 'This field cannot be more than 24 characters long.',
-    'passwordsEqual': 'Password mismatch.',
-    'isEmail': 'Email invalid.'
-  };
 }

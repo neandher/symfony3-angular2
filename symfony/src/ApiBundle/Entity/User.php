@@ -489,6 +489,10 @@ class User implements AdvancedUserInterface
 
         //$roles[] = static::ROLE_DEFAULT;
 
+        if(!count($roles) > 0){
+            $roles = ['ROLE_USER'];
+        }
+
         return array_unique($roles);
     }
 

@@ -16,7 +16,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.user = this.auth.getUserData();
+
     this.auth.authSuccessEmitter.subscribe(
       (isAuthSeccess: boolean) => {
         if (isAuthSeccess) {

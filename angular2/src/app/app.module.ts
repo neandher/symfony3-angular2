@@ -15,6 +15,7 @@ import {AuthProvider} from "./auth/auth.provider";
 import {HeaderComponent} from './components/header.component';
 import {AuthService} from "./auth/auth.service";
 import { UserEditComponent } from './components/user-edit.component';
+import { UserChangePasswordComponent } from './components/user-change-password.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UserEditComponent } from './components/user-edit.component';
     DefaultComponent,
     ChannelComponent,
     HeaderComponent,
-    UserEditComponent
+    UserEditComponent,
+    UserChangePasswordComponent
   ],
   imports: [
     BrowserModule,

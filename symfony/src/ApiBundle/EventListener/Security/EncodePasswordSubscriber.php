@@ -37,30 +37,32 @@ class EncodePasswordSubscriber implements EventSubscriber
 
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
+        /** @var User $user */
+        $user = $eventArgs->getEntity();
 
-        if (!$this->isUser($entity)) {
+        if (!$this->isUser($user)) {
             return;
         }
 
-        $this->encodePassword($entity);
+        $this->encodePassword($user);
     }
 
     public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
+        /** @var User $user */
+        $user = $eventArgs->getEntity();
 
-        if (!$this->isUser($entity)) {
+        if (!$this->isUser($user)) {
             return;
         }
 
-        $this->encodePassword($entity);
+        $this->encodePassword($user);
     }
 
     private function encodePassword(User $user)
     {
         $plainPassword = $user->getPlainPassword();
-
+        
         if (!is_null($plainPassword)) {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
         }

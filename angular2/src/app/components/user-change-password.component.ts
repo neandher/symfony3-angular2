@@ -1,24 +1,23 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
+import {BaseComponent} from "./base.component";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {NGValidators} from "ng-validators";
+import {User} from "../models/user";
 import {AuthService} from "../auth/auth.service";
 import {EqualPasswordsValidator} from "../validators/equalPasswords.validator";
-import {BaseComponent} from "./base.component";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: 'signup.component.html'
+  selector: 'app-user-change-password',
+  templateUrl: './user-change-password.component.html'
 })
-export class SignUpComponent extends BaseComponent implements OnInit {
+export class UserChangePasswordComponent extends BaseComponent implements OnInit {
 
+  public user: User;
   public status: string = "";
   public error: string[] = [];
   public form: FormGroup;
   public submit: boolean = false;
   public formErrors: Object = {
-    'firstName': [],
-    'lastName': [],
-    'email': [],
+    'current_password': [],
     'plainPassword.first': [],
     'plainPassword.second': [],
   };
@@ -27,15 +26,13 @@ export class SignUpComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.buildForm();
   }
 
   buildForm(): void {
     this.form = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
-      lastName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
-      email: ['', [Validators.required, NGValidators.isEmail()]],
+      current_password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
       plainPassword: this.fb.group({
         first: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
         second: ['', [
@@ -50,14 +47,17 @@ export class SignUpComponent extends BaseComponent implements OnInit {
     this.onValueChanged();
   }
 
+  onValueChanged() {
+    this.handleError(this.form);
+  }
+
   onSubmit() {
     this.error = [];
 
-    this.auth.signUp(this.form.value).subscribe(
+    this.auth.changePassword(this.form.value).subscribe(
       response => {
         this.submit = true;
         this.status = 'success';
-        this.form.reset();
       },
       responseError => {
         this.handleResponseError(responseError.json().errors);
@@ -65,7 +65,4 @@ export class SignUpComponent extends BaseComponent implements OnInit {
     );
   }
 
-  onValueChanged() {
-    this.handleError(this.form);
-  }
 }
