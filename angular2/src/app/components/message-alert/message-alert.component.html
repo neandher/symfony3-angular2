@@ -1,0 +1,6 @@
+<div *ngIf="error.length" class="alert alert-danger" role="alert">
+  <p *ngFor="let item of error">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    {{item}}
+  </p>
+</div>

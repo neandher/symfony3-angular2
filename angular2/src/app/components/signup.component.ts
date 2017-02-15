@@ -42,7 +42,7 @@ export class SignUpComponent extends BaseComponent implements OnInit {
           Validators.required,
           Validators.minLength(4),
           Validators.maxLength(24),
-          EqualPasswordsValidator.validate('plainPassword', 'first', 'second')]],
+          EqualPasswordsValidator.validate('plainPassword.first', 'plainPassword.second')]],
       })
     });
 

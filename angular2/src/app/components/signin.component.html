@@ -4,30 +4,28 @@
   <h1>Identificate</h1>
   <hr/>
 
-  <div *ngIf="error.length" class="alert alert-danger" role="alert">
-    <p *ngFor="let item of error">{{item}}</p>
-  </div>
+  <app-message-alert [error]="error"></app-message-alert>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
 
     <div class="form-group {{form.get('email').dirty ? 'has-feedback' : ''}}"
-         [ngClass]="{'has-error':formErrors.email.length,'has-success':form.get('email').valid}">
+         [ngClass]="{'has-error':formErrors.email.length,
+         'has-success':form.get('email').dirty && form.get('email').valid}">
       <label class="control-label" for="email">Email:</label>
       <input type="email" class="form-control" formControlName="email" id="email"/>
       <span class="help-block" *ngFor="let item of formErrors.email">{{item}}</span>
-      <span class="glyphicon form-control-feedback"
-            [ngClass]="{'glyphicon-remove':formErrors.email.length,'glyphicon-ok':form.get('email').valid}"
-            aria-hidden="true"></span>
+      <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.email.length,
+            'glyphicon-ok':form.get('email').dirty && form.get('email').valid}" aria-hidden="true"></span>
     </div>
 
     <div class="form-group {{form.get('password').dirty ? 'has-feedback' : ''}}"
-         [ngClass]="{'has-error':formErrors.password.length,'has-success':form.get('password').valid}">
+         [ngClass]="{'has-error':formErrors.password.length,
+         'has-success':form.get('password').dirty && form.get('password').valid}">
       <label class="control-label" for="password">Password:</label>
       <input type="password" class="form-control" formControlName="password" id="password"/>
       <span class="help-block" *ngFor="let item of formErrors.password">{{item}}</span>
-      <span class="glyphicon form-control-feedback"
-            [ngClass]="{'glyphicon-remove':formErrors.password.length,'glyphicon-ok':form.get('password').valid}"
-            aria-hidden="true"></span>
+      <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.password.length,
+            'glyphicon-ok':form.get('password').dirty && form.get('password').valid}" aria-hidden="true"></span>
     </div>
 
     <input type="submit" [disabled]="!form.valid" value="Entrar" class="btn btn-primary"/>
