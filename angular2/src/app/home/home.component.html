@@ -1,12 +1,12 @@
 <div class="col-md-12">
   <hr/>
 
-  <h1>{{titulo}}</h1>
-  <div *ngIf="!auth.loggedIn()">
-    Inicia sesión para acceder a más opciones...
+  <h1>Welcome!!</h1>
+  <div *showAuthed="false">
+    Start the session for get more optins...
   </div>
 
-  <div *ngIf="auth.loggedIn()">
+  <div *showAuthed="true">
     Bienvenido {{user.fullName}}, <a [routerLink]="['/']">entra en tu canal</a> o <a [routerLink]="['/create-video']">crea un nuevo video</a>.
   </div>
 

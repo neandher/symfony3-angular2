@@ -1,28 +1,30 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseComponent} from "./base.component";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {User} from "../models/user";
-import {AuthService} from "../auth/auth.service";
-import {EqualPasswordsValidator} from "../validators/equalPasswords.validator";
+
+import {BaseComponent} from "../../base.component";
+import {User} from "../../models/user";
+import {EqualPasswordsValidator} from "../../validators/equalPasswords.validator";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-user-change-password',
-  templateUrl: './user-change-password.component.html'
+  templateUrl: 'user-change-password.component.html'
 })
 export class UserChangePasswordComponent extends BaseComponent implements OnInit {
 
-  public user: User;
-  public status: string = "";
-  public error: string[] = [];
-  public form: FormGroup;
-  public submit: boolean = false;
-  public formErrors: Object = {
+  isSubmiting: boolean = false;
+  user: User;
+  status: string = '';
+  error: string[] = [];
+  form: FormGroup;
+  submit: boolean = false;
+  formErrors: Object = {
     'current_password': [],
     'plainPassword.first': [],
     'plainPassword.second': [],
   };
 
-  constructor(private fb: FormBuilder, protected auth: AuthService) {
+  constructor(private fb: FormBuilder, protected userService: UserService) {
     super();
   }
 
@@ -52,9 +54,10 @@ export class UserChangePasswordComponent extends BaseComponent implements OnInit
   }
 
   onSubmit() {
+    this.isSubmiting = true;
     this.error = [];
 
-    this.auth.changePassword(this.form.value).subscribe(
+    this.userService.changePassword(this.form.value).subscribe(
       response => {
         this.submit = true;
         this.status = 'success';

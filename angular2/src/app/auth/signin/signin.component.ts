@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../auth/auth.service";
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
-import {NGValidators} from "ng-validators";
-import {BaseComponent} from "./base.component";
 import {Router} from "@angular/router";
+
+import {NGValidators} from "ng-validators";
+import {BaseComponent} from "../../base.component";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-login',
@@ -11,19 +12,19 @@ import {Router} from "@angular/router";
 })
 export class SignInComponent extends BaseComponent implements OnInit {
 
-  public error: string[] = [];
-  public form: FormGroup;
-  public formErrors: Object = {
+  isSubmitting: boolean = false;
+  error: string[] = [];
+  form: FormGroup;
+  formErrors: Object = {
     'email': [],
     'password': [],
   };
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     super();
   }
 
   ngOnInit(): any {
-    this.auth.logout();
     this.buildForm();
   }
 
@@ -37,21 +38,13 @@ export class SignInComponent extends BaseComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSubmitting = true;
     this.error = [];
-    this.auth.signIn(this.form.value).subscribe(
-      response => {
-        if (response.token != null) {
-          localStorage.setItem('id_token', response.token);
-          this.auth.authSuccessEmitter.emit(true);
-          this.router.navigate(['/']);
-        }
-        else {
-          alert('Some Error!');
-        }
-      },
-      responseError => {
-        console.log(responseError);
-        this.error = ['Invalid Credentials'];
+    this.userService.attemptAuth(this.form.value).subscribe(
+      data => this.router.navigateByUrl('/'),
+      err => {
+        this.error = ['Incorrect username or password.'];
+        this.isSubmitting = false;
       }
     );
   }

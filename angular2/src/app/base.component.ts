@@ -1,5 +1,5 @@
 import {FormGroup, FormControl} from "@angular/forms";
-import {validation} from "../models/validation";
+import {validation} from "./models/validation";
 
 export class BaseComponent {
 
@@ -18,7 +18,7 @@ export class BaseComponent {
         path = this.getPathFormErrorResponse(index, this.form);
         this.error.push(item);
         this.formErrors[(path)].push(item);
-        this.form.get(path).setErrors({"response_error": item});
+        this.form.get(path).setErrors({'response_error': item});
         check++;
       }
       if (check == 0) {

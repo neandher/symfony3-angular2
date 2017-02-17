@@ -17,7 +17,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a [routerLink]="['/']">Home</a></li>
-          <li *ngIf="auth.loggedIn()"><a [routerLink]="['/create-video']">Crear vídeo</a></li>
+          <li *showAuthed="true"><a [routerLink]="['/create-video']">Create Video</a></li>
         </ul>
 
         <!--<form class="navbar-form navbar-left" role="search">
@@ -30,7 +30,7 @@
                     </button>
                 </form>-->
 
-        <ul *ngIf="auth.loggedIn()" class="nav navbar-nav navbar-right" id="creadentials-top">
+        <ul *showAuthed="true" class="nav navbar-nav navbar-right" id="creadentials-top">
 
           <li>
             <a [routerLink]="['/index']" class="user-image">
@@ -64,16 +64,16 @@
               <li role="separator" class="divider"></li>
               <li>
                 <a (click)="onLogout()" style="cursor: pointer;">
-                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir
+                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
                 </a>
               </li>
             </ul>
           </li>
         </ul>
 
-        <ul *ngIf="!auth.loggedIn()" class="nav navbar-nav navbar-right">
-          <li><a [routerLink]="['/signin']">Acceder</a></li>
-          <li><a [routerLink]="['/signup']">Registro</a></li>
+        <ul *showAuthed="false" class="nav navbar-nav navbar-right">
+          <li><a [routerLink]="['/signin']">SignIn</a></li>
+          <li><a [routerLink]="['/signup']">SignUp</a></li>
         </ul>
       </div>
     </div>

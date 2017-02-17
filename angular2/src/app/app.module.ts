@@ -1,46 +1,41 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
-import {AuthHttp} from 'angular2-jwt';
 
 import {AppComponent} from './app.component';
-import {SignInComponent} from './components/signin.component';
-import {SignUpComponent} from './components/signup.component';
-import {DefaultComponent} from './components/default.component';
 import {routing} from "./app.routes";
 import {ChannelComponent} from './components/channel.component';
-import {AuthGuard} from "./auth/auth.guard";
-import {AuthProvider} from "./auth/auth.provider";
-import {HeaderComponent} from './components/header.component';
-import {AuthService} from "./auth/auth.service";
-import { UserEditComponent } from './components/user-edit.component';
-import { UserChangePasswordComponent } from './components/user-change-password.component';
-import { MessageAlertComponent } from './components/message-alert/message-alert.component';
+import {HeaderComponent} from "./shared/layout/header/header.component";
+import {AuthModule} from "./auth/auth.module";
+import {HomeModule} from "./home/home.module";
+import {SharedModule} from "./shared/shared.module";
+import {ApiService} from "./shared/services/api.service";
+import {AuthGuard} from "./shared/services/auth.guard";
+import {JwtService} from "./shared/services/jwt.service";
+import {UserService} from "./shared/services/user.service";
+import {AuthHttp} from "angular2-jwt";
+import {AuthProvider} from "./shared/services/auth.provider";
+import {SettingsModule} from "./settings/settings.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignInComponent,
-    SignUpComponent,
-    DefaultComponent,
-    ChannelComponent,
     HeaderComponent,
-    UserEditComponent,
-    UserChangePasswordComponent,
-    MessageAlertComponent
+    ChannelComponent,
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    routing
+    routing,
+    AuthModule,
+    HomeModule,
+    SharedModule,
+    SettingsModule
   ],
   providers: [
+    ApiService,
     AuthGuard,
     {provide: AuthHttp, useClass: AuthProvider},
-    AuthService
+    JwtService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

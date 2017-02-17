@@ -1,34 +1,40 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "../models/user";
-import {AuthService} from "../auth/auth.service";
-import {BaseComponent} from "./base.component";
+
+import {BaseComponent} from "../../base.component";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {NGValidators} from "ng-validators";
+import {User} from "../../models/user";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-user-edit',
-  templateUrl: './user-edit.component.html'
+  templateUrl: 'user-edit.component.html'
 })
 export class UserEditComponent extends BaseComponent implements OnInit {
 
-  public user: User;
-  public status: string = "";
-  public error: string[] = [];
-  public form: FormGroup;
-  public submit: boolean = false;
-  public formErrors: Object = {
+  isSubmiting: boolean = false;
+  user: User;
+  status: string = '';
+  error: string[] = [];
+  form: FormGroup;
+  submit: boolean = false;
+  formErrors: Object = {
     'firstName': [],
     'lastName': [],
     'email': [],
   };
 
-  constructor(private fb: FormBuilder, protected auth: AuthService) {
+  constructor(private fb: FormBuilder, protected userService: UserService) {
     super();
   }
 
   ngOnInit() {
     this.buildForm();
-    this.user = this.auth.getUserData();
+    this.userService.currentUser.subscribe(
+      (userData) => {
+        this.user = userData;
+      }
+    );
   }
 
   buildForm(): void {
@@ -43,9 +49,10 @@ export class UserEditComponent extends BaseComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSubmiting = true;
     this.error = [];
 
-    this.auth.updateUser(this.form.value).subscribe(
+    this.userService.update(this.form.value).subscribe(
       response => {
         this.submit = true;
         this.status = 'success';

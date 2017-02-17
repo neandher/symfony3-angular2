@@ -1,9 +1,10 @@
 import {Component, OnInit} from "@angular/core";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+
 import {NGValidators} from "ng-validators";
-import {AuthService} from "../auth/auth.service";
-import {EqualPasswordsValidator} from "../validators/equalPasswords.validator";
-import {BaseComponent} from "./base.component";
+import {BaseComponent} from "../../base.component";
+import {UserService} from "../../shared/services/user.service";
+import {EqualPasswordsValidator} from "../../validators/equalPasswords.validator";
 
 @Component({
   selector: 'app-register',
@@ -11,11 +12,12 @@ import {BaseComponent} from "./base.component";
 })
 export class SignUpComponent extends BaseComponent implements OnInit {
 
-  public status: string = "";
-  public error: string[] = [];
-  public form: FormGroup;
-  public submit: boolean = false;
-  public formErrors: Object = {
+  isSubmiting: boolean = false;
+  status: string = "";
+  error: string[] = [];
+  form: FormGroup;
+  submit: boolean = false;
+  formErrors: Object = {
     'firstName': [],
     'lastName': [],
     'email': [],
@@ -23,7 +25,7 @@ export class SignUpComponent extends BaseComponent implements OnInit {
     'plainPassword.second': [],
   };
 
-  constructor(private fb: FormBuilder, protected auth: AuthService) {
+  constructor(private fb: FormBuilder, protected userService: UserService) {
     super();
   }
 
@@ -51,9 +53,10 @@ export class SignUpComponent extends BaseComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSubmiting = true;
     this.error = [];
 
-    this.auth.signUp(this.form.value).subscribe(
+    this.userService.attemptRegister(this.form.value).subscribe(
       response => {
         this.submit = true;
         this.status = 'success';
