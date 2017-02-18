@@ -33,7 +33,7 @@
         <ul *showAuthed="true" class="nav navbar-nav navbar-right" id="creadentials-top">
 
           <li>
-            <a [routerLink]="['/index']" class="user-image">
+            <a [routerLink]="['/']" class="user-image">
               <img *ngIf="user.avatarImageName"
                    src="http://localhost/curso-fullstack/symfony/web/uploads/users/{{user.avatarImageName}}"/>
               <img *ngIf="!user.avatarImageName" src="assets/images/default_img_user_64.png"/>

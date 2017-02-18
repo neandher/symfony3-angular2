@@ -4,5 +4,6 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api_url: 'http://localhost/symfony3-angular2/symfony/web/app_dev.php/api'
 };

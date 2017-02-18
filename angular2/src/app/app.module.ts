@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {routing} from "./app.routes";
-import {ChannelComponent} from './components/channel.component';
 import {HeaderComponent} from "./shared/layout/header/header.component";
 import {AuthModule} from "./auth/auth.module";
 import {HomeModule} from "./home/home.module";
@@ -15,12 +14,12 @@ import {UserService} from "./shared/services/user.service";
 import {AuthHttp} from "angular2-jwt";
 import {AuthProvider} from "./shared/services/auth.provider";
 import {SettingsModule} from "./settings/settings.module";
+import {ChannelModule} from "./channel/channel.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    ChannelComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +27,8 @@ import {SettingsModule} from "./settings/settings.module";
     AuthModule,
     HomeModule,
     SharedModule,
-    SettingsModule
+    SettingsModule,
+    ChannelModule,
   ],
   providers: [
     ApiService,
