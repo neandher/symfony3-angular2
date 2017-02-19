@@ -8,10 +8,10 @@
     <a [routerLink]="['/signin']">pinchando aqui...</a>
   </div>
 
-  <!--<app-message-alert [error]="error"></app-message-alert>-->
+  <app-message-alert [error]="error"></app-message-alert>
 
   <form *ngIf="!submit" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
-    <fieldset [disabled]="isSubmiting">
+    <fieldset [disabled]="isSubmitting">
       <div class="form-group {{form.get('firstName').dirty ? 'has-feedback' : ''}}"
            [ngClass]="{'has-error':formErrors.firstName.length,
          'has-success':form.get('firstName').dirty && form.get('firstName').valid}">

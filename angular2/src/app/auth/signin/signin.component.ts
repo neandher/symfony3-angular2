@@ -41,7 +41,9 @@ export class SignInComponent extends BaseComponent implements OnInit {
     this.isSubmitting = true;
     this.error = [];
     this.userService.attemptAuth(this.form.value).subscribe(
-      data => this.router.navigateByUrl('/'),
+      data => {
+        this.router.navigateByUrl('/')
+      },
       err => {
         this.error = ['Incorrect username or password.'];
         this.isSubmitting = false;

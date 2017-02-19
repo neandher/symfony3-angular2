@@ -12,7 +12,7 @@ import {UserService} from "../../shared/services/user.service";
 })
 export class UserChangePasswordComponent extends BaseComponent implements OnInit {
 
-  isSubmiting: boolean = false;
+  isSubmitting: boolean = false;
   user: User;
   status: string = '';
   error: string[] = [];
@@ -54,7 +54,7 @@ export class UserChangePasswordComponent extends BaseComponent implements OnInit
   }
 
   onSubmit() {
-    this.isSubmiting = true;
+    this.isSubmitting = true;
     this.error = [];
 
     this.userService.changePassword(this.form.value).subscribe(
@@ -63,7 +63,8 @@ export class UserChangePasswordComponent extends BaseComponent implements OnInit
         this.status = 'success';
       },
       responseError => {
-        this.handleResponseError(responseError.json().errors);
+        this.isSubmitting = false;
+        this.handleResponseError(responseError.errors);
       }
     );
   }

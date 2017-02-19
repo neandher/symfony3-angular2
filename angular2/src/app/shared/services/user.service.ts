@@ -29,7 +29,7 @@ export class UserService {
     let token: string = this.jwtService.getToken();
     // If JWT detected, attempt to get & store user's info
     if (token) {
-      let user: User = this.jwtHelper.decodeToken(token);
+      let user: User = this.jwtHelper.decodeToken(token).user;
       this.apiService.get('/users/' + user.email)
         .subscribe(
           data => {
@@ -69,14 +69,14 @@ export class UserService {
     return this.apiService.signin(user)
       .map(
         data => {
-          this.setAuth(this.jwtHelper.decodeToken(data.token), data.token);
+          this.setAuth(this.jwtHelper.decodeToken(data.token).user, data.token);
           return data.token;
         }
       );
   }
 
   attemptRegister(user: User): Observable<User> {
-    return this.apiService.post('/users', user)
+    return this.apiService.post('/auth/signup', user, false)
       .map(
         userResponse => {
           return userResponse;
@@ -91,7 +91,7 @@ export class UserService {
   // Update the user on the server (email, pass, etc)
   update(user: User): Observable<User> {
     return this.apiService
-      .put('/users/' + user.email, user)
+      .put('/users/' + this.getCurrentUser().email, user)
       .map(userUpdated => {
         // Update the currentUser observable
         this.currentUserSubject.next(userUpdated);
@@ -101,7 +101,7 @@ export class UserService {
 
   changePassword(user: User): Observable<User> {
     return this.apiService
-      .put('/users/' + user.email + '/change-password', user)
+      .put('/users/' + this.getCurrentUser().email + '/change-password', user)
       .map(userUpdated => {
         // Update the currentUser observable
         this.currentUserSubject.next(userUpdated);

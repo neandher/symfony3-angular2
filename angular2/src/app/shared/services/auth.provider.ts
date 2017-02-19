@@ -18,8 +18,8 @@ export class AuthProvider {
       headerPrefix: 'Bearer',
       tokenName: 'id_token',
       tokenGetter: (() => localStorage.getItem('id_token')),
-      //globalHeaders: [{'Content-Type': 'application/json'}],
-      globalHeaders: [],
+      globalHeaders: [{'Content-Type': 'application/json'}],
+      //globalHeaders: [],
       noJwtError: false,
       noTokenScheme: false
     }), http);

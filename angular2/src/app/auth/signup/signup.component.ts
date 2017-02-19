@@ -12,7 +12,7 @@ import {EqualPasswordsValidator} from "../../validators/equalPasswords.validator
 })
 export class SignUpComponent extends BaseComponent implements OnInit {
 
-  isSubmiting: boolean = false;
+  isSubmitting: boolean = false;
   status: string = "";
   error: string[] = [];
   form: FormGroup;
@@ -53,17 +53,17 @@ export class SignUpComponent extends BaseComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isSubmiting = true;
+    this.isSubmitting = true;
     this.error = [];
 
     this.userService.attemptRegister(this.form.value).subscribe(
       response => {
         this.submit = true;
         this.status = 'success';
-        this.form.reset();
       },
       responseError => {
-        this.handleResponseError(responseError.json().errors);
+        this.isSubmitting = false;
+        this.handleResponseError(responseError.errors);
       }
     );
   }
