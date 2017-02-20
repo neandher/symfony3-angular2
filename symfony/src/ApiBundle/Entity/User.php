@@ -283,6 +283,9 @@ class User implements AdvancedUserInterface
 
     /**
      * @return string
+     * 
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("fullName")
      */
     public function getFullName()
     {

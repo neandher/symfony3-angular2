@@ -5,6 +5,7 @@ import {SharedModule} from "../shared/shared.module";
 import {UserEditComponent} from "./user-edit/user-edit.component";
 import {UserChangePasswordComponent} from "./user-change-password/user-change-password.component";
 import {AuthGuard} from "../shared/services/auth.guard";
+import {FileUploadModule} from "ng2-file-upload";
 
 const settingsRouting: ModuleWithProviders = RouterModule.forChild([
   {path: 'user-edit', component: UserEditComponent, canActivate: [AuthGuard]},
@@ -14,7 +15,8 @@ const settingsRouting: ModuleWithProviders = RouterModule.forChild([
 @NgModule({
   imports: [
     SharedModule,
-    settingsRouting
+    settingsRouting,
+    FileUploadModule
   ],
   declarations: [
     UserEditComponent,

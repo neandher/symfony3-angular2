@@ -8,6 +8,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: pt_BR
+    jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
     upload_avatar_path: "%kernel.root_dir%/../web/uploads/images/avatar"
     upload_video_path: "%kernel.root_dir%/../web/uploads/videos"
     upload_video_image_path: "%kernel.root_dir%/../web/uploads/images/video"
@@ -127,6 +128,7 @@ nelmio_cors:
         forced_allow_origin_value: ~
     paths:
         '^/api/':
+            allow_credentials: true
             allow_origin: ['*']
             allow_headers: ['Authorization','X-Requested-With','X-Custom-Auth','Content-Type','Accept','Origin']
             allow_methods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE', 'OPTIONS']

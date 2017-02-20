@@ -9,41 +9,73 @@
 
   <app-message-alert [error]="error"></app-message-alert>
 
-  <form *ngIf="!submit" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="col-md-4">
-    <fieldset [disabled]="isSubmitting">
+  <div *ngIf="!submit" class="row">
 
-      <div class="form-group {{form.get('firstName').dirty ? 'has-feedback' : ''}}"
-           [ngClass]="{'has-error':formErrors.firstName.length,
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Mis datos</h3></div>
+        <div class="panel-body">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <fieldset [disabled]="isSubmitting">
+
+              <div class="form-group {{form.get('firstName').dirty ? 'has-feedback' : ''}}"
+                   [ngClass]="{'has-error':formErrors.firstName.length,
          'has-success':form.get('firstName').dirty && form.get('firstName').valid}">
-        <label class="control-label" for="firstName">Nombre:</label>
-        <input type="text" class="form-control" formControlName="firstName" id="firstName"
-               [(ngModel)]="user.firstName"/>
-        <span class="help-block" *ngFor="let item of formErrors.firstName">{{item}}</span>
-        <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.firstName.length,
+                <label class="control-label" for="firstName">Nombre:</label>
+                <input type="text" class="form-control" formControlName="firstName" id="firstName"
+                       [(ngModel)]="user.firstName"/>
+                <span class="help-block" *ngFor="let item of formErrors.firstName">{{item}}</span>
+                <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.firstName.length,
             'glyphicon-ok':form.get('firstName').dirty && form.get('firstName').valid}" aria-hidden="true"></span>
-      </div>
+              </div>
 
-      <div class="form-group {{form.get('lastName').dirty ? 'has-feedback' : ''}}"
-           [ngClass]="{'has-error':formErrors.lastName.length,
+              <div class="form-group {{form.get('lastName').dirty ? 'has-feedback' : ''}}"
+                   [ngClass]="{'has-error':formErrors.lastName.length,
          'has-success':form.get('lastName').dirty && form.get('lastName').valid}">
-        <label class="control-label" for="lastName">Apellidos:</label>
-        <input type="text" class="form-control" formControlName="lastName" id="lastName" [(ngModel)]="user.lastName"/>
-        <span class="help-block" *ngFor="let item of formErrors.lastName">{{item}}</span>
-        <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.lastName.length,
+                <label class="control-label" for="lastName">Apellidos:</label>
+                <input type="text" class="form-control" formControlName="lastName" id="lastName"
+                       [(ngModel)]="user.lastName"/>
+                <span class="help-block" *ngFor="let item of formErrors.lastName">{{item}}</span>
+                <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.lastName.length,
             'glyphicon-ok':form.get('lastName').dirty &&form.get('lastName').valid}" aria-hidden="true"></span>
-      </div>
+              </div>
 
-      <div class="form-group {{form.get('email').dirty ? 'has-feedback' : ''}}"
-           [ngClass]="{'has-error':formErrors.email.length,
+              <div class="form-group {{form.get('email').dirty ? 'has-feedback' : ''}}"
+                   [ngClass]="{'has-error':formErrors.email.length,
          'has-success':form.get('email').dirty && form.get('email').valid}">
-        <label class="control-label" for="email">Email:</label>
-        <input type="email" class="form-control" formControlName="email" id="email" [(ngModel)]="user.email"/>
-        <span class="help-block" *ngFor="let item of formErrors.email">{{item}}</span>
-        <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.email.length,
+                <label class="control-label" for="email">Email:</label>
+                <input type="email" class="form-control" formControlName="email" id="email" [(ngModel)]="user.email"/>
+                <span class="help-block" *ngFor="let item of formErrors.email">{{item}}</span>
+                <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.email.length,
             'glyphicon-ok':form.get('email').dirty && form.get('email').valid}" aria-hidden="true"></span>
-      </div>
+              </div>
 
-      <input type="submit" value="Actualizar mis datos" class="btn btn-success" [disabled]="!form.valid"/>
-    </fieldset>
-  </form>
+              <input type="submit" value="Actualizar mis datos" class="btn btn-success" [disabled]="!form.valid"/>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Imagen de perfil</h3></div>
+        <div class="panel-body">
+          <p>
+            <input type="file" ng2FileSelect [uploader]="uploader"
+                   placeholder="Subir imagen..." accept="image/*"/>
+          </p>
+          <div class="progress" style="">
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+          </div>
+          <button type="button" class="btn btn-success btn-s"
+                  (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+            <span class="glyphicon glyphicon-upload"></span> Upload
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>

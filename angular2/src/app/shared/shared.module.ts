@@ -12,7 +12,7 @@ import {MessageAlertComponent} from "./layout/message-alert/message-alert.compon
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
     ShowAuthedDirective,

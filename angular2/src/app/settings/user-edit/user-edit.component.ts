@@ -5,6 +5,8 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {NGValidators} from "ng-validators";
 import {User} from "../../models/user";
 import {UserService} from "../../shared/services/user.service";
+import {FileUploader} from "ng2-file-upload";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-user-edit',
@@ -18,10 +20,11 @@ export class UserEditComponent extends BaseComponent implements OnInit {
   error: string[] = [];
   form: FormGroup;
   submit: boolean = false;
+  uploader: FileUploader;
   formErrors: Object = {
     'firstName': [],
     'lastName': [],
-    'email': [],
+    'email': []
   };
 
   constructor(private fb: FormBuilder, protected userService: UserService) {
@@ -33,6 +36,20 @@ export class UserEditComponent extends BaseComponent implements OnInit {
     this.userService.currentUser.subscribe(
       (userData) => {
         this.user = userData;
+        this.uploader = new FileUploader(
+          {
+            url: `${environment.api_url}` + '/users/' + this.user.email + '/avatar',
+            authToken: this.userService.getCurrentUserToken(true),
+            itemAlias: 'avatarImageFile'
+          }
+        );
+        this.uploader.onSuccessItem = (item, response, status, headers) => {
+          this.userService.setCurrentUser(JSON.parse(response));
+        };
+        this.uploader.onErrorItem = (item, response, status, headers) => {
+          this.error = [];
+          this.handleResponseError(JSON.parse(response));
+        };
       }
     );
   }

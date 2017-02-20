@@ -88,6 +88,14 @@ export class UserService {
     return this.currentUserSubject.value;
   }
 
+  getCurrentUserToken(withPrefix: boolean = false): string {
+    return withPrefix ? 'Bearer ' + this.jwtService.getToken() : this.jwtService.getToken();
+  }
+
+  setCurrentUser(user: User) {
+    this.currentUserSubject.next(user);
+  }
+
   // Update the user on the server (email, pass, etc)
   update(user: User): Observable<User> {
     return this.apiService

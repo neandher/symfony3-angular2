@@ -15,10 +15,12 @@ export class BaseComponent {
     for (let index in responseError) {
       check = 0;
       for (let item of responseError[index]) {
-        path = this.getPathFormErrorResponse(index, this.form);
         this.error.push(item);
-        this.formErrors[(path)].push(item);
-        this.form.get(path).setErrors({'response_error': item});
+        path = this.getPathFormErrorResponse(index, this.form);
+        if (this.formErrors.hasOwnProperty(path)) {
+          this.formErrors[(path)].push(item);
+          this.form.get(path).setErrors({'response_error': item});
+        }
         check++;
       }
       if (check == 0) {

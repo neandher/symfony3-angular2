@@ -80,7 +80,7 @@ class jwtTokenAuthenticator extends AbstractGuardAuthenticator
             throw new CustomUserMessageAuthenticationException($e->getReason());
         }
 
-        $email = $data['email'];
+        $email = $data['user']['email'];
 
         $user = $this->em->getRepository('ApiBundle:User')->findOneBy(['emailCanonical' => $email]);
 

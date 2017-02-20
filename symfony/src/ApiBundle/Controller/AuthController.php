@@ -45,16 +45,11 @@ class AuthController extends BaseController
         $em->persist($user);
         $em->flush();
 
+        $userSerialized = $this->serialize($user);
+
         $token = $this->get('lexik_jwt_authentication.encoder.default')->encode(
             [
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'fullName' => $user->getFullName(),
-                'email' => $user->getEmailCanonical(),
-                'avatarImageName' => $user->getAvatarImageName(),
-                'lastLogin' => $user->getLastLoginAt(),
-                'roles' => $user->getRoles(),
-                'createdAt' => $user->getCreatedAt(),
+                'user' => json_decode($userSerialized),
                 //'exp' => time() + 993600
                 'exp' => time() + 3600 // 1 hour expiration
             ]

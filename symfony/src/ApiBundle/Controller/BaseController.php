@@ -26,7 +26,7 @@ class BaseController extends Controller
         ));
     }
 
-    private function serialize($data, $format = 'json')
+    protected function serialize($data, $format = 'json')
     {
         $context = new SerializationContext();
         $context->setSerializeNull(true);
