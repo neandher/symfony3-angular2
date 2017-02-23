@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {AuthHttp} from "angular2-jwt";
-import {User} from "../../models/user";
+import {User} from "../models/user";
 
 @Injectable()
 export class ApiService {

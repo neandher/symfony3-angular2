@@ -1,16 +1,16 @@
-.main{
+.main {
   margin-top: 65px;
 }
 
-.loader{
+.loader {
   margin-bottom: 30px;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
-.user-image{
+.user-image {
   width: 35px;
   height: 35px;
   overflow: hidden;
@@ -28,30 +28,30 @@
 
 /*Listado videos home*/
 
-#videos-list{
+#videos-list {
   list-style: none;
   margin: 0px;
-  margin-top:20px;
+  margin-top: 20px;
   padding: 0px;
 }
 
-.video-item{
+.video-item {
   margin-bottom: 30px;
 }
 
-.video-image-thumb{
+.video-image-thumb {
   width: 100%;
   height: 150px;
   overflow: hidden;
   background: #ddd;
 }
 
-.video-image-thumb img{
+.video-image-thumb img {
   width: 100%;
   margin-top: -27px;
 }
 
-.video-item .data{
+.video-item .data {
   border: 1px solid #ddd;
   border-radius: 0px 0px 5px 5px;
   padding: 10px;
@@ -61,15 +61,15 @@
 
 /*Fin listado videos home*/
 
-#video-player{
-  width:100%;
+#video-player {
+  width: 100%;
 }
 
-.video-data{
+.video-data {
   margin-top: 15px;
 }
 
-#videos-list{
+#videos-list {
   list-style: none;
   margin: 0px;
   padding: 0px;
@@ -81,22 +81,22 @@
   font-size: 13px !important;
 }
 
-.last-video-item .last-video-image-thumb{
+.last-video-item .last-video-image-thumb {
   width: 80px;
   height: 81px;
-  margin-top:-1px;
+  margin-top: -1px;
   overflow: hidden;
-  background:#E7E7E7;
+  background: #E7E7E7;
   border-radius: 4px 0px 0px 4px;
 }
 
-.last-video-image-thumb img{
+.last-video-image-thumb img {
   width: 120px;
   margin-left: -37px;
   /*margin-top:-7px;*/
 }
 
-.last-video-item .data{
+.last-video-item .data {
   border: 1px solid #ddd !important;
   border-left: 0px !important;
   border-radius: 0px 4px 4px 0px;
@@ -105,11 +105,11 @@
 }
 
 /*Canal del usuario*/
-.channel-head{
+.channel-head {
   text-align: center;
 }
 
-.image-channel{
+.image-channel {
   width: 150px;
   height: 150px;
   border-radius: 500px;
@@ -118,8 +118,12 @@
   background: #ccc;
 }
 
-.image-channel img{
+.image-channel img {
   height: 160px;
 }
 
 /*Fin canal del usuario*/
+
+.nv-file-over {
+  border: dotted 3px red;
+}

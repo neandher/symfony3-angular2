@@ -5,7 +5,7 @@ import {ChannelComponent} from "./channel.component";
 import {AuthGuard} from "../shared/services/auth.guard";
 
 const ChannelRouting: ModuleWithProviders = RouterModule.forChild([
-  {path: 'channel', component: ChannelComponent, canActivate: [AuthGuard]},
+  {path: '', component: ChannelComponent, canActivate: [AuthGuard]},
 ]);
 
 @NgModule({

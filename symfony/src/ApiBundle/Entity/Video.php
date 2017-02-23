@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Entity;
 
+use ApiBundle\Helper\GlobalsHelper;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -79,7 +80,7 @@ class Video
      * )
      */
     private $imageFile;
-    
+
     /**
      * @var string
      *
@@ -87,6 +88,14 @@ class Video
      * @Serializer\Expose()
      */
     private $imageName;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="miniature_number", type="smallint", nullable=true)
+     * @Serializer\Expose()
+     */
+    private $miniatureNumber;
 
     /**
      * @Vich\UploadableField(mapping="video", fileNameProperty="videoName")
@@ -99,7 +108,7 @@ class Video
      * )
      */
     private $videoFile;
-    
+
     /**
      * @var string
      *
@@ -128,13 +137,22 @@ class Video
 
     /**
      * @var User
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Expose()
      * @Serializer\Groups({"deep"})
      */
     private $user;
+
+    /**
+     * Video constructor.
+     */
+    public function __construct()
+    {
+        $this->miniatureNumber = 1;
+    }
+
 
     /**
      * Get id
@@ -240,7 +258,7 @@ class Video
 
         return $this;
     }
-    
+
     /**
      * Set image
      *
@@ -266,6 +284,17 @@ class Video
     }
 
     /**
+     * @return string|null
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("imageUrl")
+     */
+    public function getImageUrl()
+    {
+        return $this->imageName ? GlobalsHelper::getVideoImageUrl() . '/' . $this->imageName : null;
+    }
+
+    /**
      * @return File
      */
     public function getVideoFile()
@@ -287,7 +316,7 @@ class Video
 
         return $this;
     }
-    
+
     /**
      * Set videoName
      *
@@ -310,6 +339,27 @@ class Video
     public function getVideoName()
     {
         return $this->videoName;
+    }
+
+    /**
+     * Get videoNameNoExt
+     *
+     * @return string
+     */
+    public function getVideoNameNoExt()
+    {
+        return $this->videoName ? explode('.', $this->videoName)[0] : null;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("videoUrl")
+     */
+    public function getVideoUrl()
+    {
+        return $this->videoName ? GlobalsHelper::getVideoUrl() . '/' . $this->videoName : null;
     }
 
     /**
@@ -377,5 +427,49 @@ class Video
         $this->user = $user;
         return $this;
     }
-}
 
+    /**
+     * @return int
+     */
+    public function getMiniatureNumber()
+    {
+        return $this->miniatureNumber;
+    }
+
+    /**
+     * @param int $miniatureNumber
+     * @return Video
+     */
+    public function setMiniatureNumber($miniatureNumber)
+    {
+        $this->miniatureNumber = $miniatureNumber;
+        return $this;
+    }
+
+    /**
+     * @return string
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("miniaturesUrl")
+     */
+    public function getMiniaturesUrl()
+    {
+        $data = [];
+        $videoNameNoExt = $this->getVideoNameNoExt();
+
+        if (!$this->imageName && $this->videoName) {
+            $data = [
+                'default' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default' . $this->miniatureNumber . '.jpg',
+                'mqdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'mqdefault' . $this->miniatureNumber . '.jpg',
+                'maxresdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'maxresdefault' . $this->miniatureNumber . '.jpg',
+            ];
+        } else if ($this->imageName && $this->videoName) {
+            $data = [
+                'default' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default' . '.jpg',
+                'mqdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'mqdefault' . '.jpg',
+                'maxresdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'maxresdefault' . '.jpg',
+            ];
+        }
+        return $data;
+    }
+}

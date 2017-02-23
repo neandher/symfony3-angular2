@@ -4,14 +4,32 @@ imports:
     - { resource: services.yml }
     - { resource: api/services.yml }
 
-# Put parameters here that don't need to change on each machine where the app is deployed
+# Put parameters here that don"t need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: pt_BR
+
+    ### naming_strategy serializer ###
     jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
-    upload_avatar_path: "%kernel.root_dir%/../web/uploads/images/avatar"
-    upload_video_path: "%kernel.root_dir%/../web/uploads/videos"
-    upload_video_image_path: "%kernel.root_dir%/../web/uploads/images/video"
+
+    ### uploads path ###
+    upload_avatar_path: "%kernel.root_dir%/../web/uploads/avatar_images"
+    upload_video_path: "%kernel.root_dir%/../web/uploads/video_files"
+    upload_video_image_path: "%kernel.root_dir%/../web/uploads/video_images"
+    upload_cache_path: "%kernel.root_dir%/../web/uploads/cache"
+
+    ### uploads relative path to web ###
+    upload_avatar_relative_path: "uploads/avatar_images"
+    upload_video_relative_path: "uploads/video_files"
+    upload_video_image_relative_path: "uploads/video_images"
+    upload_cache_relative_path: "uploads/cache"
+
+    #### ffmpeg ####
+    ffmpeg:
+        ffmpeg_binary: "%kernel.root_dir%/../var/ffmpeg/bin/ffmpeg.exe"
+        ffprobe_binary: "%kernel.root_dir%/../var/ffmpeg/bin/ffprobe.exe"
+        binary_timeout: 300 # Use 0 for infinite
+        threads_count: 4
 
 framework:
     #esi:             ~
@@ -26,7 +44,7 @@ framework:
     validation:      { enable_annotations: true }
     #serializer:      { enable_annotations: true }
     templating:
-        engines: ['twig']
+        engines: ["twig"]
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -94,26 +112,28 @@ vich_uploader:
     db_driver: orm
     mappings:
         user_avatar:
-            uri_prefix: '/uploads/images/avatar'
+            uri_prefix: "%upload_avatar_relative_path%"
             upload_destination: "%upload_avatar_path%"
             delete_on_remove: true
             delete_on_update: true
             inject_on_load: true
             namer: vich_uploader.namer_uniqid
         video:
-            uri_prefix: '/uploads/videos'
+            uri_prefix: "%upload_video_relative_path%"
             upload_destination: "%upload_video_path%"
+            directory_namer:    api.custom_video_dir_namer_vich_upload
             delete_on_remove: true
             delete_on_update: true
             inject_on_load: true
             namer: vich_uploader.namer_uniqid
         video_image:
-            uri_prefix: '/uploads/images/video'
+            uri_prefix: "%upload_video_image_relative_path%"
             upload_destination: "%upload_video_image_path%"
+            directory_namer:    api.custom_video_dir_namer_vich_upload
             delete_on_remove: true
             delete_on_update: true
             inject_on_load: true
-            namer: vich_uploader.namer_uniqid
+            namer: api.custom_video_image_namer_vich_upload
 
 nelmio_cors:
     defaults:
@@ -127,9 +147,27 @@ nelmio_cors:
         origin_regex: false
         forced_allow_origin_value: ~
     paths:
-        '^/api/':
+        "^/api/":
             allow_credentials: true
-            allow_origin: ['*']
-            allow_headers: ['Authorization','X-Requested-With','X-Custom-Auth','Content-Type','Accept','Origin']
-            allow_methods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE', 'OPTIONS']
+            allow_origin: ["*"]
+            allow_headers: ["Authorization","X-Requested-With","X-Custom-Auth","Content-Type","Accept","Origin"]
+            allow_methods: ["POST", "PUT", "PATCH", "GET", "DELETE", "OPTIONS"]
             max_age: 3600
+
+liip_imagine:
+    resolvers:
+        default:
+            web_path:
+                web_root: "%kernel.root_dir%/../web"
+                cache_prefix: "%upload_cache_relative_path%"
+    filter_sets:
+        cache: ~
+        # the name of the "filter set"
+        thumb_120_90:
+            quality: 100
+            filters:
+                thumbnail: { size: [120, 90], mode: outbound }
+        thumb_320_180:
+            quality: 90
+            filters:
+                thumbnail: { size: [320, 180], mode: outbound }

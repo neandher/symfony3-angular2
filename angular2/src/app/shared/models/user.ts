@@ -5,6 +5,7 @@ export class User {
   fullName: string;
   email: string;
   avatarImageName: string;
+  avatarImageUrl: string;
   isEnabled: boolean = true;
   lastLoginAt: string;
   isLocked: boolean;

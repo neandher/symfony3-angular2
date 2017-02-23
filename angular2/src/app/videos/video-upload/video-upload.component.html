@@ -1,0 +1,18 @@
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading" align="center">
+      <h3 class="panel-title">Selecione arquivos para enviar</h3>
+    </div>
+    <div
+      class="panel-body pointer"
+      align="center"
+      ng2FileDrop
+      [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+      (fileOver)="fileOverBase($event)"
+      [uploader]="uploader"
+    >
+      <img src="./assets/images/upload.png" height="128" width="128"/>
+    </div>
+  </div>
+  <div class="panel-footer" align="center">Ou arraste e solte arquivos de vídeo</div>
+</div>

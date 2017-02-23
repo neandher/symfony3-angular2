@@ -3,9 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from "../../base.component";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {NGValidators} from "ng-validators";
-import {User} from "../../models/user";
+import {User} from "../../shared/models/user";
 import {UserService} from "../../shared/services/user.service";
-import {FileUploader} from "ng2-file-upload";
+import {FileUploader, FileItem} from "ng2-file-upload";
 import {environment} from "../../../environments/environment";
 
 @Component({
@@ -43,12 +43,20 @@ export class UserEditComponent extends BaseComponent implements OnInit {
             itemAlias: 'avatarImageFile'
           }
         );
-        this.uploader.onSuccessItem = (item, response, status, headers) => {
-          this.userService.setCurrentUser(JSON.parse(response));
-        };
-        this.uploader.onErrorItem = (item, response, status, headers) => {
+        this.uploader.onBeforeUploadItem = () => {
           this.error = [];
-          this.handleResponseError(JSON.parse(response));
+          this.status = '';
+          this.isSubmitting = true;
+        };
+        this.uploader.onCompleteAll = () => {
+          this.isSubmitting = false;
+        };
+        this.uploader.onSuccessItem = (item: FileItem, response) => {
+          this.userService.setCurrentUser(JSON.parse(response));
+          this.status = 'success';
+        };
+        this.uploader.onErrorItem = (item: FileItem, response) => {
+          this.handleResponseError(JSON.parse(response).errors);
         };
       }
     );

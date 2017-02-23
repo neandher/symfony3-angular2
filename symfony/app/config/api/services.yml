@@ -45,3 +45,13 @@ services:
         autowire: true
         tags:
             - { name: jms_serializer.event_subscriber }
+
+    api.ffmpeg:
+        class: ApiBundle\FFmpeg\FFmpeg
+        arguments: ['@monolog.logger', '%ffmpeg%']
+
+    api.custom_video_image_namer_vich_upload:
+        class: ApiBundle\VichUpload\CustomVideoImageNamer
+
+    api.custom_video_dir_namer_vich_upload:
+        class: ApiBundle\VichUpload\CustomVideoDirNamer

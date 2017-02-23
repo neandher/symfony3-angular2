@@ -17,7 +17,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a [routerLink]="['/']">Home</a></li>
-          <li *showAuthed="true"><a [routerLink]="['/create-video']">Create Video</a></li>
+          <li *showAuthed="true"><a [routerLink]="['/videos/upload']">Create Video</a></li>
         </ul>
 
         <!--<form class="navbar-form navbar-left" role="search">
@@ -35,7 +35,7 @@
           <li>
             <a [routerLink]="['/']" class="user-image">
               <img *ngIf="user.avatarImageName"
-                   src="http://localhost/symfony3-angular2/symfony/web/uploads/images/avatar/{{user.avatarImageName}}"/>
+                   src="{{user.avatarImageUrl}}"/>
               <img *ngIf="!user.avatarImageName" src="assets/images/default_img_user_64.png"/>
             </a>
           </li>
@@ -52,12 +52,12 @@
                 </a>
               </li>
               <li>
-                <a [routerLink]="['/user-edit']">
+                <a [routerLink]="['/settings/user-edit']">
                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span> User Edit
                 </a>
               </li>
               <li>
-                <a [routerLink]="['/user-change-password']">
+                <a [routerLink]="['/settings/user-change-password']">
                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Change Password
                 </a>
               </li>
@@ -72,8 +72,8 @@
         </ul>
 
         <ul *showAuthed="false" class="nav navbar-nav navbar-right">
-          <li><a [routerLink]="['/signin']">SignIn</a></li>
-          <li><a [routerLink]="['/signup']">SignUp</a></li>
+          <li><a [routerLink]="['/auth/signin']">Sign In</a></li>
+          <li><a [routerLink]="['/auth/signup']">Sign Up</a></li>
         </ul>
       </div>
     </div>

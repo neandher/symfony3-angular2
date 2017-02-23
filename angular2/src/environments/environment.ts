@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost/symfony3-angular2/symfony/web/app_dev.php/api'
+  api_url: 'http://kidtuve.localhost/app_dev.php/api'
 };

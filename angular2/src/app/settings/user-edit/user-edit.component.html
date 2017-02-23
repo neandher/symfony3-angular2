@@ -61,17 +61,19 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Imagen de perfil</h3></div>
         <div class="panel-body">
-          <p>
-            <input type="file" ng2FileSelect [uploader]="uploader"
-                   placeholder="Subir imagen..." accept="image/*"/>
-          </p>
-          <div class="progress" style="">
-            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-          </div>
-          <button type="button" class="btn btn-success btn-s"
-                  (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-            <span class="glyphicon glyphicon-upload"></span> Upload
-          </button>
+          <fieldset [disabled]="isSubmitting">
+            <p>
+              <input type="file" ng2FileSelect [uploader]="uploader"
+                     placeholder="Subir imagen..." accept="image/*"/>
+            </p>
+            <div class="progress" style="">
+              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+            </div>
+            <button type="button" class="btn btn-success btn-s"
+                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+              <span class="glyphicon glyphicon-upload"></span> Upload
+            </button>
+          </fieldset>
         </div>
       </div>
     </div>

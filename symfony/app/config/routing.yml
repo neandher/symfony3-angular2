@@ -5,4 +5,7 @@ api:
     defaults:
         #_format: json
 
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
 

@@ -1,4 +1,11 @@
-import {RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 
-//export const routing = RouterModule.forRoot([], {useHash: true});
-export const routing = RouterModule.forRoot([]);
+const APP_ROUTES: Routes = [
+  {path: '', loadChildren: 'app/home/home.module#HomeModule'},
+  {path: 'auth', loadChildren: 'app/auth/auth.module#AuthModule'},
+  {path: 'channel', loadChildren: 'app/channel/channel.module#ChannelModule'},
+  {path: 'settings', loadChildren: 'app/settings/settings.module#SettingsModule'},
+  {path: 'videos', loadChildren: 'app/videos/videos.module#VideosModule'},
+];
+
+export const routing = RouterModule.forRoot(APP_ROUTES);

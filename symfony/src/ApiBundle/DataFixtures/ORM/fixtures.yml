@@ -22,10 +22,12 @@ ApiBundle\Entity\Video:
     video{1..10}:
         title: Video title <current()>
         description: Video description <current()>
-        status: avaible
+        status: public
+        miniatureNumber: 1
         user: '@user1'
     video{11..20}:
         title: Video title <current()>
         description: Video description <current()>
-        status: avaible
+        status: public
+        miniatureNumber: 1
         user: '@user2'

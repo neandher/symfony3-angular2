@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Entity;
 
+use ApiBundle\Helper\GlobalsHelper;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -283,7 +284,7 @@ class User implements AdvancedUserInterface
 
     /**
      * @return string
-     * 
+     *
      * @Serializer\VirtualProperty()
      * @Serializer\SerializedName("fullName")
      */
@@ -492,7 +493,7 @@ class User implements AdvancedUserInterface
 
         //$roles[] = static::ROLE_DEFAULT;
 
-        if(!count($roles) > 0){
+        if (!count($roles) > 0) {
             $roles = ['ROLE_USER'];
         }
 
@@ -793,6 +794,17 @@ class User implements AdvancedUserInterface
     public function getAvatarImageName()
     {
         return $this->avatarImageName;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("avatarImageUrl")
+     */
+    public function getAvatarImageUrl()
+    {
+        return $this->avatarImageName ? GlobalsHelper::getAvatarUrl() . '/' . $this->avatarImageName : null;
     }
 
     /**

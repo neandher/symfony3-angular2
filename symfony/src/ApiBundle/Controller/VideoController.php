@@ -6,9 +6,11 @@ use ApiBundle\Entity\Video;
 use ApiBundle\Form\VideoFileType;
 use ApiBundle\Form\VideoImageType;
 use ApiBundle\Form\VideoType;
+use FFMpeg\Coordinate\TimeCode;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -101,7 +103,7 @@ class VideoController extends BaseController
     public function updateAction(Request $request, $id)
     {
         $video = $this->checkVideo($id);
-        
+
         $form = $this->createForm(VideoType::class, $video);
         $this->processForm($request, $form);
 
@@ -140,13 +142,137 @@ class VideoController extends BaseController
     }
 
     /**
-     * @Route("/{id}/image", requirements={"id": "\d+"})
+     * @Route("/{id}/upload", requirements={"id": "\d+"})
      * @Method("POST")
      * @param Request $request
      * @param $id
      * @return Response
      */
-    public function imageUploadAction(Request $request, $id)
+    public function uploadAction(Request $request, $id)
+    {
+        $video = $this->checkVideo($id);
+
+        $form = $this->createForm(VideoFileType::class, $video);
+        $form->submit($request->files->all());
+
+        if (!$form->isValid()) {
+            $this->throwApiProblemValidationException($form);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($video);
+        $em->flush();
+
+        /*$response = $this->createApiResponse($video, 200);
+
+        return $response;*/
+
+        return $this->generateThumbsVideo($request, $video);
+    }
+
+    /**
+     * @param Request $request
+     * @param Video $video
+     * @return Response
+     */
+    private function generateThumbsVideo(Request $request, Video $video)
+    {
+        $videoNameNoExt = $video->getVideoNameNoExt();
+
+        $videoPath = str_replace(
+                ['\\', 'app/../'],
+                ['/', ''],
+                $this->getParameter('upload_video_path')
+            ) . '/video_' . $videoNameNoExt;
+
+        $imageVideoPath = str_replace(
+                ['\\', 'app/../'],
+                ['/', ''],
+                $this->getParameter('upload_video_image_path')
+            ) . '/video_' . $videoNameNoExt;
+
+        $imageVideoRelativePath = $this->getParameter('upload_video_image_relative_path') . '/video_' . $videoNameNoExt;
+
+        $ffmpeg = $this->get('api.ffmpeg')->ffmpeg;
+
+        $openVideo = $ffmpeg->open($videoPath . '/' . $video->getVideoName());
+
+        if (is_null($video->getImageName())) {
+
+            if (!is_dir($imageVideoPath)) {
+                mkdir($imageVideoPath);
+            }
+
+            $openVideo
+                ->frame(TimeCode::fromSeconds(20))
+                ->save($imageVideoPath . '/' . 'maxresdefault1.jpg');
+
+            $openVideo
+                ->frame(TimeCode::fromSeconds(30))
+                ->save($imageVideoPath . '/' . 'maxresdefault2.jpg');
+
+            $openVideo
+                ->frame(TimeCode::fromSeconds(40))
+                ->save($imageVideoPath . '/' . 'maxresdefault3.jpg');
+
+            for ($i = 1; $i < 4; $i++) {
+                $this->generateThumb(
+                    $request,
+                    'thumb_120_90',
+                    $imageVideoRelativePath,
+                    'maxresdefault' . $i . '.jpg',
+                    'default' . $i . '.jpg'
+                );
+                $this->generateThumb(
+                    $request,
+                    'thumb_320_180',
+                    $imageVideoRelativePath,
+                    'maxresdefault' . $i . '.jpg',
+                    'mqdefault' . $i . '.jpg'
+                );
+            }
+        } else if ($video->getImageName()) {
+            $this->generateThumb(
+                $request,
+                'thumb_120_90',
+                $imageVideoRelativePath,
+                'maxresdefault' . '.jpg',
+                'default' . '.jpg'
+            );
+            $this->generateThumb(
+                $request,
+                'thumb_320_180',
+                $imageVideoRelativePath,
+                'maxresdefault' . '.jpg',
+                'mqdefault' . '.jpg'
+            );
+        }
+
+        $response = $this->createApiResponse($video, 200);
+
+        return $response;
+    }
+
+    private function generateThumb($request, $filter, $path, $fileName, $newFileName)
+    {
+        $imageManagerResponse = $this->container->get('liip_imagine.controller');
+
+        $imageManagerResponse->filterAction($request, $path . '/' . $fileName, $filter);
+
+        $fileTemp = new File(
+            $this->getParameter('upload_cache_path') . '/' . $filter . '/' . $path . '/' . $fileName
+        );
+        $fileTemp->move($path, $newFileName);
+    }
+
+    /**
+     * @Route("/{id}/upload-image", requirements={"id": "\d+"})
+     * @Method("POST")
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function uploadImageAction(Request $request, $id)
     {
         $video = $this->checkVideo($id);
 
@@ -161,32 +287,7 @@ class VideoController extends BaseController
         $em->persist($video);
         $em->flush();
 
-        $response = $this->createApiResponse($video, 200);
-
-        return $response;
-    }
-
-    /**
-     * @Route("/{id}/video", requirements={"id": "\d+"})
-     * @Method("POST")
-     * @param Request $request
-     * @param $id
-     * @return Response
-     */
-    public function videoUploadAction(Request $request, $id)
-    {
-        $video = $this->checkVideo($id);
-
-        $form = $this->createForm(VideoFileType::class, $video);
-        $form->submit($request->files->all());
-
-        if (!$form->isValid()) {
-            $this->throwApiProblemValidationException($form);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($video);
-        $em->flush();
+        $this->generateThumbsVideo($request, $video);
 
         $response = $this->createApiResponse($video, 200);
 

@@ -1,0 +1,91 @@
+<div class="col-md-12">
+  <hr/>
+  <h1>New Video</h1>
+  <hr/>
+
+  <div class="alert alert-success" *ngIf="status == 'success'">
+    {{video.id ? 'Video has been created successfull!' : 'Video has been updated successfull!'}}
+  </div>
+
+  <app-message-alert [error]="error"></app-message-alert>
+
+  <div class="row">
+
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Información básica de tu vídeo.</h3>
+        </div>
+        <div class="panel-body">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <fieldset [disabled]="isSubmitting">
+
+              <div class="form-group {{form.get('title').dirty ? 'has-feedback' : ''}}"
+                   [ngClass]="{'has-error':formErrors.title.length,
+         'has-success':form.get('title').dirty && form.get('title').valid}">
+                <label class="control-label" for="title">Title:</label>
+                <input type="text" class="form-control" formControlName="title" id="title"/>
+                <span class="help-block" *ngFor="let item of formErrors.title">{{item}}</span>
+                <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.title.length,
+            'glyphicon-ok':form.get('title').dirty && form.get('title').valid}" aria-hidden="true"></span>
+              </div>
+
+              <div class="form-group {{form.get('description').dirty ? 'has-feedback' : ''}}"
+                   [ngClass]="{'has-error':formErrors.description.length,
+         'has-success':form.get('description').dirty && form.get('description').valid}">
+                <label class="control-label" for="description">Description:</label>
+                <input type="text" class="form-control" formControlName="description" id="description"/>
+                <span class="help-block" *ngFor="let item of formErrors.description">{{item}}</span>
+                <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.description.length,
+            'glyphicon-ok':form.get('description').dirty && form.get('description').valid}" aria-hidden="true"></span>
+              </div>
+
+              <div class="form-group {{form.get('status').dirty ? 'has-feedback' : ''}}"
+                   [ngClass]="{'has-error':formErrors.status.length,
+         'has-success':form.get('status').dirty && form.get('status').valid}">
+                <label class="control-label" for="status">Status:</label>
+                <select class="form-control" id="status" formControlName="status"
+                        (change)="callVideoStatus(videostatus.value)" #videostatus>
+                  <option value="public" [attr.selected]="(video ? video.status : '') === 'public' ? 'selected' : null">
+                    Public
+                  </option>
+                  <option value="private"
+                          [attr.selected]="(video ? video.status : '') === 'private' ? 'selected' : null">Private
+                  </option>
+                </select>
+                <span class="help-block" *ngFor="let item of formErrors.status">{{item}}</span>
+                <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.status.length,
+            'glyphicon-ok':form.get('status').dirty && form.get('status').valid}" aria-hidden="true"></span>
+              </div>
+
+              <input type="submit" value="Create Video" class="btn btn-success" [disabled]="!form.valid"/>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="col-md-6" *ngIf="status == 'success' && uploadedImage == false">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Imagen del video</h3></div>
+        <div class="panel-body">
+          <p>Paso 2 de 3. Sube la imagen del video</p>
+          <fieldset [disabled]="isSubmitting">
+            <p>
+              <input type="file" ng2FileSelect [uploader]="uploader"
+                     placeholder="Subir imagen..." accept="image/*"/>
+            </p>
+            <div class="progress" style="">
+              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+            </div>
+            <button type="button" class="btn btn-success btn-s"
+                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+              <span class="glyphicon glyphicon-upload"></span> Upload
+            </button>
+          </fieldset>
+        </div>
+      </div>
+    </div>-->
+
+  </div>
+
+</div>
