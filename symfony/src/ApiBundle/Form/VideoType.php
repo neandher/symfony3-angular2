@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Form;
 
+use ApiBundle\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,7 +22,8 @@ class VideoType extends AbstractType
             ->add('description', TextType::class)
             ->add('status', TextType::class)
             ->add('createdAt', DateTimeType::class)
-            ->add('updatedAt', DateTimeType::class);
+            ->add('updatedAt', DateTimeType::class)
+            ->add('user', EntityType::class, ['class' => User::class]);
     }
 
     /**

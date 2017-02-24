@@ -52,9 +52,7 @@ class Video
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
-     * @Assert\NotBlank()
-     * @Assert\Length(min="2")
+     * @ORM\Column(name="description", type="text", nullable=true)
      * @Serializer\Expose()
      */
     private $description;
@@ -450,9 +448,9 @@ class Video
      * @return string
      *
      * @Serializer\VirtualProperty()
-     * @Serializer\SerializedName("miniaturesUrl")
+     * @Serializer\SerializedName("imagesUrl")
      */
-    public function getMiniaturesUrl()
+    public function getImagesUrl()
     {
         $data = [];
         $videoNameNoExt = $this->getVideoNameNoExt();
@@ -470,6 +468,19 @@ class Video
                 'maxresdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'maxresdefault' . '.jpg',
             ];
         }
+
+        if ($this->videoName) {
+            $data['thumbs'] = [
+                '1' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default1' . '.jpg',
+                '2' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default2' . '.jpg',
+                '3' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default3' . '.jpg',
+            ];
+
+            if ($this->imageName) {
+                $data['thumbs']['4'] = GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default' . '.jpg';
+            }
+        }
+
         return $data;
     }
 }

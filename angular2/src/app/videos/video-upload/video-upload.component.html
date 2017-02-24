@@ -1,5 +1,6 @@
 <div class="col-md-12">
-  <div class="panel panel-default">
+  <!-- Select Video File -->
+  <div class="panel panel-default" *ngIf="!uploadStarted">
     <div class="panel-heading" align="center">
       <h3 class="panel-title">Selecione arquivos para enviar</h3>
     </div>
@@ -12,7 +13,125 @@
       [uploader]="uploader"
     >
       <img src="./assets/images/upload.png" height="128" width="128"/>
+      <br><br>
+      <p>
+        <select name="videoStatus" id="videoStatus" [(ngModel)]="videoStatus">
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </select>
+      </p>
+    </div>
+    <div class="panel-footer" align="center">Ou arraste e solte arquivos de vídeo</div>
+  </div>
+  <!-- end Select Video File -->
+
+  <!-- Started Upload Video File -->
+  <div class="panel panel-default" *ngIf="uploadStarted && !uploadFinished && !submit">
+    <div class="panel-heading" align="center">
+      <h3 class="panel-title">Sending video...</h3>
+    </div>
+    <div class="panel-body">
+
+      <app-message-alert [error]="error"></app-message-alert>
+
+      <div class="row">
+        <!--<div class="col-md-3">
+          <h3>Left Side</h3>
+        </div>-->
+
+        <div class="col-md-12">
+
+          <div class="progress" style="">
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+          </div>
+
+          <div class="panel panel-default">
+
+            <div class="panel-heading" align="center">
+              <h3 class="panel-title">Basic Information</h3>
+            </div>
+
+            <div class="panel-body">
+              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                <fieldset [disabled]="isSubmitting">
+
+                  <div class="row">
+                    <div class="form-group col-md-6 {{form.get('title').dirty ? 'has-feedback' : ''}}"
+                         [ngClass]="{'has-error':formErrors.title.length,
+         'has-success':form.get('title').dirty && form.get('title').valid}">
+                      <label class="control-label" for="title">Title:</label>
+                      <input type="text" class="form-control" formControlName="title" id="title"
+                             [(ngModel)]="video.title"/>
+                      <span class="help-block" *ngFor="let item of formErrors.title">{{item}}</span>
+                      <span class="glyphicon form-control-feedback" [ngClass]="{'glyphicon-remove':formErrors.title.length,
+            'glyphicon-ok':form.get('title').dirty && form.get('title').valid}" aria-hidden="true"></span>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label class="control-label" for="description">Description:</label>
+                      <input type="text" class="form-control" formControlName="description" id="description"
+                             [(ngModel)]="video.description"/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label class="control-label" for="status">Status:</label>
+                      <select class="form-control" id="status" formControlName="status" [(ngModel)]="video.status">
+                        <option value="public" [attr.selected]="video.status === 'public' ? 'selected' : null">
+                          Public
+                        </option>
+                        <option value="private" [attr.selected]="video.status === 'private' ? 'selected' : null">
+                          Private
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h3>Miniatures Video</h3>
+                      <div *ngIf="!video.imagesUrl.thumbs">
+                        <p>The miniatures will be shown after video upload has been finished</p>
+                      </div>
+                      <div *ngIf="video.imagesUrl.thumbs">
+                        <div class="col-xs-6 col-md-3" *ngFor="let item of video.imagesUrl.thumbs; let i = index;">
+                          <a href="#" class="thumbnail"
+                             [ngClass]="{'thumbnail-miniature-select': video.miniatureNumber == index}"
+                             (click)="setMiniatureNumber(index)">
+                            <img src="{{item}}" alt="">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <input type="submit" value="Save and Publish" class="btn btn-success pull-right"
+                             [disabled]="!form.valid && !uploadFinished"/>
+                    </div>
+                  </div>
+
+                </fieldset>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
-  <div class="panel-footer" align="center">Ou arraste e solte arquivos de vídeo</div>
+  <!-- End Upload Video File -->
+
+  <!-- Finhed Upload Video File -->
+  <div class="panel panel-default" *ngIf="submit">
+    <div class="panel-body">
+      <div class="alert alert-success" role="alert">The video has been uploaded with success!</div>
+    </div>
+  </div>
+
 </div>

@@ -7,4 +7,7 @@ export class Video {
   videoName: string;
   createdAt: string;
   updatedAt: string;
+  miniatureNumber: number;
+  imagesUrl: any;
+  user: any;
 }
