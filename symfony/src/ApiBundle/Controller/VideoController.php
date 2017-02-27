@@ -104,7 +104,7 @@ class VideoController extends BaseController
     {
         $video = $this->checkVideo($id);
 
-        $form = $this->createForm(VideoType::class, $video);
+        $form = $this->createForm(VideoType::class, $video, ['is_edit' => true]);
         $this->processForm($request, $form);
 
         if (!$form->isValid()) {

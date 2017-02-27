@@ -9,5 +9,6 @@ export class Video {
   updatedAt: string;
   miniatureNumber: number;
   imagesUrl: any;
+  imagesThumbsUrl: any;
   user: any;
 }

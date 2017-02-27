@@ -452,7 +452,6 @@ class Video
      */
     public function getImagesUrl()
     {
-        $data = [];
         $videoNameNoExt = $this->getVideoNameNoExt();
 
         if (!$this->imageName && $this->videoName) {
@@ -467,20 +466,40 @@ class Video
                 'mqdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'mqdefault' . '.jpg',
                 'maxresdefault' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'maxresdefault' . '.jpg',
             ];
-        }
-
-        if ($this->videoName) {
-            $data['thumbs'] = [
-                '1' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default1' . '.jpg',
-                '2' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default2' . '.jpg',
-                '3' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default3' . '.jpg',
+        } else {
+            $data = [
+                'default' => null,
+                'mqdefault' => null,
+                'maxresdefault' => null,
             ];
-
-            if ($this->imageName) {
-                $data['thumbs']['4'] = GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default' . '.jpg';
-            }
         }
 
         return $data;
+    }
+
+    /**
+     * @return string
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("imagesThumbsUrl")
+     */
+    public function getImagesThumbsUrl()
+    {
+        $videoNameNoExt = $this->getVideoNameNoExt();
+
+        if ($this->videoName) {
+
+            $thumbs[] = ['1' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default1' . '.jpg'];
+            $thumbs[] = ['2' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default2' . '.jpg'];
+            $thumbs[] = ['3' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default3' . '.jpg'];
+
+            if ($this->imageName) {
+                $thumbs[] = ['4' => GlobalsHelper::getVideoImageUrl() . '/video_' . $videoNameNoExt . '/' . 'default' . '.jpg'];
+            }
+        } else {
+            $thumbs = null;
+        }
+
+        return $thumbs;
     }
 }

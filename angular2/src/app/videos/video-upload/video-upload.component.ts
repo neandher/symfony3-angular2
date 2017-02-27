@@ -8,7 +8,6 @@ import {UserService} from "../../shared/services/user.service";
 import {BaseComponent} from "../../base.component";
 import {Video} from "../../shared/models/video";
 
-
 @Component({
   selector: 'app-video-upload',
   templateUrl: './video-upload.component.html'
@@ -28,6 +27,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
   public error: string[] = [];
   public formErrors: Object = {
     'title': [],
+    'videoFile': []
   };
 
   constructor(private videoService: VideoService,
@@ -47,7 +47,8 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
         response => {
           this.video = response;
           this.uploadInit(fileItem)
-        }
+        },
+        errorResponse => console.log(errorResponse)
       );
     };
   }
@@ -73,28 +74,26 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     this.uploader.uploadAll();
 
     this.uploader.onSuccessItem = (item: FileItem, response) => {
-
-      for (let item in JSON.parse(response).imagesUrl.thumbs) {
-        console.log(item);
-        console.log(JSON.parse(response).imagesUrl.thumbs[item]);
-      }
-
       this.video = JSON.parse(response);
     };
 
     this.uploader.onCompleteAll = () => {
-      //this.uploadFinished = true;
+      this.uploadFinished = true;
     };
 
     this.uploader.onErrorItem = (item: FileItem, response) => {
-      console.log(JSON.parse(response));
-      //this.handleResponseError(JSON.parse(response).errors);
+      this.videoService.destroy(this.video.id); // not working
+      this.video = new Video();
+      this.uploader = new FileUploader({});
+      this.uploadStarted = false;
+      this.handleResponseError(JSON.parse(response).errors);
+      this.ngOnInit();
     };
   }
 
   formBuilder() {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
+      title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(150)]],
       description: [''],
       status: [''],
       miniatureNumber: [this.miniatureNumber],
@@ -112,18 +111,22 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     this.isSubmitting = true;
     this.error = [];
 
-    this.videoService.save(this.form.value).subscribe(
+    this.videoService.save(this.form.value, this.video.id).subscribe(
       response => {
         this.submit = true;
       },
       responseError => {
         this.isSubmitting = false;
         this.handleResponseError(responseError.errors);
+
+        console.log(responseError);
+        //console.log(this.form.value);
       }
     );
   }
 
   setMiniatureNumber(number: number) {
-    this.video.miniatureNumber = number;
+    this.miniatureNumber = number;
+    this.form.get('miniatureNumber').setValue(number);
   }
 }

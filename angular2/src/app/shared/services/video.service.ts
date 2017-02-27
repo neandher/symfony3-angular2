@@ -33,9 +33,9 @@ export class VideoService {
       .map(response => response);
   }
 
-  save(video: Video): Observable<Video> {
-    if (video.id) {
-      return this.apiService.put('/videos/' + video.id, video)
+  save(video: Video, id = null): Observable<Video> {
+    if (id) {
+      return this.apiService.put('/videos/' + id, video)
         .map(response => response);
     } else {
       return this.apiService.post('/videos', video)
