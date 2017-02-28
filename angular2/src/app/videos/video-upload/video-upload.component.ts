@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, NgZone} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 
 import {FileUploader, FileItem} from "ng2-file-upload";
@@ -33,7 +33,8 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
 
   constructor(private videoService: VideoService,
               private userService: UserService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private zone: NgZone) {
     super();
   }
 
@@ -81,6 +82,12 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     this.formBuilder();
 
     this.uploader.uploadAll();
+
+    this.uploader.onProgressAll = (progress: any) => {
+      this.zone.run(() => {
+        this.uploader.progress = progress;
+      });
+    };
 
     this.uploader.onSuccessItem = (item: FileItem, response) => {
       let responseVideo: Video = JSON.parse(response);

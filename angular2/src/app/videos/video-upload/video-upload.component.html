@@ -43,7 +43,7 @@
         <div class="col-md-12">
 
           <div class="progress" style="">
-            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }">{{uploader.progress}}%</div>
           </div>
 
           <div class="panel panel-default">
@@ -69,12 +69,6 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label class="control-label" for="description">Description:</label>
-                      <input type="text" class="form-control" formControlName="description" id="description"
-                             [(ngModel)]="video.description"/>
-                    </div>
-
-                    <div class="form-group col-md-6">
                       <label class="control-label" for="status">Status:</label>
                       <select class="form-control" id="status" formControlName="status" [(ngModel)]="video.status">
                         <option value="public" [attr.selected]="video.status === 'public' ? 'selected' : null">
@@ -85,6 +79,13 @@
                         </option>
                       </select>
                     </div>
+
+                    <div class="form-group col-md-6">
+                      <label class="control-label" for="description">Description:</label>
+                      <textarea class="form-control" formControlName="description" id="description"
+                                [(ngModel)]="video.description" cols="3"></textarea>
+                    </div>
+
                   </div>
 
                   <hr>
@@ -99,7 +100,8 @@
                       </div>
 
                       <div *ngIf="video.videoName">
-                        <div class="col-xs-6 col-md-3" (click)="$event.preventDefault()" *ngFor="let item of video.imagesThumbsUrl; let i = index;">
+                        <div class="col-xs-6 col-md-3" (click)="$event.preventDefault()"
+                             *ngFor="let item of video.imagesThumbsUrl; let i = index;">
                           <a href="#" class="thumbnail"
                              [ngClass]="{'thumbnail-miniature-select': video.miniatureNumber == (i+1)}"
                              (click)="setMiniatureNumber((i+1))">
