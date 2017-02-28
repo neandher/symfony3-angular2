@@ -14,13 +14,14 @@ import {Video} from "../../shared/models/video";
 })
 export class VideoUploadComponent extends BaseComponent implements OnInit {
 
-  public uploader: FileUploader = new FileUploader({});
+  public uploader: FileUploader;
+  public allowedMimeType: string[] = ['video/mp4'];
   public hasBaseDropZoneOver: boolean = false;
-  public video: Video = new Video();
+  public video: Video;
   public videoStatus: string = 'public';
   public miniatureNumber: number;
-  public uploadStarted = false;
-  public uploadFinished = false;
+  public uploadStarted: boolean = false;
+  public uploadFinished: boolean = false;
   public form: FormGroup;
   public submit: boolean = false;
   public isSubmitting: boolean = false;
@@ -37,14 +38,22 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.uploader.onAfterAddingFile = (fileItem: FileItem) => {
 
+    this.clear();
+
+    this.uploader.onWhenAddingFileFailed = () => {
+      this.error.push('The file you are uploading may not be a valid video file');
+      this.ngOnInit();
+    };
+
+    this.uploader.onAfterAddingFile = (fileItem: FileItem) => {
+      this.error = [];
       this.video.title = fileItem.file.name;
       this.video.status = this.videoStatus;
       this.video.user = this.userService.getCurrentUser().id;
 
       this.videoService.save(this.video).subscribe(
-        response => {
+        (response: Video) => {
           this.video = response;
           this.uploadInit(fileItem)
         },
@@ -74,7 +83,12 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     this.uploader.uploadAll();
 
     this.uploader.onSuccessItem = (item: FileItem, response) => {
-      this.video = JSON.parse(response);
+      let responseVideo: Video = JSON.parse(response);
+
+      this.video.id = responseVideo.id;
+      this.video.videoName = responseVideo.videoName;
+      this.video.imagesUrl = responseVideo.imagesUrl;
+      this.video.imagesThumbsUrl = responseVideo.imagesThumbsUrl;
     };
 
     this.uploader.onCompleteAll = () => {
@@ -83,12 +97,15 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
 
     this.uploader.onErrorItem = (item: FileItem, response) => {
       this.videoService.destroy(this.video.id); // not working
-      this.video = new Video();
-      this.uploader = new FileUploader({});
       this.uploadStarted = false;
       this.handleResponseError(JSON.parse(response).errors);
       this.ngOnInit();
     };
+  }
+
+  private clear() {
+    this.uploader = new FileUploader({allowedMimeType: this.allowedMimeType});
+    this.video = new Video();
   }
 
   formBuilder() {
