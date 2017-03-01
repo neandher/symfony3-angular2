@@ -1,17 +1,14 @@
-import {NgModule, ModuleWithProviders} from '@angular/core';
-import {SharedModule} from "../shared/shared.module";
-import {RouterModule} from "@angular/router";
-import {ChannelComponent} from "./channel.component";
-import {AuthGuard} from "../shared/services/auth.guard";
+import {NgModule} from '@angular/core';
 
-const ChannelRouting: ModuleWithProviders = RouterModule.forChild([
-  {path: '', component: ChannelComponent, canActivate: [AuthGuard]},
-]);
+import {SharedModule} from "../shared/shared.module";
+import {ChannelComponent} from "./channel.component";
+import {ChannelRoutingModule} from "./channel.routing.module";
+
 
 @NgModule({
   imports: [
     SharedModule,
-    ChannelRouting
+    ChannelRoutingModule
   ],
   declarations: [
     ChannelComponent

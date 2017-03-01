@@ -4,7 +4,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {NGValidators} from "ng-validators";
 import {BaseComponent} from "../../base.component";
 import {UserService} from "../../shared/services/user.service";
-import {EqualPasswordsValidator} from "../../validators/equalPasswords.validator";
+import {EqualPasswordsValidator} from "../../shared/validators/equalPasswords.validator";
 
 @Component({
   selector: 'app-register',

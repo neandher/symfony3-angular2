@@ -8,6 +8,7 @@ export class Video {
   createdAt: string;
   updatedAt: string;
   miniatureNumber: number;
+  videoUrl: string;
   imagesUrl: any;
   imagesThumbsUrl: any;
   user: any;

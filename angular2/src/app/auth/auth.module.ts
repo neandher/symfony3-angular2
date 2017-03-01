@@ -1,19 +1,14 @@
-import {NgModule, ModuleWithProviders} from "@angular/core";
-import {RouterModule} from "@angular/router";
+import {NgModule} from "@angular/core";
 
 import {SignInComponent} from "./signin/signin.component";
 import {SignUpComponent} from "./signup/signup.component";
 import {SharedModule} from "../shared/shared.module";
-
-const AUTH_ROUTES: ModuleWithProviders  = RouterModule.forChild([
-  {path: 'signin', component: SignInComponent},
-  {path: 'signup', component: SignUpComponent},
-]);
+import {AuthRoutingModule} from "./auth.routing.module";
 
 @NgModule({
   imports: [
-    AUTH_ROUTES,
-    SharedModule
+    SharedModule,
+    AuthRoutingModule,
   ],
   declarations: [
     SignInComponent,

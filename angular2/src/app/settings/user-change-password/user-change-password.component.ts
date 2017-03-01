@@ -3,7 +3,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 
 import {BaseComponent} from "../../base.component";
 import {User} from "../../shared/models/user";
-import {EqualPasswordsValidator} from "../../validators/equalPasswords.validator";
+import {EqualPasswordsValidator} from "../../shared/validators/equalPasswords.validator";
 import {UserService} from "../../shared/services/user.service";
 
 @Component({

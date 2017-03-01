@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.userService.purgeAuth();
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/auth/signin']);
   }
 
 }

@@ -5,7 +5,7 @@ import {BaseComponent} from "../../base.component";
 import {Video} from "../../shared/models/video";
 import {Subscription} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {VideoService} from "../../shared/services/video.service";
+import {VideoService} from "../video.service";
 
 @Component({
   selector: 'app-video-editor',

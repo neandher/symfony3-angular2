@@ -357,7 +357,7 @@ class Video
      */
     public function getVideoUrl()
     {
-        return $this->videoName ? GlobalsHelper::getVideoUrl() . '/' . $this->videoName : null;
+        return $this->videoName ? GlobalsHelper::getVideoUrl() . '/video_' . $this->getVideoNameNoExt() . '/' . $this->videoName : null;
     }
 
     /**

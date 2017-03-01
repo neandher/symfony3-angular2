@@ -19,7 +19,10 @@ export class ApiService {
     return Observable.throw(error.json());
   }
 
-  get(path: string, params: URLSearchParams = new URLSearchParams(), auth: boolean = true): Observable<any> {
+  get(path: string, params: URLSearchParams = new URLSearchParams(), auth: boolean = true, deep: boolean = false): Observable<any> {
+    if (deep) {
+      params.append('deep', '1');
+    }
     return (auth ? this.authHttp : this.http).get(`${environment.api_url}${path}`, {search: params})
       .catch(this.formatErrors)
       .map((res: Response) => res.json());

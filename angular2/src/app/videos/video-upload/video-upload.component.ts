@@ -3,7 +3,7 @@ import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 
 import {FileUploader, FileItem} from "ng2-file-upload";
 import {environment} from "../../../environments/environment";
-import {VideoService} from "../../shared/services/video.service";
+import {VideoService} from "../video.service";
 import {UserService} from "../../shared/services/user.service";
 import {BaseComponent} from "../../base.component";
 import {Video} from "../../shared/models/video";
@@ -103,7 +103,6 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     };
 
     this.uploader.onErrorItem = (item: FileItem, response) => {
-      this.videoService.destroy(this.video.id); // not working
       this.uploadStarted = false;
       this.handleResponseError(JSON.parse(response).errors);
       this.ngOnInit();
@@ -115,7 +114,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     this.video = new Video();
   }
 
-  formBuilder() {
+  private formBuilder() {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(150)]],
       description: [''],
@@ -127,7 +126,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     this.onValueChanged();
   }
 
-  onValueChanged() {
+  private onValueChanged() {
     this.handleError(this.form);
   }
 
