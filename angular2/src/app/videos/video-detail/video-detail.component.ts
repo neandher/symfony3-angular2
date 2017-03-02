@@ -23,11 +23,10 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
       (params: any) => {
         if (params.hasOwnProperty('id')) {
           this.loading = true;
-          this.videoService.get(params['id'], true).subscribe(
+          this.videoService.get(params['id']).subscribe(
             videoResponse => {
               this.video = videoResponse;
               this.loading = false;
-              console.log(this.video);
             },
             errorResponse => {
               // invalid id

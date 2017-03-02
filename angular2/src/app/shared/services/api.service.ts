@@ -19,7 +19,10 @@ export class ApiService {
     return Observable.throw(error.json());
   }
 
-  get(path: string, params: URLSearchParams = new URLSearchParams(), auth: boolean = true, deep: boolean = false): Observable<any> {
+  get(path: string,
+      params: URLSearchParams = new URLSearchParams(),
+      auth: boolean = true,
+      deep: boolean = false): Observable<any> {
     if (deep) {
       params.append('deep', '1');
     }

@@ -29,8 +29,8 @@ export class VideoService {
    ).map(data => data);
    }*/
 
-  get(id: number, deep: boolean = false): Observable<Video> {
-    return this.apiService.get('/videos/' + id, (new URLSearchParams()), true, deep)
+  get(id: number): Observable<Video> {
+    return this.apiService.get('/videos/' + id, (new URLSearchParams()), true, true)
       .map(response => response);
   }
 
