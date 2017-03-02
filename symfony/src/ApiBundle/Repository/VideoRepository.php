@@ -1,6 +1,7 @@
 <?php
 
 namespace ApiBundle\Repository;
+
 use ApiBundle\Entity\User;
 
 /**
@@ -31,5 +32,19 @@ class VideoRepository extends BaseRepository
         $this->addOrderingQueryBuilder($qb, $params);
 
         return $qb;
+    }
+
+    /**
+     * @param $id
+     * @return \Doctrine\ORM\QueryBuilder
+     * @internal param array $params
+     */
+    public function findLastsQueryBuilder($id)
+    {
+        $qb = $this->createQueryBuilder('video')
+            ->andWhere('video.id <> :id')->setParameter('id', $id)
+            ->orderBy('video.createdAt', 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 }
