@@ -36,16 +36,16 @@ class PaginationFactory
         $page = $request->query->get('page', 1);
         $perPage = $request->query->get('perpage', 10);
 
-        $adapter = new DoctrineORMAdapter($qb);
+        $adapter = new DoctrineORMAdapter($qb, true, false);
 
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($perPage);
         $pagerfanta->setCurrentPage($page);
 
-        $programmers = [];
+        $items = [];
 
         foreach ($pagerfanta->getCurrentPageResults() as $result) {
-            $programmers[] = $result;
+            $items[] = $result;
         }
 
         // make sure query parameters are included in pagination links
@@ -59,7 +59,7 @@ class PaginationFactory
         };
 
         $paginatedCollection = new PaginatedCollection(
-            $programmers,
+            $items,
             $pagerfanta->getNbResults()
         );
 

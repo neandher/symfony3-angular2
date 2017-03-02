@@ -29,6 +29,10 @@ class VideoRepository extends BaseRepository
             $qb->andWhere('video.user = :user')->setParameter('user', $user);
         }
 
+        if (isset($params['offset']) && !empty($params['offset'])) {
+            $qb->andWhere('video.id <> :id')->setParameter('id', $params['offset']);
+        }
+
         $this->addOrderingQueryBuilder($qb, $params);
 
         return $qb;

@@ -12,12 +12,19 @@ class BaseRepository extends EntityRepository
 {
     protected function addOrderingQueryBuilder(QueryBuilder $qb, $params = [])
     {
-        $aliases = $qb->getRootAliases();
 
-        if (isset($params['orderby']) && !empty($params['orderby'])
-            && isset($params['sort']) && !empty($params['sort'])
-        ) {
-            $qb->orderBy($aliases[0] . '.' . $params['orderby'], $params['sort']);
+        // Ex.:/api/products?sorting[price]=asc&sorting[name]=asc
+
+        $aliases = $qb->getRootAliases();
+        $fields = array_keys($this->getClassMetadata()->fieldMappings);
+
+        if (isset($params['sorting'])) {
+            foreach ($params['sorting'] as $sorting_index => $sorting_val) {
+                if (in_array($sorting_index, $fields)) {
+                    $direction = ($sorting_val === 'asc') ? 'asc' : 'desc';
+                    $qb->addOrderBy($aliases[0] . '.' . $sorting_index, $direction);
+                }
+            }
         } else {
             $qb->orderBy($aliases[0] . '.id', 'DESC');
         }
