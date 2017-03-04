@@ -262,6 +262,7 @@ class VideoController extends BaseController
         $fileTemp = new File(
             $this->getParameter('upload_cache_path') . '/' . $filter . '/' . $path . '/' . $fileName
         );
+        
         $fileTemp->move($path, $newFileName);
     }
 

@@ -19,7 +19,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
   public hasBaseDropZoneOver: boolean = false;
   public video: Video;
   public videoStatus: string = 'public';
-  public miniatureNumber: number;
+  public miniatureNumber: number = 1;
   public uploadStarted: boolean = false;
   public uploadFinished: boolean = false;
   public form: FormGroup;
@@ -38,6 +38,11 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     super();
   }
 
+  private removeExtensionFromFile(fileName: string) {
+    let newFileName: string[] = fileName.split('.');
+    return fileName.replace('.' + newFileName[(newFileName.length - 1)], '');
+  }
+
   ngOnInit() {
 
     this.clear();
@@ -49,7 +54,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
 
     this.uploader.onAfterAddingFile = (fileItem: FileItem) => {
       this.error = [];
-      this.video.title = fileItem.file.name;
+      this.video.title = this.removeExtensionFromFile(fileItem.file.name);
       this.video.status = this.videoStatus;
       this.video.user = this.userService.getCurrentUser().id;
 

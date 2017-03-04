@@ -5,6 +5,7 @@ import {Video} from "../../shared/models/video";
 import {Subscription} from "rxjs";
 import {VideoService} from "../video.service";
 import {VideoListConfig} from "../video-list-config.model";
+import {URLSearchParams} from "@angular/http";
 
 @Component({
   selector: 'app-video-detail',
@@ -13,9 +14,10 @@ import {VideoListConfig} from "../video-list-config.model";
 export class VideoDetailComponent implements OnInit, OnDestroy {
 
   public loading: boolean = false;
+  public lastsVideosloading: boolean = false;
   public video: Video;
   public subscription: Subscription;
-  public lastsVideos: Video[];
+  public lastsVideos: {items: Video[],_links: {}};
   public listConfig: VideoListConfig = new VideoListConfig();
 
   constructor(private route: ActivatedRoute, private router: Router, private videoService: VideoService) {
@@ -34,22 +36,16 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
             (videoResponse: any) => {
               this.video = videoResponse;
               this.loading = false;
-              this.lastsVideos = [];
+              this.lastsVideos = null;
 
               //lasts videos
 
-              this.listConfig = {
-                filters: {
-                  offset: this.video.id,
-                  maxresults: 15,
-                  perpage: 5,
-                }
-              };
+              this.listConfig.filters.offset = this.video.id;
+              this.listConfig.filters.perpage = 5;
 
               this.videoService.query(this.listConfig).subscribe(
-                (videoResponse: any[]) => {
+                videoResponse => {
                   this.lastsVideos = videoResponse;
-                  console.log(this.lastsVideos);
                 },
                 errorResponse => {
                   console.log(errorResponse);
@@ -70,6 +66,30 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  lastsVideosNext() {
+
+    let hasNext = Object.keys(this.lastsVideos._links).some(function (item) {
+      return item == 'next';
+    });
+
+    if (hasNext) {
+      this.lastsVideosloading = true;
+
+      this.videoService.query(null, this.lastsVideos._links['next']).subscribe(
+        videoResponse => {
+          for (let item of videoResponse.items) {
+            this.lastsVideos.items.push(item);
+          }
+          this.lastsVideos._links = videoResponse._links;
+          this.lastsVideosloading = false;
+        },
+        errorResponse => {
+          console.log(errorResponse);
+        }
+      );
+    }
   }
 
   ngOnDestroy() {

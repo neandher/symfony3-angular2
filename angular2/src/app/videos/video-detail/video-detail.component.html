@@ -1,38 +1,67 @@
 <div class="loader" *ngIf="loading">
-  <img src="assets/images/ajax-gray.gif" />
+  <img src="assets/images/ajax-gray.gif"/>
 </div>
 
-<div class="col-md-12" *ngIf="video && !loading">
-  <hr/>
-  <h3>{{video.title}}</h3>
-  <hr/>
+<div *ngIf="video && !loading">
 
-  <div class="col-md-8">
-    <video controls id="video-player">
+  <div class="col-md-8" style="padding-left: 0; padding-right: 0">
+    <video controls id="video-player" poster="{{video.imagesUrl.maxresdefault}}">
       <source src="{{video.videoUrl}}">
       Tu navegador no es compatible con HTML5
     </video>
 
     <div class="panel panel-default video-data">
+      <div class="panel-body">
+        <h3 style="margin-top: 0">{{video.title}}</h3>
+        <ul class="media-list" style="margin-bottom: 0">
+          <li class="media">
+            <div class="media-left">
+              <img class="media-object" *ngIf="video.user.avatarImageName"
+                   src="{{video.user.avatarImageUrl}}" width="48"/>
+              <img class="media-object" *ngIf="!video.user.avatarImageName" src="assets/images/default_img_user_64.png" width="48"/>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading" title="{{video.user.fullName}}" style="margin-top: 10px">
+                <strong>{{video.user.fullName}}</strong>
+              </h4>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default video-data">
       <div class="panel-heading">
         <h3 class="panel-title">
-          Subido por <strong>{{video.user.fullName}} </strong> el {{video.createdAt | date:'dd/MM/y' }}
+          Published in {{video.createdAt | date:'dd/MM/y' }}
         </h3>
       </div>
-      <div class="panel-body">
-        {{video.description}}
-      </div>
+      <div class="panel-body line-breaker">{{video.description}}</div>
     </div>
 
     <!-- COMPONENTE DE COMENTARIOS -->
     <!--<comments *ngIf="identity"></comments>-->
   </div>
 
-  <div class="col-md-4">
-    <h3>Otros vídeos</h3>
-    <hr/>
+  <div class="col-md-4" style="padding-right: 0">
 
-    <ul id="videos-list" *ngIf="lastsVideos">
+    <ul class="media-list" *ngIf="lastsVideos">
+      <li class="media" *ngFor="let video of lastsVideos.items">
+        <div class="media-left">
+          <a [routerLink]="['/videos', video.id]" title="{{video.title}}">
+            <img class="media-object" src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}" width="158">
+          </a>
+        </div>
+        <div class="media-body pointer" [routerLink]="['/videos', video.id]">
+          <h4 class="media-heading block-with-text" title="{{video.title}}"><strong>{{video.title}}</strong></h4>
+          <p>{{video.user.fullName}}</p>
+        </div>
+      </li>
+    </ul>
+    <div *ngIf="lastsVideosloading"><p>Loading...</p></div>
+    <button class="btn btn-primary btn-block" (click)="lastsVideosNext()" *ngIf="!lastsVideosloading">Load More</button>
+
+    <!--<ul id="videos-list" *ngIf="lastsVideos">
       <li *ngFor="let video of lastsVideos.items" class="last-video-item col-md-12 pull-left">
         <div class="last-video-image-thumb col-md-4 pull-left">
           <img src="{{video.imagesUrl.mqdefault}}" />
@@ -44,7 +73,7 @@
         </div>
 
       </li>
-    </ul>
+    </ul>-->
 
   </div>
 

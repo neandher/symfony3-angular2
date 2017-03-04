@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs/Rx";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/catch";
 import {ApiService} from "../shared/services/api.service";
 import {Video} from "../shared/models/video";
 import {URLSearchParams} from "@angular/http";
@@ -14,21 +13,29 @@ export class VideoService {
   constructor(private apiService: ApiService) {
   }
 
-  query(config: VideoListConfig): Observable<any[]> {
+  query(config: VideoListConfig = null, url: string = null): Observable<{items: Video[],_links: {}}> {
 
-    let params: URLSearchParams = new URLSearchParams();
+    let params: URLSearchParams;
+
+    if (!url) {
+      params = new URLSearchParams();
+
+      Object.keys(config.filters).forEach((key) => {
+        params.set(key, config.filters[key]);
+      });
+    }
+    else if (url) {
+      let newUrl = url.split('?');
+      params = new URLSearchParams(newUrl[1]);
+    }
 
     params.append('deep', '1');
-
-    Object.keys(config.filters).forEach((key) => {
-      params.set(key, config.filters[key]);
-    });
 
     return this.apiService.get('/videos', params)
       .map(response => response);
   }
 
-  get(id: number): Observable<Video> {
+  get(id: number): Observable < Video > {
 
     let params: URLSearchParams = new URLSearchParams();
 
@@ -38,7 +45,7 @@ export class VideoService {
       .map(response => response);
   }
 
-  save(video: Video, id = null): Observable<Video> {
+  save(video: Video, id = null): Observable < Video > {
     if (id) {
       return this.apiService.put('/videos/' + id, video)
         .map(response => response);
