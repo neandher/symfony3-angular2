@@ -31,7 +31,7 @@ export class VideoService {
 
     params.append('deep', '1');
 
-    return this.apiService.get('/videos', params)
+    return this.apiService.get('/videos', params, false)
       .map(response => response);
   }
 
@@ -41,7 +41,7 @@ export class VideoService {
 
     params.append('deep', '1');
 
-    return this.apiService.get('/videos/' + id, params)
+    return this.apiService.get('/videos/' + id, params, false)
       .map(response => response);
   }
 

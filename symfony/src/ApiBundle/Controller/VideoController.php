@@ -17,12 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class VideoController
  *
- * @Security("is_granted('ROLE_USER')")
  * @Route("/videos")
  */
 class VideoController extends BaseController
 {
     /**
+     * @Security("is_granted('ROLE_USER')")
      * @Route("")
      * @Method("POST")
      * @param Request $request
@@ -94,6 +94,7 @@ class VideoController extends BaseController
     }
 
     /**
+     * @Security("is_granted('ROLE_USER')")
      * @Route("/{id}", requirements={"id": "\d+"})
      * @Method({"PUT", "PATCH"})
      * @param $id
@@ -121,6 +122,7 @@ class VideoController extends BaseController
     }
 
     /**
+     * @Security("is_granted('ROLE_USER')")
      * @Route("/{id}", requirements={"id": "\d+"})
      * @Method("DELETE")
      * @param $id
@@ -142,6 +144,7 @@ class VideoController extends BaseController
     }
 
     /**
+     * @Security("is_granted('ROLE_USER')")
      * @Route("/{id}/upload", requirements={"id": "\d+"})
      * @Method("POST")
      * @param Request $request
@@ -267,6 +270,7 @@ class VideoController extends BaseController
     }
 
     /**
+     * @Security("is_granted('ROLE_USER')")
      * @Route("/{id}/upload-image", requirements={"id": "\d+"})
      * @Method("POST")
      * @param Request $request

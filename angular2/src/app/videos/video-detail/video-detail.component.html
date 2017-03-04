@@ -18,7 +18,8 @@
             <div class="media-left">
               <img class="media-object" *ngIf="video.user.avatarImageName"
                    src="{{video.user.avatarImageUrl}}" width="48"/>
-              <img class="media-object" *ngIf="!video.user.avatarImageName" src="assets/images/default_img_user_64.png" width="48"/>
+              <img class="media-object" *ngIf="!video.user.avatarImageName" src="assets/images/default_img_user_64.png"
+                   width="48"/>
             </div>
             <div class="media-body">
               <h4 class="media-heading" title="{{video.user.fullName}}" style="margin-top: 10px; font-size: 12px">
@@ -52,14 +53,19 @@
             <img class="media-object" src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}" width="158">
           </a>
         </div>
-        <div class="media-body pointer" [routerLink]="['/videos', video.id]">
-          <h4 class="media-heading block-with-text" title="{{video.title}}" style="font-size: 14px;"><strong>{{video.title}}</strong></h4>
-          <p style="font-size: 11px; color: #767676">{{video.user.fullName}}</p>
+        <div class="media-body pointer" >
+          <a [routerLink]="['/videos', video.id]">
+            <h4 class="media-heading block-with-text" title="{{video.title}}" style="font-size: 14px;"><strong>{{video.title}}</strong>
+            </h4>
+            <p style="font-size: 11px; color: #767676">{{video.user.fullName}}</p>
+          </a>
         </div>
       </li>
     </ul>
     <div *ngIf="lastsVideosloading"><p>Loading...</p></div>
-    <button class="btn btn-primary btn-block" (click)="lastsVideosNext()" *ngIf="!lastsVideosloading">Load More</button>
+    <button class="btn btn-primary btn-block" (click)="lastsVideosNext()"
+            *ngIf="!lastsVideosloading && lastsVideosClicked < lastsVideosMaxClicks">Load More
+    </button>
 
     <!--<ul id="videos-list" *ngIf="lastsVideos">
       <li *ngFor="let video of lastsVideos.items" class="last-video-item col-md-12 pull-left">

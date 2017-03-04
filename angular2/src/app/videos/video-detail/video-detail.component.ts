@@ -5,7 +5,6 @@ import {Video} from "../../shared/models/video";
 import {Subscription} from "rxjs";
 import {VideoService} from "../video.service";
 import {VideoListConfig} from "../video-list-config.model";
-import {URLSearchParams} from "@angular/http";
 
 @Component({
   selector: 'app-video-detail',
@@ -19,11 +18,14 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public lastsVideos: {items: Video[],_links: {}};
   public listConfig: VideoListConfig = new VideoListConfig();
+  public lastsVideosClicked: number;
+  public lastsVideosMaxClicks: number = 2;
 
   constructor(private route: ActivatedRoute, private router: Router, private videoService: VideoService) {
   }
 
   ngOnInit() {
+
     this.subscription = this.route.params.subscribe(
       (params: any) => {
         if (params.hasOwnProperty('id')) {
@@ -37,6 +39,7 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
               this.video = videoResponse;
               this.loading = false;
               this.lastsVideos = null;
+              this.lastsVideosClicked = 0;
 
               //lasts videos
 
@@ -74,7 +77,7 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
       return item == 'next';
     });
 
-    if (hasNext) {
+    if (hasNext && this.lastsVideosClicked < this.lastsVideosMaxClicks) {
       this.lastsVideosloading = true;
 
       this.videoService.query(null, this.lastsVideos._links['next']).subscribe(
@@ -89,6 +92,8 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
           console.log(errorResponse);
         }
       );
+
+      this.lastsVideosClicked++;
     }
   }
 

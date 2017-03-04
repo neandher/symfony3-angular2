@@ -7,7 +7,7 @@ import {VideoUploadComponent} from './video-upload/video-upload.component';
 import {FileUploadModule} from "ng2-file-upload";
 import {VideosRoutingModule} from "./videos.routing.module";
 import {VideoService} from "./video.service";
-import { VideoDetailComponent } from './video-detail/video-detail.component';
+import {VideoDetailComponent} from './video-detail/video-detail.component';
 
 @NgModule({
   imports: [
@@ -23,7 +23,8 @@ import { VideoDetailComponent } from './video-detail/video-detail.component';
   ],
   providers: [
     VideoService
-  ]
+  ],
+  exports: [VideoService]
 })
 export class VideosModule {
 }

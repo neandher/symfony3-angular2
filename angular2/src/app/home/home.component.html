@@ -7,48 +7,71 @@
   </div>
 
   <div *showAuthed="true">
-    Bienvenido {{user.fullName}}, <a [routerLink]="['/']">entra en tu canal</a> o <a [routerLink]="['/videos/create-video']">crea un nuevo video</a>.
+    Bienvenido {{user.fullName}}, <a [routerLink]="['/']">entra en tu canal</a> o <a
+    [routerLink]="['/videos/create-video']">crea un nuevo video</a>.
   </div>
 
   <hr/>
 
-  <!--<div class="all-videos">
-        <div class="loader" *ngIf="loading == 'show'">
-            <img src="assets/images/ajax-gray.gif" />
-        </div>
+  <div class="all-videos">
 
-        <ul id="videos-list" *ngIf="videos && loading == 'hide'">
-            <li *ngFor="let video of videos" class="video-item col-md-4 pull-left">
-                <div class="video-image-thumb">
-                    <img src="http://localhost/curso-fullstack/symfony/web/uploads/video_images/video_{{video.id}}/{{video.image}}"  *ngIf="video.image"/>
-                </div>
-                <div class="data">
-                    <h4><a [routerLink]="['/video', video.id]">{{video.title}}</a></h4>
-                    <p>Subido por <a [routerLink]="['/channel', video.user.id]">{{video.user.name}} {{video.user.surname}}</a></p>
-                    <div class="video-buttons" *ngIf="identity && identity != null && identity.sub == video.user.id">
-                        <a [routerLink]="['/edit-video', video.id]" class="btn btn-primary">Editar</a>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </li>
-        </ul>
+    <div class="loader" *ngIf="loading">
+      <img src="assets/images/ajax-gray.gif"/>
     </div>
-    <div class="clearfix"></div>
 
-    <ul class="pagination">
-        <li>
-            <a [routerLink]="['/index', pagePrev]" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li *ngFor="let page of pages">
-            <a [routerLink]="['/index', page + 1]">{{page + 1}}</a>
-        </li>
-        <li>
-            <a [routerLink]="['/index', pageNext]" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
+    <div *ngIf="videosList && !loading">
+      <div class="col-sm-6 col-md-4" *ngFor="let video of videosList.items">
+        <div class="thumbnail" style="height: 298px">
+          <a [routerLink]="['/edit-video', video.id]" title="{{video.title}}">
+            <img src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}">
+          </a>
+          <div class="caption">
+            <h4 class="block-with-text">
+              <a [routerLink]="['/edit-video', video.id]" title="{{video.title}}">{{video.title}}</a>
+            </h4>
+            <p style="font-size: 11px">Subido por <a [routerLink]="['/channel', video.user.id]">{{video.user.fullName}}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<ul id="videos-list" *ngIf="videosList && !loading">
+      <li *ngFor="let video of videosList.items" class="video-item col-md-4 pull-left">
+        <div class="video-image-thumb">
+          <img
+            src="{{video.imagesUrl.mqdefault}}"
+            *ngIf="video.videoName"/>
+        </div>
+        <div class="data">
+          <h4 class="block-with-text"><a [routerLink]="['/videos', video.id]">{{video.title}}</a></h4>
+          <p>Subido por <a [routerLink]="['/channel', video.user.id]">{{video.user.fullName}}</a></p>
+          <div class="video-buttons" *ngIf="user.id == video.user.id">
+            <a [routerLink]="['/edit-video', video.id]" class="btn btn-primary">Editar</a>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </li>
     </ul>-->
+
+  </div>
+  <div class="clearfix"></div>
+
+  <div *ngIf="videosList" align="center">
+    <ul class="pagination">
+      <li *ngIf="videosList._links.previous">
+        <a href="#" aria-label="Previous" (click)="$event.preventDefault(); pagination('previous')">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <!--<li *ngFor="let page of pages">
+        <a [routerLink]="['/index', page + 1]">{{page + 1}}</a>
+      </li>-->
+      <li *ngIf="videosList._links.next">
+        <a href="#" aria-label="Next" (click)="$event.preventDefault(); pagination('next')">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 
 </div>
