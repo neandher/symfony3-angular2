@@ -57,14 +57,14 @@ class PaginationFactory
                 array_merge(
                     $routeParams,
                     array('page' => $targetPage)
-                ),
-                0
+                )
             );
         };
 
         $paginatedCollection = new PaginatedCollection(
             $items,
-            $pagerfanta->getNbResults()
+            $pagerfanta->getNbResults(),
+            $pagerfanta->getNbPages()
         );
 
         $paginatedCollection->addLink('self', $createLinkUrl($page));

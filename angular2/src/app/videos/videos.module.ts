@@ -24,7 +24,6 @@ import {VideoDetailComponent} from './video-detail/video-detail.component';
   providers: [
     VideoService
   ],
-  exports: [VideoService]
 })
 export class VideosModule {
 }

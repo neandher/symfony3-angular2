@@ -22,14 +22,15 @@
     <div *ngIf="videosList && !loading">
       <div class="col-sm-6 col-md-4" *ngFor="let video of videosList.items">
         <div class="thumbnail" style="height: 298px">
-          <a [routerLink]="['/edit-video', video.id]" title="{{video.title}}">
+          <a [routerLink]="['/videos', video.id]" title="{{video.tit}}">
             <img src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}">
           </a>
           <div class="caption">
             <h4 class="block-with-text">
-              <a [routerLink]="['/edit-video', video.id]" title="{{video.title}}">{{video.title}}</a>
+              <a [routerLink]="['/videos', video.id]" title="{{video.title}}">{{video.title}}</a>
             </h4>
-            <p style="font-size: 11px">Subido por <a [routerLink]="['/channel', video.user.id]">{{video.user.fullName}}</a></p>
+            <p style="font-size: 11px">Subido por <a
+              [routerLink]="['/channel', video.user.id]">{{video.user.fullName}}</a></p>
           </div>
         </div>
       </div>
@@ -56,18 +57,20 @@
   </div>
   <div class="clearfix"></div>
 
-  <div *ngIf="videosList" align="center">
+  <div *ngIf="videosList && !loading" align="center">
     <ul class="pagination">
       <li *ngIf="videosList._links.previous">
-        <a href="#" aria-label="Previous" (click)="$event.preventDefault(); pagination('previous')">
+        <a [routerLink]="['/']" [queryParams]="paginationQueryParams('previous')"
+           aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <!--<li *ngFor="let page of pages">
-        <a [routerLink]="['/index', page + 1]">{{page + 1}}</a>
-      </li>-->
+      <li *ngFor="let page of pager.pages" [ngClass]="{active: pager.currentPage == page}">
+        <a [routerLink]="['/']" [queryParams]="paginationQueryParams(null, page)">{{page}}</a>
+      </li>
       <li *ngIf="videosList._links.next">
-        <a href="#" aria-label="Next" (click)="$event.preventDefault(); pagination('next')">
+        <a [routerLink]="['/']" [queryParams]="paginationQueryParams('next')"
+           aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>

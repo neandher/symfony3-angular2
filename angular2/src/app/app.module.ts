@@ -12,6 +12,7 @@ import {AuthHttp} from "angular2-jwt";
 import {AuthProvider} from "./shared/services/auth.provider";
 import {AppRoutingModule} from "./app.routing.module";
 import {HomeComponent} from "./home/home.component";
+import {PagerService} from "./shared/services/pager.service";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {HomeComponent} from "./home/home.component";
     AuthGuard,
     {provide: AuthHttp, useClass: AuthProvider},
     JwtService,
-    UserService
+    UserService,
+    PagerService
   ],
   bootstrap: [AppComponent]
 })

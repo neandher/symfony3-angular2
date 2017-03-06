@@ -6,6 +6,7 @@ import {ApiService} from "../shared/services/api.service";
 import {Video} from "../shared/models/video";
 import {URLSearchParams} from "@angular/http";
 import {VideoListConfig} from "./video-list-config.model";
+import {ListResult} from "../shared/services/list-result.interface";
 
 @Injectable()
 export class VideoService {
@@ -13,7 +14,7 @@ export class VideoService {
   constructor(private apiService: ApiService) {
   }
 
-  query(config: VideoListConfig = null, url: string = null): Observable<{items: Video[],_links: {}}> {
+  query(config: VideoListConfig = null, url: string = null): Observable<ListResult<Video>> {
 
     let params: URLSearchParams;
 
@@ -35,7 +36,29 @@ export class VideoService {
       .map(response => response);
   }
 
-  get(id: number): Observable < Video > {
+  query2(params: any[], defaults: any[] = []): Observable<ListResult<Video>> {
+
+    let newParams: URLSearchParams = new URLSearchParams();
+
+    params.forEach(function (item: {}) {
+      Object.keys(item).forEach(function (key) {
+        newParams.set(key, item[key]);
+      })
+    });
+
+    defaults.forEach(function (item) {
+      Object.keys(item).forEach(function (key) {
+        newParams.set(key, item[key]);
+      })
+    });
+
+    newParams.append('deep', '1');
+
+    return this.apiService.get('/videos', newParams, false)
+      .map(response => response);
+  }
+
+  get(id: number): Observable <Video> {
 
     let params: URLSearchParams = new URLSearchParams();
 

@@ -59,6 +59,13 @@ class PaginatedCollection
     private $count;
 
     /**
+     * @Serializer\Expose()
+     *
+     * @var
+     */
+    private $nbPages;
+
+    /**
      * @var array
      */
     private $_links = array();
@@ -67,12 +74,14 @@ class PaginatedCollection
      * PaginatedCollection constructor.
      * @param $items
      * @param $total
+     * @param $nbPages
      */
-    public function __construct($items, $total)
+    public function __construct($items, $total, $nbPages)
     {
         $this->items = $items;
         $this->total = $total;
         $this->count = count($items);
+        $this->nbPages = $nbPages;
     }
 
     public function addLink($ref, $url)
