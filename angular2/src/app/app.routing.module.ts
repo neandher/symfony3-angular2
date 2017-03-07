@@ -23,13 +23,13 @@ const appRoutes: Routes = [
   {
     path: 'videos',
     loadChildren: 'app/videos/videos.module#VideosModule',
-    canActivate: [AuthGuard],
-    canLoad: [AuthGuard],
+    //canActivate: [AuthGuard],
+    //canLoad: [AuthGuard],
   },
   {
     path: '',
-    // loadChildren: 'app/home/home.module#HomeModule'
-    component: HomeComponent,
+    loadChildren: 'app/home/home.module#HomeModule'
+    //component: HomeComponent,
   },
 ];
 

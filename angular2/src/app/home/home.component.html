@@ -36,45 +36,11 @@
       </div>
     </div>
 
-    <!--<ul id="videos-list" *ngIf="videosList && !loading">
-      <li *ngFor="let video of videosList.items" class="video-item col-md-4 pull-left">
-        <div class="video-image-thumb">
-          <img
-            src="{{video.imagesUrl.mqdefault}}"
-            *ngIf="video.videoName"/>
-        </div>
-        <div class="data">
-          <h4 class="block-with-text"><a [routerLink]="['/videos', video.id]">{{video.title}}</a></h4>
-          <p>Subido por <a [routerLink]="['/channel', video.user.id]">{{video.user.fullName}}</a></p>
-          <div class="video-buttons" *ngIf="user.id == video.user.id">
-            <a [routerLink]="['/edit-video', video.id]" class="btn btn-primary">Editar</a>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </li>
-    </ul>-->
-
   </div>
   <div class="clearfix"></div>
 
   <div *ngIf="videosList && !loading" align="center">
-    <ul class="pagination">
-      <li *ngIf="videosList._links.previous">
-        <a [routerLink]="['/']" [queryParams]="paginationQueryParams('previous')"
-           aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li *ngFor="let page of pager.pages" [ngClass]="{active: pager.currentPage == page}">
-        <a [routerLink]="['/']" [queryParams]="paginationQueryParams(null, page)">{{page}}</a>
-      </li>
-      <li *ngIf="videosList._links.next">
-        <a [routerLink]="['/']" [queryParams]="paginationQueryParams('next')"
-           aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
+    <app-pagination [itemList]="videosList" [pager]="pager" [routerName]="'/'"></app-pagination>
   </div>
 
 </div>

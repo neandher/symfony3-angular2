@@ -12,6 +12,7 @@ import {UserService} from "../../services/user.service";
 export class HeaderComponent implements OnInit {
 
   user: User;
+  searchString: string;
 
   constructor(private userService: UserService, private router: Router) {
   }
@@ -27,6 +28,12 @@ export class HeaderComponent implements OnInit {
   onLogout() {
     this.userService.purgeAuth();
     this.router.navigate(['/auth/signin']);
+  }
+
+  search() {
+    if (this.searchString != null && this.searchString.trim() != '') {
+      this.router.navigate(["/"], {queryParams: {filter: this.searchString}});
+    }
   }
 
 }

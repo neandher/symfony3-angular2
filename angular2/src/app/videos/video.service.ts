@@ -6,7 +6,7 @@ import {ApiService} from "../shared/services/api.service";
 import {Video} from "../shared/models/video";
 import {URLSearchParams} from "@angular/http";
 import {VideoListConfig} from "./video-list-config.model";
-import {ListResult} from "../shared/services/list-result.interface";
+import {ListResult} from "../shared/interface/list-result.interface";
 
 @Injectable()
 export class VideoService {
