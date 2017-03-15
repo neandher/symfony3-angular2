@@ -14,10 +14,9 @@ export class PagerService {
   getPager(totalItems: number, pageSize: number = 10): {} {
 
     let currentPage: number = this.getParam('page');
-    // calculate total pages
     let totalPages = Math.ceil(totalItems / pageSize);
-
     let startPage: number, endPage: number;
+
     if (totalPages <= 10) {
       // less than 10 total pages so show all
       startPage = 1;
@@ -57,7 +56,7 @@ export class PagerService {
     };
   }
 
-  handleQueryParams(params: Params): any[] {
+  handleQueryParams(params: any): any[] {
 
     let finalParams: any[] = [];
 

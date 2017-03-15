@@ -1,7 +1,8 @@
 import {RouterModule, Routes} from '@angular/router';
 import {NgModule} from "@angular/core";
+
 import {AuthGuard} from "./shared/services/auth.guard";
-import {HomeComponent} from "./home/home.component";
+import {NotFoundComponent} from "./shared/layout/not-found/not-found.component";
 
 const appRoutes: Routes = [
   {
@@ -23,19 +24,20 @@ const appRoutes: Routes = [
   {
     path: 'videos',
     loadChildren: 'app/videos/videos.module#VideosModule',
-    //canActivate: [AuthGuard],
-    //canLoad: [AuthGuard],
   },
   {
     path: '',
     loadChildren: 'app/home/home.module#HomeModule'
     //component: HomeComponent,
   },
+  {
+    path: '**',
+    component: NotFoundComponent
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(appRoutes, {useHash: true})],
-  //imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

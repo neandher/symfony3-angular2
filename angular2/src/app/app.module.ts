@@ -13,11 +13,13 @@ import {AuthProvider} from "./shared/services/auth.provider";
 import {AppRoutingModule} from "./app.routing.module";
 import {HomeComponent} from "./home/home.component";
 import {PagerService} from "./shared/pagination/pager.service";
+import {NotFoundComponent} from "./shared/layout/not-found/not-found.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
+    NotFoundComponent
     //HomeComponent
   ],
   imports: [

@@ -2,9 +2,6 @@
 
 namespace ApiBundle\Form;
 
-use ApiBundle\Entity\User;
-use ApiBundle\Entity\Video;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,17 +15,7 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', TextType::class)
-            ->add('videoId', EntityType::class,
-                [
-                    'class' => Video::class,
-                    'property_path' => 'video'
-                ])
-            ->add('userId', EntityType::class,
-                [
-                    'class' => User::class,
-                    'property_path' => 'user'
-                ]);
+            ->add('body', TextType::class);
     }
 
     /**

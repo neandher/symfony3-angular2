@@ -18,7 +18,7 @@ import { PaginationComponent } from './pagination/pagination.component';
   declarations: [
     ShowAuthedDirective,
     MessageAlertComponent,
-    PaginationComponent
+    PaginationComponent,
   ],
   exports: [
     CommonModule,
@@ -28,7 +28,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     RouterModule,
     ShowAuthedDirective,
     MessageAlertComponent,
-    PaginationComponent
+    PaginationComponent,
   ]
 })
 export class SharedModule {

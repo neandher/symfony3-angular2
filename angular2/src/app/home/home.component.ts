@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     let defaults: any[] = [{'perpage': this.perpage}];
 
     this.loading = true;
-    this.videoService.query2(this.queryParams, defaults).subscribe(
+    this.videoService.query(this.queryParams, defaults).subscribe(
       videoResponse => {
         this.loading = false;
         this.videosList = videoResponse;

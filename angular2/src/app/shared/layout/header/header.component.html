@@ -21,14 +21,25 @@
         </ul>
 
         <form class="navbar-form navbar-left" role="search">
-          <div class="form-group">
+          <!--<div class="form-group">
             <input type="text" class="form-control" placeholder="¿Que quieres ver?" value="{{searchString}}"
                    [(ngModel)]="searchString" name="search"/>
           </div>
           <button type="submit" class="btn btn-default" (click)="search()">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             Buscar
-          </button>
+          </button>-->
+
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="search" value="{{searchString}}"
+                   [(ngModel)]="searchString" name="search"/>
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-default" (click)="search()">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              </button>
+            </span>
+          </div>
+
         </form>
 
         <ul *showAuthed="true" class="nav navbar-nav navbar-right" id="creadentials-top">

@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://kidtube.localhost/app_dev.php/api'
+  api_url: 'http://kidtube.dev/app_dev.php/api'
 };

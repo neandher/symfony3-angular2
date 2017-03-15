@@ -15,20 +15,26 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class CommentController
  *
- * @Security("is_granted('ROLE_USER')")
  * @Route("/comments")
  */
 class CommentController extends BaseController
 {
     /**
-     * @Route("")
+     * @Route("/{video}/video", requirements={"video": "\d+"})
+     * @ParamConverter("video", class="ApiBundle:Video")
      * @Method("POST")
+     * @Security("is_granted('ROLE_USER')")
+     *
      * @param Request $request
+     * @param Video $video
      * @return Response|void
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, Video $video)
     {
         $comment = new Comment();
+        $comment->setVideo($video);
+        $comment->setUser($this->getUser());
+
         $form = $this->createForm(CommentType::class, $comment);
 
         $this->processForm($request, $form);
@@ -60,6 +66,7 @@ class CommentController extends BaseController
      * @Method("GET")
      * @param Comment $comment
      * @return Response
+     * @internal param Request $request
      */
     public function showAction(Comment $comment)
     {
@@ -96,6 +103,8 @@ class CommentController extends BaseController
     /**
      * @Route("/{id}", requirements={"id": "\d+"})
      * @Method("DELETE")
+     * @Security("is_granted('ROLE_USER')")
+     *
      * @param Comment $comment
      * @return Response
      */

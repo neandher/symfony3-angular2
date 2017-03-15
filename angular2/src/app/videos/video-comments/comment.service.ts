@@ -4,17 +4,17 @@ import {Observable} from "rxjs/Rx";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 
-import {ApiService} from "../shared/services/api.service";
-import {Video} from "../shared/models/video";
-import {ListResult} from "../shared/interface/list-result.interface";
+import {ApiService} from "../../shared/services/api.service";
+import {Comment} from "../../shared/models/comment";
+import {ListResult} from "../../shared/interface/list-result.interface";
 
 @Injectable()
-export class VideoService {
+export class CommentService {
 
   constructor(private apiService: ApiService) {
   }
 
-  query(params: any[], defaults: any[] = [], url: string = ''): Observable<ListResult<Video>> {
+  query(params: any[], defaults: any[] = [], url: string = '', videoId: number = null): Observable<ListResult<Comment>> {
 
     let urlSearchParams: URLSearchParams = new URLSearchParams();
 
@@ -43,31 +43,31 @@ export class VideoService {
       urlSearchParams.append('deep', '1');
     }
 
-    return this.apiService.get('/videos', urlSearchParams, false)
+    return this.apiService.get('/comments/' + videoId + '/video', urlSearchParams, false)
       .map(response => response);
   }
 
-  get(id: number): Observable <Video> {
+  get(id: number): Observable <Comment> {
 
     let params: URLSearchParams = new URLSearchParams();
 
     params.append('deep', '1');
 
-    return this.apiService.get('/videos/' + id, params, false)
+    return this.apiService.get('/comments/' + id, params, false)
       .map(response => response);
   }
 
-  save(video: Video, id = null): Observable < Video > {
+  save(comment: Comment, id = null, videoId = null): Observable <Comment> {
     if (id) {
-      return this.apiService.put('/videos/' + id, video)
+      return this.apiService.put('/comments/' + id, comment)
         .map(response => response);
     } else {
-      return this.apiService.post('/videos', video)
+      return this.apiService.post('/comments/' + videoId + '/video?deep=1', comment)
         .map(response => response);
     }
   }
 
   destroy(id: number) {
-    return this.apiService.delete('/videos/' + id);
+    return this.apiService.delete('/comments/' + id);
   }
 }

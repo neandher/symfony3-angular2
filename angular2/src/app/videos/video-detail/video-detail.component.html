@@ -33,54 +33,17 @@
 
     <div class="panel panel-default video-data">
       <div class="panel-heading">
-        <h3 class="panel-title" style="font-size: 14px">
-          Published in {{video.createdAt | date:'dd/MM/y' }}
-        </h3>
+        <h3 class="panel-title" style="font-size: 14px">Published in {{video.createdAt | date:'dd/MM/y' }}</h3>
       </div>
       <div class="panel-body line-breaker">{{video.description}}</div>
     </div>
 
     <!-- COMPONENTE DE COMENTARIOS -->
-    <!--<comments *ngIf="identity"></comments>-->
+    <app-video-comments [videoId]="video.id"></app-video-comments>
   </div>
 
   <div class="col-md-4" style="padding-right: 0">
-
-    <ul class="media-list" *ngIf="lastsVideos">
-      <li class="media" *ngFor="let video of lastsVideos.items">
-        <div class="media-left">
-          <a [routerLink]="['/videos', video.id]" title="{{video.title}}">
-            <img class="media-object" src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}" width="158">
-          </a>
-        </div>
-        <div class="media-body pointer" >
-          <a [routerLink]="['/videos', video.id]">
-            <h4 class="media-heading block-with-text" title="{{video.title}}" style="font-size: 14px;"><strong>{{video.title}}</strong>
-            </h4>
-            <p style="font-size: 11px; color: #767676">{{video.user.fullName}}</p>
-          </a>
-        </div>
-      </li>
-    </ul>
-    <div *ngIf="lastsVideosloading"><p>Loading...</p></div>
-    <button class="btn btn-primary btn-block" (click)="lastsVideosNext()"
-            *ngIf="!lastsVideosloading && lastsVideosClicked < lastsVideosMaxClicks">Load More
-    </button>
-
-    <!--<ul id="videos-list" *ngIf="lastsVideos">
-      <li *ngFor="let video of lastsVideos.items" class="last-video-item col-md-12 pull-left">
-        <div class="last-video-image-thumb col-md-4 pull-left">
-          <img src="{{video.imagesUrl.mqdefault}}" />
-        </div>
-
-        <div class="data col-md-8 pull-left">
-          <h5><a [routerLink]="['/videos', video.id]">{{video.title}}</a></h5>
-          <a>{{video.user.fullName}}</a>
-        </div>
-
-      </li>
-    </ul>-->
-
+    <app-video-lasts [offset]="video.id"></app-video-lasts>
   </div>
 
 </div>
