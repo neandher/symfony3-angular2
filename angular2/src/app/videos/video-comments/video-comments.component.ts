@@ -7,6 +7,7 @@ import {Comment} from "../../shared/models/comment";
 import {BaseComponent} from "../../base.component";
 import {UserService} from "../../shared/services/user.service";
 import {User} from "../../shared/models/user";
+import {Video} from "../../shared/models/video";
 
 @Component({
   selector: 'app-video-comments',
@@ -14,10 +15,10 @@ import {User} from "../../shared/models/user";
 })
 export class VideoCommentsComponent extends BaseComponent implements OnInit {
 
-  public comments: ListResult<Comment>;
-  public loading: boolean = true;
+  @Input() comments: ListResult<Comment>;
+  @Input() video: Video;
+  public loading: boolean = false;
   public loadingNext: boolean = false;
-  @Input() videoId: number = 0;
   public user: User;
   public isSubmitting: boolean = false;
   public submit: boolean = false;
@@ -33,15 +34,9 @@ export class VideoCommentsComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this.buildForm();
-    if (this.videoId > 0) {
+    if (this.video) {
       this.userService.currentUser.subscribe(
         userData => this.user = userData
-      );
-      this.commentService.query([{'perpage': 2}], [], null, this.videoId).subscribe(
-        response => {
-          this.loading = false;
-          this.comments = response;
-        }
       );
     }
   }
@@ -58,13 +53,11 @@ export class VideoCommentsComponent extends BaseComponent implements OnInit {
     this.isSubmitting = true;
     this.error = [];
 
-    this.commentService.save(this.form.value, null, this.videoId).subscribe(
+    this.commentService.save(this.form.value, null, this.video.id).subscribe(
       response => {
         this.form.reset();
         this.comments.items.unshift(response);
-        console.log(this.comments.items);
         this.submit = true;
-        console.log(response);
       },
       responseError => {
         console.log(responseError);
@@ -88,7 +81,7 @@ export class VideoCommentsComponent extends BaseComponent implements OnInit {
 
   next() {
     this.loadingNext = true;
-    this.commentService.query([], [], this.comments._links['next'], this.videoId).subscribe(
+    this.commentService.query([], [], this.comments._links['next'], this.video.id).subscribe(
       commentResponse => {
         for (let item of commentResponse.items) {
           this.comments.items.push(item);

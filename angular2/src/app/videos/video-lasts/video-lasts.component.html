@@ -2,7 +2,7 @@
   <li class="media" *ngFor="let video of videos.items">
     <div class="media-left">
       <a [routerLink]="['/videos', video.id]" title="{{video.title}}">
-        <img class="media-object" src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}" width="158">
+        <img class="media-object img-thumbnail" src="{{video.imagesUrl.mqdefault}}" alt="{{video.title}}" width="158">
       </a>
     </div>
     <div class="media-body pointer">
@@ -14,6 +14,9 @@
     </div>
   </li>
 </ul>
-<div *ngIf="loading"><p>Loading...</p></div>
+<div *ngIf="loading || !videos">
+  <p><img src="assets/images/ajax-gray.gif"/></p>
+</div>
 <button class="btn btn-primary btn-block" (click)="next()"
-        *ngIf="!loading && nextClicked < maxClicks && (videos && videos._links.next)">Load More</button>
+        *ngIf="!loading && nextClicked < maxClicks && (videos && videos._links.next)">Load More
+</button>

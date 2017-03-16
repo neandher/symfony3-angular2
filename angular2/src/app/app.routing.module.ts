@@ -26,9 +26,13 @@ const appRoutes: Routes = [
     loadChildren: 'app/videos/videos.module#VideosModule',
   },
   {
-    path: '',
+    path: 'home',
     loadChildren: 'app/home/home.module#HomeModule'
-    //component: HomeComponent,
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full',
   },
   {
     path: '**',

@@ -5,7 +5,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate *ngIf="user.id">
       <fieldset [disabled]="isSubmitting">
         <div class="form-group">
-          <textarea class="form-control" formControlName="body" id="body" rows="6"></textarea>
+          <textarea class="form-control" formControlName="body" id="body" rows="4"></textarea>
         </div>
         <input type="submit" value="Comment" class="btn btn-success" [disabled]="!form.valid"/>
       </fieldset>
@@ -14,7 +14,7 @@
     <div class="clearfix"></div>
     <hr style="border-color: #ccc"/>
 
-    <div class="loader" *ngIf="loading">
+    <div class="loader" *ngIf="loading || !comments">
       <img src="assets/images/ajax-gray.gif"/>
     </div>
 

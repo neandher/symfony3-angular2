@@ -10,14 +10,14 @@
           <span class="icon-bar"></span>
         </button>
 
-        <a class="navbar-brand" [routerLink]="['/']">
+        <a class="navbar-brand" [routerLink]="['/home']">
           <img src="./assets/images/logo.png" height="50" style="margin-top: -15px;"/>
         </a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a [routerLink]="['/']">Home</a></li>
-          <li *showAuthed="true"><a [routerLink]="['/videos/upload']">Create Video</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/home']">Home</a></li>
+          <li *showAuthed="true" routerLinkActive="active"><a [routerLink]="['/videos/upload']">Create Video</a></li>
         </ul>
 
         <form class="navbar-form navbar-left" role="search">
@@ -84,8 +84,8 @@
         </ul>
 
         <ul *showAuthed="false" class="nav navbar-nav navbar-right">
-          <li><a [routerLink]="['/auth/signin']">Sign In</a></li>
-          <li><a [routerLink]="['/auth/signup']">Sign Up</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/auth/signin']">Sign In</a></li>
+          <li routerLinkActive="active"><a [routerLink]="['/auth/signup']">Sign Up</a></li>
         </ul>
       </div>
     </div>

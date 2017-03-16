@@ -102,7 +102,7 @@ class Video
      * @Assert\NotBlank(groups={"video_upload"})
      * @Assert\File(
      *     groups={"video_upload"},
-     *     mimeTypes = {"video/mp4"}
+     *     mimeTypes = {"video/mp4", "video/x-matroska"}
      * )
      */
     private $videoFile;

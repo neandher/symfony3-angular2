@@ -1,6 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
+
 import {Video} from "../../shared/models/video";
 import {VideoService} from "../video.service";
+import {ListResult} from "../../shared/interface/list-result.interface";
 
 @Component({
   selector: 'app-video-lasts',
@@ -8,38 +10,20 @@ import {VideoService} from "../video.service";
 })
 export class VideoLastsComponent implements OnInit {
 
-  public videos: {items: Video[],_links: {}};
+  @Input() videos: ListResult<Video>;
   public loading: boolean = false;
-  public nextClicked: number;
+  public nextClicked: number = 0;
   public maxClicks: number = 2;
-  @Input() offset: number = 0;
 
   constructor(private videoService: VideoService) {
   }
 
   ngOnInit() {
-    if (this.offset > 0) {
-      this.loading = true;
-      this.videos = null;
-      this.nextClicked = 0;
-
-      let params: any[] = [{'offset': this.offset}, {'perpage': 5}];
-      this.videoService.query(params).subscribe(
-        videoResponse => {
-          this.videos = videoResponse;
-          this.loading = false;
-        },
-        errorResponse => {
-          console.log(errorResponse);
-        }
-      );
-    }
   }
 
   next() {
     if (this.nextClicked < this.maxClicks) {
       this.loading = true;
-
       this.videoService.query([], [], this.videos._links['next']).subscribe(
         videoResponse => {
           for (let item of videoResponse.items) {

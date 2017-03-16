@@ -15,7 +15,7 @@ import {Video} from "../../shared/models/video";
 export class VideoUploadComponent extends BaseComponent implements OnInit {
 
   public uploader: FileUploader;
-  public allowedMimeType: string[] = ['video/mp4'];
+  public allowedMimeType: string[] = ['video/mp4', 'video/x-matroska'];
   public hasBaseDropZoneOver: boolean = false;
   public video: Video;
   public videoStatus: string = 'public';
