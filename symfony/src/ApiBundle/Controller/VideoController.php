@@ -73,6 +73,7 @@ class VideoController extends BaseController
 
     /**
      * @Route("", name="api_videos_collection")
+     * @Route("/", name="api_videos_collection")
      * @Method("GET")
      * @param Request $request
      * @return Response

@@ -15,7 +15,6 @@ import {Video} from "../../shared/models/video";
 })
 export class VideoCommentsComponent extends BaseComponent implements OnInit {
 
-  @Input() comments: ListResult<Comment>;
   @Input() video: Video;
   public loading: boolean = false;
   public loadingNext: boolean = false;
@@ -28,7 +27,9 @@ export class VideoCommentsComponent extends BaseComponent implements OnInit {
     'body': [],
   };
 
-  constructor(private commentService: CommentService, private fb: FormBuilder, private userService: UserService) {
+  constructor(private commentService: CommentService,
+              private fb: FormBuilder,
+              private userService: UserService) {
     super();
   }
 
@@ -54,9 +55,9 @@ export class VideoCommentsComponent extends BaseComponent implements OnInit {
     this.error = [];
 
     this.commentService.save(this.form.value, null, this.video.id).subscribe(
-      response => {
+      (commentSubmited: any) => {
         this.form.reset();
-        this.comments.items.unshift(response);
+        this.video.comments.items.unshift(commentSubmited);
         this.submit = true;
       },
       responseError => {
@@ -71,27 +72,27 @@ export class VideoCommentsComponent extends BaseComponent implements OnInit {
     this.handleError(this.form);
   }
 
-  deleteComment(id: number) {
-    let commentPanel = <HTMLElement>document.querySelector('comment-panel-' + id);
-    if (commentPanel != null) {
-      commentPanel.style.display = 'none';
-    }
-    this.commentService.destroy(id);
-  }
-
   next() {
     this.loadingNext = true;
-    this.commentService.query([], [], this.comments._links['next'], this.video.id).subscribe(
-      commentResponse => {
+    this.commentService.query([], [], this.video.comments._links['next'], this.video.id).subscribe(
+      (commentResponse: any) => {
         for (let item of commentResponse.items) {
-          this.comments.items.push(item);
+          this.video.comments.items.push(item);
         }
-        this.comments._links = commentResponse._links;
+        this.video.comments._links = commentResponse._links;
         this.loadingNext = false;
       },
       errorResponse => {
         console.log(errorResponse);
       }
     );
+  }
+
+  deleteComment(id: number) {
+    let commentPanel = <HTMLElement>document.querySelector('.comment-panel-' + id);
+    if (commentPanel != null) {
+      commentPanel.style.display = 'none';
+    }
+    this.commentService.destroy(id).subscribe();
   }
 }

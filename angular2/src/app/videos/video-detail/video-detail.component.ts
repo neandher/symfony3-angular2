@@ -16,8 +16,6 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
   public loading: boolean = false;
   public video: Video;
   public subscription: Subscription;
-  public lasts: ListResult<Video>;
-  public comments: ListResult<Comment>;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -29,15 +27,23 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
     this.subscription = this.route.params.subscribe(
       (params: any) => {
         if (params.hasOwnProperty('id')) {
+
           this.loading = true;
-          this.videoService.get(params['id']).subscribe(
+
+          this.videoService.get(params['id'])
+            .flatMap((video: Video) => {
+              return this.videoService.query([{'perpage': 5}, {'offset': video.id}])
+                .map((lasts: any) => {
+                  video.lasts = lasts;
+                  return video;
+                });
+            }).subscribe(
             (videoResponse: any) => {
               this.video = videoResponse;
               this.loading = false;
-              this.loadLastsAndComments();
+              this.loadComments();
             },
             errorResponse => {
-              // invalid id
               console.log(errorResponse);
               this.loading = false;
               this.router.navigate(['']);
@@ -48,16 +54,10 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  private loadLastsAndComments() {
-    this.lasts = null;
-    this.comments = null;
-    Observable.forkJoin([
-      this.videoService.query([{'perpage': 5}, {'offset': this.video.id}]),
-      this.commentService.query([{'perpage': 2}], [], null, this.video.id)
-    ]).subscribe(
-      ([lasts, comments]) => {
-        this.lasts = lasts;
-        this.comments = comments;
+  private loadComments() {
+    this.commentService.query([{'perpage': 2}], [], null, this.video.id).subscribe(
+      (commentsResponse: any) => {
+        this.video.comments = commentsResponse;
       },
       errorResponse => {
         console.log(errorResponse);

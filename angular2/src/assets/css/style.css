@@ -1,3 +1,8 @@
+.container-fluid{
+  padding-right: 65px;
+  padding-left: 65px;
+}
+
 .main {
   margin-top: 75px;
 }
