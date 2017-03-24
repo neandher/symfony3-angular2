@@ -165,5 +165,10 @@
 }*/
 
 .line-breaker {
-  white-space: pre-line;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+ul.media-list {
+  margin-bottom: 25px;
 }

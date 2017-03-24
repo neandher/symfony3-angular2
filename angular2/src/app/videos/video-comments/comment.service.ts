@@ -14,19 +14,21 @@ export class CommentService {
   constructor(private apiService: ApiService) {
   }
 
-  query(params: any[], defaults: any[] = [], url: string = '', videoId: number = null): Observable<ListResult<Comment>> {
+  query(params: any[],
+        defaults: any[] = [],
+        url: string = ''): Observable<ListResult<Comment>> {
 
     let urlSearchParams: URLSearchParams = new URLSearchParams();
 
     params.forEach(function (item: {}) {
       Object.keys(item).forEach(function (key) {
-        urlSearchParams.set(key, item[key]);
+        urlSearchParams.set(encodeURIComponent(key), encodeURIComponent(item[key]));
       })
     });
 
     defaults.forEach(function (item) {
       Object.keys(item).forEach(function (key) {
-        urlSearchParams.set(key, item[key]);
+        urlSearchParams.set(key, encodeURIComponent(item[key]));
       })
     });
 
@@ -35,7 +37,7 @@ export class CommentService {
       urlQueryParams.forEach(function (value) {
         let paramIndex: any = value.split('=')[0];
         let paramValue: any = value.split('=')[1];
-        urlSearchParams.append(paramIndex, paramValue);
+        urlSearchParams.append(paramIndex, encodeURIComponent(paramValue));
       });
     }
 
@@ -43,7 +45,7 @@ export class CommentService {
       urlSearchParams.append('deep', '1');
     }
 
-    return this.apiService.get('/comments/' + videoId + '/video', urlSearchParams, false)
+    return this.apiService.get('/comments', urlSearchParams, false)
       .map(response => response);
   }
 

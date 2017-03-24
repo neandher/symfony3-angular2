@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Repository;
 
+use ApiBundle\Entity\Comment;
 use ApiBundle\Entity\Video;
 
 /**
@@ -14,10 +15,9 @@ class CommentRepository extends BaseRepository
 {
     /**
      * @param array $params
-     * @param Video $video
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function findAllQueryBuilder($params = [], $video = null)
+    public function findAllQueryBuilder($params = [])
     {
         $qb = $this->createQueryBuilder('comment')
             ->select('comment');
@@ -28,8 +28,19 @@ class CommentRepository extends BaseRepository
             $qb->andWhere('video.title LIKE :filter')->setParameter('filter', '%' . $params['filter'] . '%');
         }
 
-        if (!is_null($video)) {
-            $qb->andWhere('comment.video = :video')->setParameter('video', $video);
+        if (isset($params['video']) && !empty($params['video'])) {
+            $qb->andWhere('comment.video = :video')->setParameter('video', $params['video']);
+        }
+
+        if (isset($params['commentParent']) && !empty($params['commentParent'])) {
+            $qb->andWhere('comment.commentParent = :commentParent')->setParameter('commentParent', $params['commentParent']);
+        }
+        else{
+            $qb->andWhere('comment.commentParent is null');
+        }
+
+        if (!isset($params['sorting']) && empty($params['sorting'])) {
+            $params['sorting'] = ['createdAt' => 'asc'];
         }
 
         $this->addOrderingQueryBuilder($qb, $params);

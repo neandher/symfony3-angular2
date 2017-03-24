@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -21,7 +22,7 @@ use JMS\Serializer\Annotation as Serializer;
  *          parameters = { "id" = "expr(object.getId())" }
  *     )
  * )
- * 
+ *
  */
 class Comment
 {
@@ -61,7 +62,6 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank()
      * @Serializer\Expose()
-     * @Serializer\Groups({"deep"})
      */
     private $user;
 
@@ -72,9 +72,18 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank()
      * @Serializer\Expose()
-     * @Serializer\Groups({"deep"})
      */
     private $video;
+
+    /**
+     * @var Comment
+     *
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Comment")
+     * @ORM\JoinColumn(nullable=true)
+     * @Serializer\Expose()
+     */
+    private $commentParent;
+
 
     /**
      * Get id
@@ -167,6 +176,24 @@ class Comment
     public function setVideo($video)
     {
         $this->video = $video;
+        return $this;
+    }
+
+    /**
+     * @return Comment
+     */
+    public function getCommentParent()
+    {
+        return $this->commentParent;
+    }
+
+    /**
+     * @param Comment $commentParent
+     * @return Comment
+     */
+    public function setCommentParent($commentParent)
+    {
+        $this->commentParent = $commentParent;
         return $this;
     }
 }

@@ -77,20 +77,17 @@ class CommentController extends BaseController
 
     /**
      * @Route("", name="api_comments_collection")
-     * @Route("/{video}/video", requirements={"video": "\d+"}, name="api_comments_video_collection")
-     * @ParamConverter("video", class="ApiBundle:Video")
      * @Method("GET")
      * @param Request $request
-     * @param Video $video
      * @return Response
      */
-    public function listAction(Request $request, $video = null)
+    public function listAction(Request $request)
     {
         $params = $request->query->all();
 
         $qb = $this->getDoctrine()
             ->getRepository(Comment::class)
-            ->findAllQueryBuilder($params, $video);
+            ->findAllQueryBuilder($params);
 
         $paginatedCollection = $this->get('api.pagination_factory')
             ->createCollection($qb, $request, 'api_comments_collection');

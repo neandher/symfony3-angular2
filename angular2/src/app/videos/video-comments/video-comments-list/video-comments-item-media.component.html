@@ -1,0 +1,37 @@
+<li class="media">
+  <div class="media-left">
+    <a href="#">
+      <img *ngIf="comment.user.avatarImageName"
+           src="{{comment.user.avatarImageUrl}}" class="media-object" width="48"/>
+      <img *ngIf="!comment.user.avatarImageName" src="assets/images/default_img_user_64.png" class="media-object"
+           width="48"/>
+    </a>
+  </div>
+  <div class="media-body">
+    <h5 class="media-heading">
+      <a href="#" class="text-primary">{{comment.user.fullName}}</a>
+      <small>- {{comment.createdAt | date:'dd/MM/y - H:mm:ss' }}</small>
+    </h5>
+    <p class="line-breaker" style="line-height: 0.9; padding-top: 7px;">{{comment.body}}</p>
+    <p>
+      <a href="#" class="text-muted">Reply</a>
+      <a href="#" class="text-muted small" (click)="deleteComment(comment.id)"
+         *ngIf="user.id == comment.user.id || user.id == comment.video.user.id">
+        Delete
+      </a>
+    </p>
+    <div *ngIf="comment.commentChildren">
+      <app-video-comments-item-media *ngFor="let commentChildren of comment.commentChildren.items"
+                                     [comment]="commentChildren"></app-video-comments-item-media>
+
+      <div *ngIf="loadingNext">
+        <button class="btn btn-default btn-block">Loading...</button>
+      </div>
+
+      <button class="btn btn-default btn-sm btn-block" (click)="next()"
+              *ngIf="!loadingNext && comment.commentChildren._links.next">Load More
+      </button>
+      <br>
+    </div>
+  </div>
+</li>

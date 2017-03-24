@@ -11,6 +11,10 @@ import {VideoDetailComponent} from './video-detail/video-detail.component';
 import { VideoLastsComponent } from './video-lasts/video-lasts.component';
 import { VideoCommentsComponent } from './video-comments/video-comments.component';
 import {CommentService} from "./video-comments/comment.service";
+import { VideoCommentsItemComponent } from './video-comments/video-comments-list/video-comments-item.component';
+import { VideoComponentListComponent } from './video-comments/video-comments-list/video-component-list.component';
+import { VideoComponentAddComponent } from './video-comments/video-comments-add/video-component-add.component';
+import { VideoCommentsItemMediaComponent } from './video-comments/video-comments-list/video-comments-item-media.component';
 
 @NgModule({
   imports: [
@@ -24,7 +28,11 @@ import {CommentService} from "./video-comments/comment.service";
     VideoUploadComponent,
     VideoDetailComponent,
     VideoLastsComponent,
-    VideoCommentsComponent
+    VideoCommentsComponent,
+    VideoCommentsItemComponent,
+    VideoComponentListComponent,
+    VideoComponentAddComponent,
+    VideoCommentsItemMediaComponent
   ],
   providers: [
     VideoService,

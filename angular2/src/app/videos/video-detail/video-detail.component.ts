@@ -41,7 +41,7 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
             (videoResponse: any) => {
               this.video = videoResponse;
               this.loading = false;
-              this.loadComments();
+              //this.loadComments();
             },
             errorResponse => {
               console.log(errorResponse);
@@ -50,17 +50,6 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
             }
           );
         }
-      }
-    );
-  }
-
-  private loadComments() {
-    this.commentService.query([{'perpage': 2}], [], null, this.video.id).subscribe(
-      (commentsResponse: any) => {
-        this.video.comments = commentsResponse;
-      },
-      errorResponse => {
-        console.log(errorResponse);
       }
     );
   }

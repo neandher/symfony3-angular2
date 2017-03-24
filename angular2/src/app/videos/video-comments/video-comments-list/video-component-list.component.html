@@ -1,0 +1,18 @@
+<div class="loader" *ngIf="loading || !video.comments">
+  <img src="assets/images/ajax-gray.gif"/>
+</div>
+
+<div id="comments-list" *ngIf="video.comments">
+
+  <app-video-comments-item *ngFor="let comment of video.comments.items" [comment]="comment"></app-video-comments-item>
+
+  <div *ngIf="loadingNext">
+    <button class="btn btn-default btn-block">Loading...</button>
+  </div>
+
+  <button class="btn btn-default btn-sm btn-block" (click)="next()"
+          *ngIf="!loadingNext && (video.comments && video.comments._links.next)">Load More
+  </button>
+
+  <div *ngIf="!video.comments.items.length > 0"><p class="text-muted text-center">No comments</p></div>
+</div>
