@@ -12,7 +12,7 @@ import { VideoLastsComponent } from './video-lasts/video-lasts.component';
 import { VideoCommentsComponent } from './video-comments/video-comments.component';
 import {CommentService} from "./video-comments/comment.service";
 import { VideoCommentsItemComponent } from './video-comments/video-comments-list/video-comments-item.component';
-import { VideoComponentListComponent } from './video-comments/video-comments-list/video-component-list.component';
+import { VideoCommentsListComponent } from './video-comments/video-comments-list/video-comments-list.component';
 import { VideoComponentAddComponent } from './video-comments/video-comments-add/video-component-add.component';
 import { VideoCommentsItemMediaComponent } from './video-comments/video-comments-list/video-comments-item-media.component';
 
@@ -30,7 +30,7 @@ import { VideoCommentsItemMediaComponent } from './video-comments/video-comments
     VideoLastsComponent,
     VideoCommentsComponent,
     VideoCommentsItemComponent,
-    VideoComponentListComponent,
+    VideoCommentsListComponent,
     VideoComponentAddComponent,
     VideoCommentsItemMediaComponent
   ],

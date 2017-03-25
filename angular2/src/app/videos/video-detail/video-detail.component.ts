@@ -1,11 +1,9 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Subscription, Observable} from "rxjs";
+import {Subscription} from "rxjs";
 
 import {Video} from "../../shared/models/video";
 import {VideoService} from "../video.service";
-import {CommentService} from "../video-comments/comment.service";
-import {ListResult} from "../../shared/interface/list-result.interface";
 
 @Component({
   selector: 'app-video-detail',
@@ -19,8 +17,7 @@ export class VideoDetailComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private videoService: VideoService,
-              private commentService: CommentService) {
+              private videoService: VideoService) {
   }
 
   ngOnInit() {

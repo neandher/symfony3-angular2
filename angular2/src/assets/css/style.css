@@ -3,6 +3,10 @@
   padding-left: 65px;
 }
 
+.container-flui-max-width{
+  max-width: 1280px;
+}
+
 .main {
   margin-top: 75px;
 }

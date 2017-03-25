@@ -27,20 +27,7 @@ export class VideoCommentsItemMediaComponent implements OnInit {
     );
 
     if (this.comment.commentChildren) {
-      Observable.forkJoin(
-        this.comment.commentChildren.items.map((comment: Comment) => {
-          return this.commentService.query(
-            [{
-              'perpage': 2,
-              'video': comment.video.id,
-              'commentParent': comment.id,
-            }], [], null)
-            .map((commentsChildren: any) => {
-              comment.commentChildren = commentsChildren;
-              return comment;
-            })
-        })
-      ).subscribe(
+      this.commentService.getChildrensFromParents(this.comment.commentChildren).subscribe(
         (commentItemsResponse: any) => {
           this.comment.commentChildren.items = commentItemsResponse;
         }
@@ -49,8 +36,12 @@ export class VideoCommentsItemMediaComponent implements OnInit {
   }
 
   next() {
+
     this.loadingNext = true;
-    this.commentService.query([], [], this.comment.commentChildren._links['next']).subscribe(
+
+    let listComments = this.commentService.query([], [], this.comment.commentChildren._links['next']);
+
+    listComments.subscribe(
       (commentResponse: any) => {
         for (let item of commentResponse.items) {
           this.comment.commentChildren.items.push(item);
@@ -59,6 +50,20 @@ export class VideoCommentsItemMediaComponent implements OnInit {
         this.loadingNext = false;
       }
     );
+
+    listComments.flatMap((comments: any) => {
+      if (comments && comments.items.length > 0) {
+        return this.commentService.getChildrensFromParents(comments);
+      }
+      return Observable.of([]);
+    })
+      .subscribe(
+        (commentItemsResponse: any) => {
+          if (commentItemsResponse.items) {
+            this.comment.commentChildren.items.push(commentItemsResponse);
+          }
+        }
+      );
   }
 
   deleteComment(id: number) {
@@ -68,8 +73,8 @@ export class VideoCommentsItemMediaComponent implements OnInit {
     }
     this.commentService.destroy(id).subscribe();
   }
-  
-  getCommentsChildren(){
+
+  getCommentsChildren() {
 
   }
 

@@ -72,4 +72,38 @@ export class CommentService {
   destroy(id: number) {
     return this.apiService.delete('/comments/' + id);
   }
+
+  getChildrensFromParents(comments: ListResult<Comment>): Observable<any>{
+    return Observable.forkJoin(
+      comments.items.map((comment: Comment) => {
+        return this.query(
+          [{
+            'perpage': 2,
+            'video': comment.video.id,
+            'commentParent': comment.id,
+          }], [], null)
+          .map((commentsChildren: any) => {
+            comment.commentChildren = commentsChildren;
+            return comment;
+          })
+      })
+    );
+  }
+
+  getChildrensFromParentsOther(comments: Comment[]): Observable<any>{
+    return Observable.forkJoin(
+      comments.map((comment: Comment) => {
+        return this.query(
+          [{
+            'perpage': 2,
+            'video': comment.video.id,
+            'commentParent': comment.id,
+          }], [], null)
+          .map((commentsChildren: any) => {
+            comment.commentChildren = commentsChildren;
+            return comment;
+          })
+      })
+    );
+  }
 }
