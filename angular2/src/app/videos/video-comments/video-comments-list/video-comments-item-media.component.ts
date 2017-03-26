@@ -3,6 +3,7 @@ import {UserService} from "../../../shared/services/user.service";
 import {User} from "../../../shared/models/user";
 import {CommentService} from "../comment.service";
 import {Comment} from "../../../shared/models/comment";
+import {ListResult} from "../../../shared/interface/list-result.interface";
 
 @Component({
   selector: 'app-video-comments-item-media',
@@ -28,14 +29,12 @@ export class VideoCommentsItemMediaComponent implements OnInit {
   next() {
     this.loadingNext = true;
     this.commentService.query(
-      [],
+      [{'perpage': this.comment.commentChildren.total, 'page': '1'}],
       this.comment.commentChildren._links['next']
     )
       .subscribe(
-        (commentResponse: any) => {
-          for (let item of commentResponse.items) {
-            this.comment.commentChildren.items.push(item);
-          }
+        (commentResponse: ListResult<Comment>) => {
+          this.comment.commentChildren.items = commentResponse.items;
           this.comment.commentChildren._links = commentResponse._links;
           this.loadingNext = false;
         }
