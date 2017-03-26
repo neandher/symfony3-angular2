@@ -29,7 +29,8 @@
       </div>
 
       <button class="btn btn-default btn-sm btn-block" (click)="next()"
-              *ngIf="!loadingNext && comment.commentChildren._links.next">Load More
+              *ngIf="!loadingNext && comment.commentChildren._links.next">
+        Load all {{comment.commentChildren.total}} comments
       </button>
       <br>
     </div>

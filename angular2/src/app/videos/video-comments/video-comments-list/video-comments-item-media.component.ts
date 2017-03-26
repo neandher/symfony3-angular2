@@ -3,7 +3,6 @@ import {UserService} from "../../../shared/services/user.service";
 import {User} from "../../../shared/models/user";
 import {CommentService} from "../comment.service";
 import {Comment} from "../../../shared/models/comment";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-video-comments-item-media',
@@ -21,47 +20,24 @@ export class VideoCommentsItemMediaComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.userService.currentUser.subscribe(
       userData => this.user = userData
     );
-
-    if (this.comment.commentChildren) {
-      this.commentService.getChildrensFromParents(this.comment.commentChildren).subscribe(
-        (commentItemsResponse: any) => {
-          this.comment.commentChildren.items = commentItemsResponse;
-        }
-      );
-    }
   }
 
   next() {
-
     this.loadingNext = true;
-
-    let listComments = this.commentService.query([], [], this.comment.commentChildren._links['next']);
-
-    listComments.subscribe(
-      (commentResponse: any) => {
-        for (let item of commentResponse.items) {
-          this.comment.commentChildren.items.push(item);
-        }
-        this.comment.commentChildren._links = commentResponse._links;
-        this.loadingNext = false;
-      }
-    );
-
-    listComments.flatMap((comments: any) => {
-      if (comments && comments.items.length > 0) {
-        return this.commentService.getChildrensFromParents(comments);
-      }
-      return Observable.of([]);
-    })
+    this.commentService.query(
+      [],
+      this.comment.commentChildren._links['next']
+    )
       .subscribe(
-        (commentItemsResponse: any) => {
-          if (commentItemsResponse.items) {
-            this.comment.commentChildren.items.push(commentItemsResponse);
+        (commentResponse: any) => {
+          for (let item of commentResponse.items) {
+            this.comment.commentChildren.items.push(item);
           }
+          this.comment.commentChildren._links = commentResponse._links;
+          this.loadingNext = false;
         }
       );
   }
@@ -72,10 +48,6 @@ export class VideoCommentsItemMediaComponent implements OnInit {
       commentPanel.style.display = 'none';
     }
     this.commentService.destroy(id).subscribe();
-  }
-
-  getCommentsChildren() {
-
   }
 
 }

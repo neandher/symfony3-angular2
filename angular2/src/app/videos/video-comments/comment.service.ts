@@ -14,9 +14,7 @@ export class CommentService {
   constructor(private apiService: ApiService) {
   }
 
-  query(params: any[],
-        defaults: any[] = [],
-        url: string = ''): Observable<ListResult<Comment>> {
+  query(params: any[], url: string = ''): Observable<ListResult<Comment>> {
 
     let urlSearchParams: URLSearchParams = new URLSearchParams();
 
@@ -26,18 +24,14 @@ export class CommentService {
       })
     });
 
-    defaults.forEach(function (item) {
-      Object.keys(item).forEach(function (key) {
-        urlSearchParams.set(key, encodeURIComponent(item[key]));
-      })
-    });
-
     if (url) {
       let urlQueryParams = url.split('?')[1].split('&');
       urlQueryParams.forEach(function (value) {
         let paramIndex: any = value.split('=')[0];
         let paramValue: any = value.split('=')[1];
-        urlSearchParams.append(paramIndex, encodeURIComponent(paramValue));
+        if (!urlSearchParams.has(paramIndex)) {
+          urlSearchParams.append(encodeURIComponent(paramIndex), encodeURIComponent(paramValue));
+        }
       });
     }
 
@@ -73,24 +67,7 @@ export class CommentService {
     return this.apiService.delete('/comments/' + id);
   }
 
-  getChildrensFromParents(comments: ListResult<Comment>): Observable<any>{
-    return Observable.forkJoin(
-      comments.items.map((comment: Comment) => {
-        return this.query(
-          [{
-            'perpage': 2,
-            'video': comment.video.id,
-            'commentParent': comment.id,
-          }], [], null)
-          .map((commentsChildren: any) => {
-            comment.commentChildren = commentsChildren;
-            return comment;
-          })
-      })
-    );
-  }
-
-  getChildrensFromParentsOther(comments: Comment[]): Observable<any>{
+  getChildrensFromParents(comments: Comment[]): Observable<any> {
     return Observable.forkJoin(
       comments.map((comment: Comment) => {
         return this.query(
@@ -98,7 +75,7 @@ export class CommentService {
             'perpage': 2,
             'video': comment.video.id,
             'commentParent': comment.id,
-          }], [], null)
+          }])
           .map((commentsChildren: any) => {
             comment.commentChildren = commentsChildren;
             return comment;

@@ -19,58 +19,41 @@ export class VideoCommentsListComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    let listComments = this.commentService.query([{'perpage': 2, 'video': this.video.id}], [], null);
-
-    let listCommentsItems = listComments
-      .map(response => response.items)
-      .flatMap((comments: any) => {
-        if (comments.length > 0) {
-          return this.commentService.getChildrensFromParentsOther(comments);
-        }
-        return Observable.of([]);
-      });
-
-    Observable.forkJoin([listComments, listCommentsItems])
-      .map(data => {
-        let fullResponse = data[0];
-        fullResponse.items = data[1];
-        return fullResponse;
-      })
+    let listComments = this.commentService.query([{'perpage': 2, 'video': this.video.id}]);
+    this.handleComments(listComments)
       .subscribe(commentsResponse => {
         this.video.comments = commentsResponse;
       });
-
-    /*listComments.subscribe((commentsResponse: any) => {
-     this.video.comments = commentsResponse;
-     });
-
-     listComments.flatMap((comments: any) => {
-     if (comments && comments.items.length > 0) {
-     return this.commentService.getChildrensFromParents(comments);
-     }
-     return Observable.of([]);
-     })
-     .subscribe(
-     (commentItemsResponse: any) => {
-     this.video.comments.items = commentItemsResponse;
-     }
-     );*/
   }
 
   next() {
     this.loadingNext = true;
-    this.commentService.query([], [], this.video.comments._links['next']).subscribe(
-      (commentResponse: any) => {
-        for (let item of commentResponse.items) {
+    let listComments = this.commentService.query(
+      [],
+      this.video.comments._links['next']
+    );
+    this.handleComments(listComments)
+      .subscribe(commentsResponse => {
+        for (let item of commentsResponse.items) {
           this.video.comments.items.push(item);
         }
-        this.video.comments._links = commentResponse._links;
+        this.video.comments._links = commentsResponse._links;
         this.loadingNext = false;
-      },
-      errorResponse => {
-        console.log(errorResponse);
-      }
-    );
+      });
+  }
+
+  private handleComments(listComments: Observable<ListResult<Comment>>) {
+    let listCommentsItems = listComments
+      .map(response => response.items)
+      .flatMap((comments: any) => {
+        return this.commentService.getChildrensFromParents(comments);
+      });
+
+    return Observable.forkJoin([listComments, listCommentsItems])
+      .map(data => {
+        let fullResponse: any = data[0];
+        fullResponse.items = data[1];
+        return fullResponse;
+      })
   }
 }

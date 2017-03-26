@@ -11,7 +11,8 @@
   </div>
 
   <button class="btn btn-default btn-sm btn-block" (click)="next()"
-          *ngIf="!loadingNext && (video.comments && video.comments._links.next)">Load More
+          *ngIf="!loadingNext && (video.comments && video.comments._links.next)">
+    Load all {{video.comments.total}} comments
   </button>
 
   <div *ngIf="!video.comments.items.length > 0"><p class="text-muted text-center">No comments</p></div>
