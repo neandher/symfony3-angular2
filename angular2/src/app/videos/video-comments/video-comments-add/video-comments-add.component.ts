@@ -3,6 +3,7 @@ import {CommentService} from "../comment.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BaseComponent} from "../../../base.component";
 import {Video} from "../../../shared/models/video";
+import {Comment} from "../../../shared/models/comment";
 
 @Component({
   selector: 'app-video-component-add',
@@ -11,6 +12,7 @@ import {Video} from "../../../shared/models/video";
 export class VideoComponentAddComponent extends BaseComponent implements OnInit {
 
   @Input() video: Video;
+  @Input() commentParent: Comment = null;
   public isSubmitting: boolean = false;
   public submit: boolean = false;
   public error: string[] = [];
