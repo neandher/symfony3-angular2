@@ -5,6 +5,7 @@ import {CommentService} from "../comment.service";
 import {Comment} from "../../../shared/models/comment";
 import {ListResult} from "../../../shared/interface/list-result.interface";
 import {Video} from "../../../shared/models/video";
+import {Router} from "@angular/router";
 
 declare let $: any;
 
@@ -22,7 +23,8 @@ export class VideoCommentsItemMediaComponent implements OnInit {
   public commentToReply: Comment = null;
 
   constructor(private commentService: CommentService,
-              private userService: UserService) {
+              private userService: UserService,
+              private route: Router) {
   }
 
   ngOnInit() {
@@ -61,9 +63,14 @@ export class VideoCommentsItemMediaComponent implements OnInit {
   }
 
   showCommentForm(id: number) {
-    $('div#comments-list ul.media-list li.media')
-      .find('p').removeClass('comment-simplebox-content')
-      .find('textarea').val('');
-    $('#formCommentAddShow-' + id).addClass('comment-simplebox-content');
+    if (!this.user.id) {
+      this.route.navigate(['/auth/signin']);
+    }
+    else {
+      $('div#comments-list ul.media-list li.media')
+        .find('p').removeClass('comment-simplebox-content')
+        .find('textarea').val('');
+      $('#formCommentAddShow-' + id).addClass('comment-simplebox-content');
+    }
   }
 }
