@@ -6,7 +6,7 @@ import {Comment} from "../../../shared/models/comment";
 import {Observable} from "rxjs";
 
 @Component({
-  selector: 'app-video-component-list',
+  selector: 'app-video-comments-list',
   templateUrl: 'video-comments-list.component.html'
 })
 export class VideoCommentsListComponent implements OnInit {

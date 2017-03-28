@@ -6,4 +6,5 @@ export class Comment {
   user: any;
   video: any;
   commentChildren: ListResult<Comment>;
+  commentParent: Comment;
 }

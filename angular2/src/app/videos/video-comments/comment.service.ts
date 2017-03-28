@@ -20,7 +20,7 @@ export class CommentService {
 
     params.forEach(function (item: {}) {
       Object.keys(item).forEach(function (key) {
-        urlSearchParams.set(encodeURIComponent(key), encodeURIComponent(item[key]));
+        urlSearchParams.set(key, item[key]);
       })
     });
 
@@ -30,7 +30,7 @@ export class CommentService {
         let paramIndex: any = value.split('=')[0];
         let paramValue: any = value.split('=')[1];
         if (!urlSearchParams.has(paramIndex)) {
-          urlSearchParams.append(encodeURIComponent(paramIndex), encodeURIComponent(paramValue));
+          urlSearchParams.append(paramIndex, paramValue);
         }
       });
     }

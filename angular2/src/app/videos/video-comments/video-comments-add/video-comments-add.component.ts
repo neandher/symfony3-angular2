@@ -5,14 +5,17 @@ import {BaseComponent} from "../../../base.component";
 import {Video} from "../../../shared/models/video";
 import {Comment} from "../../../shared/models/comment";
 
+declare let $: any;
+
 @Component({
-  selector: 'app-video-component-add',
-  templateUrl: 'video-component-add.component.html',
+  selector: 'app-video-comments-add',
+  templateUrl: 'video-comments-add.component.html',
 })
 export class VideoComponentAddComponent extends BaseComponent implements OnInit {
 
   @Input() video: Video;
   @Input() commentParent: Comment = null;
+  @Input() elementId: string = '';
   public isSubmitting: boolean = false;
   public submit: boolean = false;
   public error: string[] = [];
@@ -32,31 +35,51 @@ export class VideoComponentAddComponent extends BaseComponent implements OnInit 
 
   private buildForm() {
     this.form = this.fb.group({
-      body: ['', [Validators.required]]
+      body: ['', [Validators.required]],
+      commentParent: ['']
     });
     this.form.valueChanges.subscribe(data => this.onValueChanged());
     this.onValueChanged();
   }
 
   onSubmit() {
+
     this.isSubmitting = true;
     this.error = [];
 
+    if (!this.commentParent) {
+      this.form.removeControl('commentParent');
+    }
+    else {
+      this.form.get('commentParent').setValue(this.commentParent.id);
+    }
+
     this.commentService.save(this.form.value, null, this.video.id).subscribe(
       (commentSubmited: any) => {
-        this.form.reset();
-        this.video.comments.items.unshift(commentSubmited);
-        this.submit = true;
-      },
-      responseError => {
-        console.log(responseError);
         this.isSubmitting = false;
-        this.handleResponseError(responseError.errors);
+        this.resetForm();
+        if (this.commentParent) {
+          this.video.comments.items = this.video.comments.items.map((comment: any) => {
+            if (this.commentParent.id == comment.id) {
+              comment.commentChildren.items.push(commentSubmited);
+            }
+            return comment;
+          });
+        }
+        else {
+          this.video.comments.items.unshift(commentSubmited);
+          this.submit = true;
+        }
       }
     );
   }
 
   private onValueChanged() {
     this.handleError(this.form);
+  }
+
+  resetForm() {
+    $('#' + this.elementId).removeClass('comment-simplebox-content');
+    this.form.reset();
   }
 }

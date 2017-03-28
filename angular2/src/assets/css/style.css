@@ -176,3 +176,10 @@
 ul.media-list {
   margin-bottom: 25px;
 }
+
+.comment-renderer-replybox{
+  display: none;
+}
+.comment-simplebox-content{
+  display: block;
+}

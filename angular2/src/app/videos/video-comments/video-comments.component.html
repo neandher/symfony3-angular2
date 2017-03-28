@@ -2,13 +2,13 @@
   <div class="panel-heading"><h3 class="panel-title" style="font-size: 14px">Comments</h3></div>
   <div class="panel-body">
 
-    <div *ngIf="user.id">
-      <app-video-component-add [video]="video"></app-video-component-add>
+    <div *ngIf="user.id" id="parentCommentAdd">
+      <app-video-comments-add [video]="video" [elementId]="'parentCommentAdd'"></app-video-comments-add>
       <div class="clearfix"></div>
       <hr/>
     </div>
 
-    <app-video-component-list [video]="video"></app-video-component-list>
+    <app-video-comments-list [video]="video"></app-video-comments-list>
 
   </div>
 </div>

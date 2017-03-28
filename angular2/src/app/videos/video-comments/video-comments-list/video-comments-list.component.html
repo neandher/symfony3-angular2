@@ -4,7 +4,8 @@
 
 <div id="comments-list" *ngIf="video.comments">
 
-  <app-video-comments-item *ngFor="let comment of video.comments.items" [comment]="comment"></app-video-comments-item>
+  <app-video-comments-item *ngFor="let comment of video.comments.items" [comment]="comment"
+                           [video]="video"></app-video-comments-item>
 
   <div *ngIf="loadingNext">
     <button class="btn btn-default btn-block">Loading...</button>

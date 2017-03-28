@@ -14,15 +14,24 @@
     </h5>
     <p class="line-breaker" style="line-height: 0.9; padding-top: 7px;">{{comment.body}}</p>
     <p>
-      <a href="#" class="text-muted">Reply</a>
+      <a href="#" class="text-muted" (click)="$event.preventDefault();showCommentForm(comment.id);">
+        Reply
+      </a>
       <a href="#" class="text-muted small" (click)="deleteComment(comment.id)"
          *ngIf="user.id == comment.user.id || user.id == comment.video.user.id">
         Delete
       </a>
     </p>
+    <p class="comment-renderer-replybox" id="formCommentAddShow-{{comment.id}}">
+      <app-video-comments-add
+        [video]="video"
+        [commentParent]="commentToReply"
+        [elementId]="'formCommentAddShow-'+comment.id">
+      </app-video-comments-add>
+    </p>
     <div *ngIf="comment.commentChildren">
       <app-video-comments-item-media *ngFor="let commentChildren of comment.commentChildren.items"
-                                     [comment]="commentChildren"></app-video-comments-item-media>
+                                     [comment]="commentChildren" [video]="video"></app-video-comments-item-media>
 
       <div *ngIf="loadingNext">
         <button class="btn btn-default btn-block">Loading...</button>

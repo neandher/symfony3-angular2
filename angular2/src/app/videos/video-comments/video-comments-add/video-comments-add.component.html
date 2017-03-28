@@ -4,5 +4,6 @@
       <textarea class="form-control" formControlName="body" id="body" rows="4"></textarea>
     </div>
     <input type="submit" value="Comment" class="btn btn-success" [disabled]="!form.valid"/>
+    <a class="btn btn-default" (click)="$event.preventDefault();resetForm()">Cancel</a>
   </fieldset>
 </form>

@@ -4,6 +4,9 @@ import {User} from "../../../shared/models/user";
 import {CommentService} from "../comment.service";
 import {Comment} from "../../../shared/models/comment";
 import {ListResult} from "../../../shared/interface/list-result.interface";
+import {Video} from "../../../shared/models/video";
+
+declare let $: any;
 
 @Component({
   selector: 'app-video-comments-item-media',
@@ -12,9 +15,11 @@ import {ListResult} from "../../../shared/interface/list-result.interface";
 export class VideoCommentsItemMediaComponent implements OnInit {
 
   @Input() comment: Comment;
+  @Input() video: Video;
   public user: User;
   public loading: boolean = false;
   public loadingNext: boolean = false;
+  public commentToReply: Comment = null;
 
   constructor(private commentService: CommentService,
               private userService: UserService) {
@@ -24,6 +29,12 @@ export class VideoCommentsItemMediaComponent implements OnInit {
     this.userService.currentUser.subscribe(
       userData => this.user = userData
     );
+    if (this.comment.commentParent) {
+      this.commentToReply = this.comment.commentParent;
+    }
+    else {
+      this.commentToReply = this.comment;
+    }
   }
 
   next() {
@@ -49,4 +60,10 @@ export class VideoCommentsItemMediaComponent implements OnInit {
     this.commentService.destroy(id).subscribe();
   }
 
+  showCommentForm(id: number) {
+    $('div#comments-list ul.media-list li.media')
+      .find('p').removeClass('comment-simplebox-content')
+      .find('textarea').val('');
+    $('#formCommentAddShow-' + id).addClass('comment-simplebox-content');
+  }
 }
