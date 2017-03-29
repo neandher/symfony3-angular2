@@ -81,6 +81,7 @@ export class CommentService {
             comment.commentChildren = commentsChildren;
             return comment;
           })
+          .retry();
       })
     );
   }

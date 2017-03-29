@@ -1,5 +1,6 @@
 <div class="panel panel-default">
-  <div class="panel-heading"><h3 class="panel-title" style="font-size: 14px">Comments</h3></div>
+  <div class="panel-heading"><h3 class="panel-title" style="font-size: 14px">
+    Comments <span *ngIf="video.comments">{{video.comments.total}}</span></h3></div>
   <div class="panel-body">
 
     <div *ngIf="user.id" id="parentCommentAdd">

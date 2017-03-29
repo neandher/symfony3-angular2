@@ -5,6 +5,8 @@ import {BaseComponent} from "../../../base.component";
 import {Video} from "../../../shared/models/video";
 import {Comment} from "../../../shared/models/comment";
 import {ListResult} from "../../../shared/interface/list-result.interface";
+import {UserService} from "../../../shared/services/user.service";
+import {User} from "../../../shared/models/user";
 
 declare let $: any;
 
@@ -17,20 +19,19 @@ export class VideoComponentAddComponent extends BaseComponent implements OnInit 
   @Input() video: Video;
   @Input() commentParent: Comment = null;
   @Input() elementId: string = '';
+  public user: User;
   public isSubmitting: boolean = false;
   public submit: boolean = false;
-  public error: string[] = [];
   public form: FormGroup;
-  public formErrors: Object = {
-    'body': [],
-  };
 
   constructor(private commentService: CommentService,
-              private fb: FormBuilder,) {
+              private fb: FormBuilder,
+              private userService: UserService) {
     super();
   }
 
   ngOnInit() {
+    this.user = this.userService.getCurrentUser();
     this.buildForm();
   }
 
@@ -39,8 +40,6 @@ export class VideoComponentAddComponent extends BaseComponent implements OnInit 
       body: ['', [Validators.required]],
       commentParent: ['']
     });
-    this.form.valueChanges.subscribe(data => this.onValueChanged());
-    this.onValueChanged();
   }
 
   onSubmit() {
@@ -74,14 +73,11 @@ export class VideoComponentAddComponent extends BaseComponent implements OnInit 
         }
         else {
           this.video.comments.items.unshift(commentSubmited);
+          this.video.comments.total += 1;
           this.submit = true;
         }
       }
     );
-  }
-
-  private onValueChanged() {
-    this.handleError(this.form);
   }
 
   resetForm() {

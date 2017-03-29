@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {Params} from "@angular/router";
 
 import {ListResult} from "../interface/list-result.interface";
 

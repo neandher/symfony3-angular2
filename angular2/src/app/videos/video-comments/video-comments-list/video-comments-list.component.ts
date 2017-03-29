@@ -46,7 +46,10 @@ export class VideoCommentsListComponent implements OnInit {
     let listCommentsItems = listComments
       .map(response => response.items)
       .flatMap((comments: any) => {
-        return this.commentService.getChildrensFromParents(comments);
+        if (comments.length > 0) {
+          return this.commentService.getChildrensFromParents(comments);
+        }
+        return Observable.of([]);
       });
 
     return Observable.forkJoin([listComments, listCommentsItems])

@@ -19,7 +19,10 @@ class VideoRepository extends BaseRepository
      */
     public function findAllQueryBuilder($params = [], $user = null)
     {
-        $qb = $this->createQueryBuilder('video');
+        $qb = $this->createQueryBuilder('video')
+            ->addSelect('video')
+            ->innerJoin('video.user', 'user')
+            ->addSelect('user');
 
         if (isset($params['filter']) && !empty($params['filter'])) {
             $qb->andWhere('video.title LIKE :filter')->setParameter('filter', '%' . $params['filter'] . '%');
@@ -36,19 +39,5 @@ class VideoRepository extends BaseRepository
         $this->addOrderingQueryBuilder($qb, $params);
 
         return $qb;
-    }
-
-    /**
-     * @param $id
-     * @return \Doctrine\ORM\QueryBuilder
-     * @internal param array $params
-     */
-    public function findLastsQueryBuilder($id)
-    {
-        $qb = $this->createQueryBuilder('video')
-            ->andWhere('video.id <> :id')->setParameter('id', $id)
-            ->orderBy('video.createdAt', 'DESC');
-
-        return $qb->getQuery()->getResult();
     }
 }

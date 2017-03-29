@@ -41,7 +41,7 @@ class Comment
      *
      * @ORM\Column(name="body", type="text")
      * @Assert\NotBlank()
-     * @Assert\Length(min="2")
+     * @Assert\Length(min="1")
      * @Serializer\Expose()
      */
     private $body;
@@ -79,7 +79,7 @@ class Comment
      * @var Comment
      *
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Comment")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      * @Serializer\Expose()
      */
     private $commentParent;

@@ -2,9 +2,6 @@
 
 namespace ApiBundle\Repository;
 
-use ApiBundle\Entity\Comment;
-use ApiBundle\Entity\Video;
-
 /**
  * CommentRepository
  *
@@ -20,11 +17,15 @@ class CommentRepository extends BaseRepository
     public function findAllQueryBuilder($params = [])
     {
         $qb = $this->createQueryBuilder('comment')
-            ->select('comment');
+            ->addSelect('comment')
+            ->innerJoin('comment.video', 'video')
+            ->addSelect('video')
+            ->innerJoin('comment.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('comment.commentParent', 'commentParent')
+            ->addSelect('commentParent');
 
         if (isset($params['filter']) && !empty($params['filter'])) {
-            $qb->innerJoin('comment.video', 'video')
-                ->addSelect('video');
             $qb->andWhere('video.title LIKE :filter')->setParameter('filter', '%' . $params['filter'] . '%');
         }
 
@@ -34,8 +35,7 @@ class CommentRepository extends BaseRepository
 
         if (isset($params['commentParent']) && !empty($params['commentParent'])) {
             $qb->andWhere('comment.commentParent = :commentParent')->setParameter('commentParent', $params['commentParent']);
-        }
-        else{
+        } else {
             $qb->andWhere('comment.commentParent is null');
         }
 

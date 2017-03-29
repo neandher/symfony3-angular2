@@ -6,6 +6,7 @@ import {RouterModule} from "@angular/router";
 import {ShowAuthedDirective} from "./directives/show-authed";
 import {MessageAlertComponent} from "./layout/message-alert/message-alert.component";
 import {PaginationComponent} from './pagination/pagination.component';
+import { UserAvatarComponent } from './layout/user-avatar/user-avatar.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import {PaginationComponent} from './pagination/pagination.component';
     ShowAuthedDirective,
     MessageAlertComponent,
     PaginationComponent,
+    UserAvatarComponent,
   ],
   exports: [
     CommonModule,
@@ -29,6 +31,7 @@ import {PaginationComponent} from './pagination/pagination.component';
     ShowAuthedDirective,
     MessageAlertComponent,
     PaginationComponent,
+    UserAvatarComponent,
   ]
 })
 export class SharedModule {

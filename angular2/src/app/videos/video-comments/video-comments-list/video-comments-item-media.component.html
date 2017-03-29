@@ -1,25 +1,35 @@
-<li class="media" *ngIf="comment">
+<li class="media" id="comment-media-{{comment.id}}">
   <div class="media-left">
-    <a href="#">
-      <img *ngIf="comment.user.avatarImageName"
-           src="{{comment.user.avatarImageUrl}}" class="media-object" width="48"/>
-      <img *ngIf="!comment.user.avatarImageName" src="assets/images/default_img_user_64.png" class="media-object"
-           width="48"/>
+    <a href="javascript:void(0)">
+      <app-user-avatar [user]="comment.user"></app-user-avatar>
     </a>
   </div>
   <div class="media-body">
-    <h5 class="media-heading">
+    <div class="media-heading pull-left">
       <a href="#" class="text-primary">{{comment.user.fullName}}</a>
-      <small>- {{comment.createdAt | amTimeAgo }}</small>
-    </h5>
-    <p class="line-breaker" style="line-height: 0.9; padding-top: 7px;">{{comment.body}}</p>
+      <span class="text-muted" style="font-size: 80%">- {{comment.createdAt | amTimeAgo }}</span>
+    </div>
+    <div class="btn-group pull-right" *ngIf="user.id == comment.user.id || user.id == comment.video.user.id">
+      <div style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">
+        <span class="glyphicon glyphicon-option-vertical"></span>
+      </div>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="javascript:void(0)" (click)="editComment(comment.id)"
+             *ngIf="user.id == comment.user.id">Edit</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="deleteComment(comment)"
+             *ngIf="user.id == comment.user.id || user.id == comment.video.user.id">Delete</a>
+        </li>
+      </ul>
+    </div>
+    <div class="clearfix"></div>
+    <p class="line-breaker" style="line-height: 0.9; padding-top: 7px; padding-right: 40px">{{comment.body}}</p>
     <p>
-      <a href="#" class="text-muted" (click)="$event.preventDefault();showCommentForm(comment.id);">
+      <a href="javascript:void(0)" class="text-muted" (click)="showCommentForm(comment.id);">
         Reply
-      </a>
-      <a href="#" class="text-muted" (click)="deleteComment(comment.id)"
-         *ngIf="user.id == comment.user.id || user.id == comment.video.user.id">
-        Delete
       </a>
     </p>
     <p class="comment-renderer-replybox" id="formCommentAddShow-{{comment.id}}">

@@ -56,12 +56,22 @@ export class VideoCommentsItemMediaComponent implements OnInit {
       );
   }
 
-  deleteComment(id: number) {
-    let commentPanel = <HTMLElement>document.querySelector('.comment-panel-' + id);
-    if (commentPanel != null) {
-      commentPanel.style.display = 'none';
+  editComment(id: number) {
+    if (!this.user.id) {
+      this.route.navigate(['/auth/signin']);
     }
-    this.commentService.destroy(id).subscribe();
+    //...
+  }
+
+  deleteComment(comment: Comment) {
+    let commentMedia = <HTMLElement>document.querySelector('#comment-media-' + comment.id);
+    if (commentMedia != null) {
+      commentMedia.style.display = 'none';
+    }
+    this.commentService.destroy(comment.id).subscribe();
+    if (!comment.commentParent) {
+      this.video.comments.total += -1;
+    }
   }
 
   showCommentForm(id: number) {

@@ -1,9 +1,18 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-  <fieldset [disabled]="isSubmitting">
-    <div class="form-group">
-      <textarea class="form-control" formControlName="body" id="body" rows="4"></textarea>
+<ul class="media-list">
+  <li class="media">
+    <div class="media-left">
+      <a href="javascript:void(0)"><app-user-avatar [user]="user"></app-user-avatar></a>
     </div>
-    <input type="submit" value="Comment" class="btn btn-success" [disabled]="!form.valid"/>
-    <a class="btn btn-default" (click)="$event.preventDefault();resetForm()">Cancel</a>
-  </fieldset>
-</form>
+    <div class="media-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <fieldset [disabled]="isSubmitting">
+          <div class="form-group">
+            <textarea class="form-control" formControlName="body" id="body" rows="4"></textarea>
+          </div>
+          <input type="submit" value="Comment" class="btn btn-success" [disabled]="!form.valid"/>
+          <a class="btn btn-default" (click)="$event.preventDefault();resetForm()">Cancel</a>
+        </fieldset>
+      </form>
+    </div>
+  </li>
+</ul>
