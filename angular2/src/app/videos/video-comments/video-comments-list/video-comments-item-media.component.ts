@@ -1,17 +1,19 @@
 import {Component, OnInit, Input} from '@angular/core';
+import {Router} from "@angular/router";
 import {UserService} from "../../../shared/services/user.service";
 import {User} from "../../../shared/models/user";
 import {CommentService} from "../comment.service";
 import {Comment} from "../../../shared/models/comment";
 import {ListResult} from "../../../shared/interface/list-result.interface";
 import {Video} from "../../../shared/models/video";
-import {Router} from "@angular/router";
+import {TimeAgoPipe} from "angular2-moment";
 
 declare let $: any;
 
 @Component({
   selector: 'app-video-comments-item-media',
-  templateUrl: './video-comments-item-media.component.html'
+  templateUrl: './video-comments-item-media.component.html',
+  providers: [TimeAgoPipe]
 })
 export class VideoCommentsItemMediaComponent implements OnInit {
 
@@ -42,7 +44,7 @@ export class VideoCommentsItemMediaComponent implements OnInit {
   next() {
     this.loadingNext = true;
     this.commentService.query(
-      [{'perpage': this.comment.commentChildren.total, 'page': '1'}],
+      [{'perpage': this.comment.commentChildren.total, 'page': '1', 'sorting[createdAt]': 'asc'}],
       this.comment.commentChildren._links['next']
     )
       .subscribe(

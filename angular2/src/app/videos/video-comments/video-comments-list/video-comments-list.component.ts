@@ -19,7 +19,7 @@ export class VideoCommentsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    let listComments = this.commentService.query([{'perpage': 2, 'video': this.video.id}]);
+    let listComments = this.commentService.query([{'video': this.video.id}]);
     this.handleComments(listComments)
       .subscribe(commentsResponse => {
         this.video.comments = commentsResponse;

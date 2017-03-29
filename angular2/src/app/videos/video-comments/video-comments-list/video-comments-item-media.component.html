@@ -10,7 +10,7 @@
   <div class="media-body">
     <h5 class="media-heading">
       <a href="#" class="text-primary">{{comment.user.fullName}}</a>
-      <small>- {{comment.createdAt | date:'dd/MM/y - H:mm:ss' }}</small>
+      <small>- {{comment.createdAt | amTimeAgo }}</small>
     </h5>
     <p class="line-breaker" style="line-height: 0.9; padding-top: 7px;">{{comment.body}}</p>
     <p>

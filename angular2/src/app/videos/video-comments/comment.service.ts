@@ -75,6 +75,7 @@ export class CommentService {
             'perpage': 2,
             'video': comment.video.id,
             'commentParent': comment.id,
+            'sorting[createdAt]': 'desc'
           }])
           .map((commentsChildren: any) => {
             comment.commentChildren = commentsChildren;
