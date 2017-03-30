@@ -49,7 +49,7 @@
 
       <button class="btn btn-default btn-sm btn-block" (click)="next()"
               *ngIf="!loadingNext && comment.commentChildren._links && comment.commentChildren._links.next">
-        Load all {{comment.commentChildren.total}} comments
+        Load all {{comment.commentChildren.items.length}} comments
       </button>
       <br>
     </div>

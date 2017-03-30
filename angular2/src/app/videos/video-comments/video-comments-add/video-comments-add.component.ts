@@ -73,7 +73,6 @@ export class VideoComponentAddComponent extends BaseComponent implements OnInit 
         }
         else {
           this.video.comments.items.unshift(commentSubmited);
-          this.video.comments.total += 1;
           this.submit = true;
         }
       }

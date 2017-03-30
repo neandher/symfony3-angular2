@@ -10,7 +10,7 @@
             <textarea class="form-control" formControlName="body" id="body" rows="4"></textarea>
           </div>
           <input type="submit" value="Comment" class="btn btn-success" [disabled]="!form.valid"/>
-          <a class="btn btn-default" (click)="$event.preventDefault();resetForm()">Cancel</a>
+          <a href="javascript:void(0)" class="btn btn-default" (click)="resetForm()">Cancel</a>
         </fieldset>
       </form>
     </div>

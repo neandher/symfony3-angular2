@@ -69,9 +69,6 @@ export class VideoCommentsItemMediaComponent implements OnInit {
       commentMedia.style.display = 'none';
     }
     this.commentService.destroy(comment.id).subscribe();
-    if (!comment.commentParent) {
-      this.video.comments.total += -1;
-    }
   }
 
   showCommentForm(id: number) {
